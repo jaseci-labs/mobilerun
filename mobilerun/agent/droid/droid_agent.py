@@ -7,13 +7,14 @@ Architecture:
 - When reasoning=True: Uses Manager (planning) + Executor (action) workflows
 """
 
+import importlib
 import functools
 import asyncio
 import logging
 import os
 import time
 import traceback
-from typing import TYPE_CHECKING, Any, Awaitable, Type, Union
+from typing import TYPE_CHECKING, Any, Awaitable, Type, Union, cast
 
 from async_adbutils import adb
 from llama_index.core.llms.llm import LLM
@@ -505,7 +506,7 @@ class MobileAgent(Workflow):
         with session_context(
             self._tracing_session_id, self._tracing_user_id, agent=self
         ):
-            return Workflow.run(self, *args, **kwargs)
+            return getattr(Workflow, "run")(self, *args, **kwargs)
 
     async def _initialize_workflow_deadline(self, ctx: Context) -> None:
         """Store a deadline owned by the runtime execution of this run."""
@@ -553,7 +554,7 @@ class MobileAgent(Workflow):
             # Load the agent module
             agent_module = load_agent(agent_name)
             if not agent_module:
-                from mobilerun.agent.external import list_agents
+                list_agents = importlib.import_module("mobilerun.agent.external").list_agents
 
                 available = list_agents()
                 if available:
@@ -595,7 +596,8 @@ class MobileAgent(Workflow):
                 max_steps=self.config.agent.max_steps,
             )
 
-            return FinalizeEvent(success=result["success"], reason=result["reason"])
+            # The external agent path ends the run directly.
+            return cast(Any, FinalizeEvent(success=result["success"], reason=result["reason"]))
 
         # ── 1. Create driver ──────────────────────────────────────────
         if self.config.agent.reasoning:

@@ -29,3 +29,12 @@ class AppCardProvider(ABC) {
         platform: builtins.str | None = None,
     ) -> builtins.str;
 }
+
+"""The provider used when app cards are disabled: every card is empty."""
+class DisabledAppCardProvider(AppCardProvider) {
+    async def load_app_card(
+        package_name: builtins.str,
+        instruction: builtins.str = "",
+        platform: builtins.str | None = None,
+    ) -> builtins.str;
+}

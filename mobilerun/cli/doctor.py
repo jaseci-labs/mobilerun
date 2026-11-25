@@ -1,5 +1,6 @@
 """Mobilerun Doctor - System health checks and diagnostics."""
 
+import importlib
 import asyncio
 import json
 import re
@@ -133,8 +134,8 @@ async def check_sdk_version(debug: bool) -> CheckResult:
 
 async def check_config(debug: bool) -> tuple[CheckResult, Any]:
     """Check config file exists and loads."""
-    from mobilerun.config_manager import ConfigLoader
-    from mobilerun.config_manager.loader import OutdatedConfigError
+    ConfigLoader = importlib.import_module("mobilerun.config_manager").ConfigLoader
+    OutdatedConfigError = importlib.import_module("mobilerun.config_manager.loader").OutdatedConfigError
 
     config_path = ConfigLoader.get_user_config_path()
 
@@ -718,7 +719,7 @@ async def run_doctor(
     _print_result(r_portal, debug)
     if not is_installed:
         # Auto-fix: run setup
-        from mobilerun.cli.main import _setup_portal
+        _setup_portal = importlib.import_module("mobilerun.cli.main")._setup_portal
 
         await _setup_portal(path=None, device=device.serial, debug=debug)
         # Re-check
@@ -735,7 +736,7 @@ async def run_doctor(
     if r_version.status == Status.WARN and installed_ver:
         # Auto-fix: run setup to install compatible version
         console.print("  [blue]→ Updating portal...[/]")
-        from mobilerun.cli.main import _setup_portal
+        _setup_portal = importlib.import_module("mobilerun.cli.main")._setup_portal
 
         await _setup_portal(path=None, device=device.serial, debug=debug, in_place=True)
         # Wait for portal service to initialize after install

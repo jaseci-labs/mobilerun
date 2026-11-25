@@ -51,7 +51,7 @@ from mobilerun.config_manager import (  # noqa: E402
 )
 
 # Import macro functionality
-from mobilerun.macro import (  # noqa: E402
+from mobilerun.macro.replay import (  # noqa: E402
     MacroPlayer,
     replay_macro_file,
     replay_macro_folder,

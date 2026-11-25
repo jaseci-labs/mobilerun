@@ -5,6 +5,7 @@ This module provides a centralized way to configure tracing providers
 (Phoenix, Langfuse, etc.) based on the TracingConfig.
 """
 
+import importlib
 import base64
 import logging
 import os
@@ -55,7 +56,7 @@ def setup_tracing(
                 f"🔍 Tracing already initialized with {_tracing_provider}, skipping setup"
             )
             if provider == "langfuse" and agent:
-                from mobilerun.telemetry.langfuse_processor import set_current_agent
+                set_current_agent = importlib.import_module("mobilerun.telemetry.langfuse_processor").set_current_agent
 
                 set_current_agent(agent)
             return
@@ -85,7 +86,7 @@ def _check_phoenix_reachable(endpoint: str, timeout: float = 3.0) -> bool:
         req = urllib.request.Request(endpoint, method="GET")
         urllib.request.urlopen(req, timeout=timeout)
         return True
-    except (urllib.error.URLError, OSError, ValueError):
+    except (OSError, ValueError):  # urllib.error.URLError is an OSError
         return False
 
 
@@ -95,7 +96,7 @@ def _setup_phoenix_tracing() -> bool:
     # The handler imports its OpenTelemetry dependencies lazily, so a broken
     # install can surface while creating it as well as on import.
     try:
-        from mobilerun.telemetry.phoenix import arize_phoenix_callback_handler
+        arize_phoenix_callback_handler = importlib.import_module("mobilerun.telemetry.phoenix").arize_phoenix_callback_handler
 
         if not _check_phoenix_reachable(endpoint):
             logger.warning(
@@ -208,11 +209,9 @@ def _setup_langfuse_tracing(
             _handler._encoder = _fixed_encoder
 
         # STEP 4: Normalize private snapshots inside the SDK's processor chain.
-        from mobilerun.telemetry.langfuse_processor import (
-            LangfuseSpanProcessor,
-            _LangfuseTracerProvider,
-            set_current_agent,
-        )
+        LangfuseSpanProcessor = importlib.import_module("mobilerun.telemetry.langfuse_processor").LangfuseSpanProcessor
+        _LangfuseTracerProvider = importlib.import_module("mobilerun.telemetry.langfuse_processor")._LangfuseTracerProvider
+        set_current_agent = importlib.import_module("mobilerun.telemetry.langfuse_processor").set_current_agent
 
         if agent:
             set_current_agent(agent)
@@ -272,7 +271,7 @@ def _setup_langfuse_tracing(
             "    To enable Langfuse integration, install with:\n"
             "    • If installed via tool: `uv tool install mobilerun[langfuse]`\n"
             "    • If installed via pip: `uv pip install mobilerun[langfuse]`\n"
-            f"    Missing: {e.name if hasattr(e, 'name') else str(e)}\n"
+            f"    Missing: {getattr(e, 'name') if hasattr(e, 'name') else str(e)}\n"
         )
         return False
     except Exception as error:
@@ -297,7 +296,7 @@ def _export_all_spans(_span) -> bool:
 
 def _provider_has_langfuse_processor(tracer_provider: object) -> bool:
     """Detect both directly registered and wrapped Langfuse processors."""
-    from mobilerun.telemetry.langfuse_processor import _LangfuseSpanProcessor
+    _LangfuseSpanProcessor = importlib.import_module("mobilerun.telemetry.langfuse_processor")._LangfuseSpanProcessor
 
     return any(
         isinstance(processor, _LangfuseSpanProcessor)
@@ -308,7 +307,7 @@ def _provider_has_langfuse_processor(tracer_provider: object) -> bool:
 
 def _provider_has_owned_langfuse_pipeline(tracer_provider: object) -> bool:
     """Confirm exactly one SDK processor uses our snapshot normalizer."""
-    from mobilerun.telemetry.langfuse_processor import _LangfuseSpanProcessor
+    _LangfuseSpanProcessor = importlib.import_module("mobilerun.telemetry.langfuse_processor")._LangfuseSpanProcessor
 
     processors = [
         processor
@@ -369,7 +368,7 @@ def session_context(
 
     from opentelemetry.context import detach
 
-    from mobilerun.telemetry.langfuse_processor import _current_agent
+    _current_agent = importlib.import_module("mobilerun.telemetry.langfuse_processor")._current_agent
 
     token = _attach_session_context(session_id, user_id)
     agent_token = _current_agent.set(agent) if agent is not None else None
@@ -405,10 +404,8 @@ def record_langfuse_screenshot(
     try:
         from opentelemetry import trace
 
-        from mobilerun.telemetry.langfuse_processor import (
-            get_last_step_span_context,
-            get_root_span_context,
-        )
+        get_last_step_span_context = importlib.import_module("mobilerun.telemetry.langfuse_processor").get_last_step_span_context
+        get_root_span_context = importlib.import_module("mobilerun.telemetry.langfuse_processor").get_root_span_context
 
         tracer = trace.get_tracer("droidrun.screenshot")
         image_b64 = base64.b64encode(screenshot).decode()

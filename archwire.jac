@@ -23,7 +23,6 @@ graph import {
         ToolsConfig,
         TracingConfig,
     }
-    mobilerun.macro --> mobilerun { MacroPlayer, replay_macro_file, replay_macro_folder }
     mobilerun.tools --> mobilerun { AndroidDriver, DeviceDriver, RecordingDriver }
     mobilerun.agent.droid.droid_agent --> mobilerun.agent.droid { MobileAgent }
     mobilerun.agent.droid.state --> mobilerun.agent.droid { MobileAgentState }
@@ -48,7 +47,7 @@ graph import {
         QueuedUserMessage,
     }
     mobilerun.agent.executor --> mobilerun.agent.droid.droid_agent { ExecutorAgent }
-    mobilerun.agent.external --> mobilerun.agent.droid.droid_agent { list_agents, load_agent }
+    mobilerun.agent.external --> mobilerun.agent.droid.droid_agent { load_agent }
     mobilerun.agent.fast_agent --> mobilerun.agent.droid.droid_agent { FastAgent }
     mobilerun.agent.fast_agent.events --> mobilerun.agent.droid.droid_agent { FastAgentOutputEvent }
     mobilerun.agent.manager --> mobilerun.agent.droid.droid_agent {
@@ -224,18 +223,6 @@ graph import {
     mobilerun.config_manager.config_manager --> mobilerun.agent.utils.tracing_setup {
         TracingConfig,
     }
-    mobilerun.telemetry.langfuse_processor --> mobilerun.agent.utils.tracing_setup {
-        LangfuseSpanProcessor,
-        _LangfuseSpanProcessor,
-        _LangfuseTracerProvider,
-        _current_agent,
-        get_last_step_span_context,
-        get_root_span_context,
-        set_current_agent,
-    }
-    mobilerun.telemetry.phoenix --> mobilerun.agent.utils.tracing_setup {
-        arize_phoenix_callback_handler,
-    }
     mobilerun --> mobilerun.telemetry.langfuse_processor { MobileAgent, __version__ }
     mobilerun.agent.droid.events --> mobilerun.agent.manager { ManagerInputEvent, ManagerPlanEvent }
     mobilerun.agent.manager.events --> mobilerun.agent.manager {
@@ -279,6 +266,7 @@ graph import {
     }
     mobilerun.app_cards.app_card_provider --> mobilerun.agent.manager.manager_agent {
         AppCardProvider,
+        DisabledAppCardProvider,
     }
     mobilerun.app_cards.providers --> mobilerun.agent.manager.manager_agent {
         CompositeAppCardProvider,
@@ -350,7 +338,6 @@ graph import {
         TracingConfig,
     }
     mobilerun --> mobilerun.agent.utils.portal_setup { __version__ }
-    mobilerun.macro.replay --> mobilerun.macro;
     mobilerun.agent.utils.trajectory --> mobilerun.macro.replay { Trajectory }
     mobilerun.macro.handoff --> mobilerun.macro.replay { run_agent_handoff }
     mobilerun.macro.matcher --> mobilerun.macro.replay { StateMatchResult, compare_states }
@@ -362,10 +349,7 @@ graph import {
     mobilerun.tools.filters --> mobilerun.macro.replay { DetailedFilter }
     mobilerun.tools.formatters --> mobilerun.macro.replay { IndexedFormatter }
     mobilerun.tools.ui.provider --> mobilerun.macro.replay { AndroidStateProvider }
-    mobilerun.config_manager.loader --> mobilerun.macro.replay { ConfigLoader }
-    mobilerun.credential_manager --> mobilerun.macro.replay { FileCredentialManager }
-    mobilerun.cli.main --> mobilerun.macro.handoff { run_command }
-    mobilerun --> mobilerun.cli.main { MobileAgent, ResultEvent, __version__ }
+    mobilerun --> mobilerun.cli.main { MobileAgent, ResultEvent }
     mobilerun.agent.external --> mobilerun.cli.main { list_agents }
     mobilerun.agent.utils.android_device --> mobilerun.cli.main {
         AndroidDeviceSelectionError,
@@ -409,8 +393,6 @@ graph import {
     mobilerun.log_handlers --> mobilerun.cli.main { CLILogHandler, configure_logging }
     mobilerun.macro.cli --> mobilerun.cli.main { macro_cli }
     mobilerun.telemetry --> mobilerun.cli.main { print_telemetry_message }
-    mobilerun.cli.deviceauth --> mobilerun.cli.main;
-    mobilerun.cli.doctor --> mobilerun.cli.main { run_doctor }
     mobilerun.agent.utils.android_device --> mobilerun.cli.device_commands {
         AndroidDeviceSelectionError,
         create_android_portal_http_driver,
@@ -424,9 +406,6 @@ graph import {
     mobilerun.tools.formatters --> mobilerun.cli.device_commands { IndexedFormatter }
     mobilerun.tools.ui.ios_provider --> mobilerun.cli.device_commands { IOSStateProvider }
     mobilerun.tools.ui.provider --> mobilerun.cli.device_commands { AndroidStateProvider }
-    mobilerun.config_manager.credential_paths --> mobilerun.cli.device_commands {
-        OAUTH_CREDENTIAL_DIR,
-    }
     mobilerun.agent.utils.android_device --> mobilerun.macro.cli {
         AndroidDeviceSelectionError,
         resolve_android_serial,
@@ -435,9 +414,6 @@ graph import {
     mobilerun.config_manager.path_resolver --> mobilerun.macro.cli { PathResolver }
     mobilerun.macro.replay --> mobilerun.macro.cli { MacroPlayer }
     mobilerun --> mobilerun.cli.doctor { __version__ }
-    mobilerun.config_manager --> mobilerun.cli.doctor { ConfigLoader }
-    mobilerun.config_manager.loader --> mobilerun.cli.doctor { OutdatedConfigError }
-    mobilerun.cli.main --> mobilerun.cli.doctor { _setup_portal }
     mobilerun.cli.main --> mobilerun.__main__ { cli }
     mobilerun.cli.main --> mobilerun.cli { cli }
     mobilerun.macro.cli --> mobilerun.macro.__main__ { macro_cli }
@@ -1576,6 +1552,7 @@ graph import {
     tests.source_text --> tests.test_android_vision_coordinate_contract { module_source }
     tests.source_text --> tests.test_grok_oauth { module_source }
     tests.source_text --> tests.test_visual_remote_connection { module_source }
+    mobilerun.macro.replay --> mobilerun { MacroPlayer, replay_macro_file, replay_macro_folder }
 }
 
 graph spaces {

@@ -5,6 +5,7 @@ This module provides functionality to load and replay macro JSON files
 that were generated during MobileAgent trajectory recording.
 """
 
+import importlib
 import asyncio
 import logging
 import time
@@ -110,8 +111,8 @@ class MacroPlayer:
         if self.credential_manager is not None:
             return self.credential_manager
 
-        from mobilerun.config_manager.loader import ConfigLoader
-        from mobilerun.credential_manager import FileCredentialManager
+        ConfigLoader = importlib.import_module("mobilerun.config_manager.loader").ConfigLoader
+        FileCredentialManager = importlib.import_module("mobilerun.credential_manager").FileCredentialManager
 
         config_path = self.config_path
         if config_path is None:

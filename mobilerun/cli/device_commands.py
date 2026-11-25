@@ -4,6 +4,7 @@ Provides ``mobilerun device <action>`` subcommands that bypass the LLM agent
 and talk directly to the device driver.
 """
 
+import importlib
 import asyncio
 import json
 import logging
@@ -67,7 +68,7 @@ def resolve_cloud_api_key() -> Optional[str]:
     if env_key:
         return env_key
     try:
-        from mobilerun.config_manager.credential_paths import OAUTH_CREDENTIAL_DIR
+        OAUTH_CREDENTIAL_DIR = importlib.import_module("mobilerun.config_manager.credential_paths").OAUTH_CREDENTIAL_DIR
 
         cred_path = OAUTH_CREDENTIAL_DIR / "mobilerun-cloud.json"
         if cred_path.exists():

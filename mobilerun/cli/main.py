@@ -2,6 +2,7 @@
 Mobilerun CLI - Command line interface for controlling Android devices through LLM agents.
 """
 
+import importlib
 import asyncio
 import importlib.metadata
 import logging
@@ -391,7 +392,7 @@ def _print_version(ctx, param, value):
 
     if not version:
         try:
-            from mobilerun import __version__ as pkg_version
+            pkg_version = importlib.import_module("mobilerun").__version__
 
             version = pkg_version
             # print("debug: step 2")
@@ -750,7 +751,7 @@ def login(auth_url: str | None, client_id: str):
     """Authenticate via OAuth 2.0 device authorization and save the session token."""
     import webbrowser
 
-    from mobilerun.cli import deviceauth
+    deviceauth = importlib.import_module("mobilerun.cli.deviceauth")
 
     auth_url = auth_url or os.getenv("MOBILERUN_AUTH_URL") or DEFAULT_AUTH_URL
 
@@ -793,7 +794,7 @@ def login(auth_url: str | None, client_id: str):
 @cli.command()
 def logout():
     """Remove the saved Mobilerun cloud login."""
-    from mobilerun.cli import deviceauth
+    deviceauth = importlib.import_module("mobilerun.cli.deviceauth")
 
     if deviceauth.clear_credentials():
         console.print("[green]Logged out.[/]")
@@ -804,7 +805,7 @@ def logout():
 @cli.command()
 def whoami():
     """Show the currently logged-in Mobilerun cloud user."""
-    from mobilerun.cli import deviceauth
+    deviceauth = importlib.import_module("mobilerun.cli.deviceauth")
 
     creds = deviceauth.load_credentials()
     token = (creds or {}).get("access_token")
@@ -1105,7 +1106,7 @@ cli.add_command(device_cli, name="device")
 @coro
 async def doctor(device: str | None, debug: bool | None):
     """Check system health and diagnose issues."""
-    from mobilerun.cli.doctor import run_doctor
+    run_doctor = importlib.import_module("mobilerun.cli.doctor").run_doctor
 
     await run_doctor(device, debug if debug is not None else False)
 

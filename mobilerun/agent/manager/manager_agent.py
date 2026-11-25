@@ -47,7 +47,7 @@ from mobilerun.agent.utils.errors import describe_error
 from mobilerun.agent.utils.inference import acall_with_retries
 from mobilerun.agent.utils.prompt_resolver import PromptResolver
 from mobilerun.agent.utils.tracing_setup import record_langfuse_screenshot
-from mobilerun.app_cards.app_card_provider import AppCardProvider
+from mobilerun.app_cards.app_card_provider import AppCardProvider, DisabledAppCardProvider
 from mobilerun.app_cards.providers import (
     CompositeAppCardProvider,
     LocalAppCardProvider,
@@ -73,16 +73,6 @@ def _card_platform(platform: str | None) -> str | None:
     """Return "android" or "ios" for app card lookups, or None."""
     value = (platform or "").lower()
     return value if value in ("android", "ios") else None
-
-
-class _DisabledAppCardProvider(AppCardProvider):
-    async def load_app_card(
-        self,
-        package_name: str,
-        instruction: str = "",
-        platform: str | None = None,
-    ) -> str:
-        return ""
 
 
 class ManagerAgent(Workflow):
@@ -139,7 +129,7 @@ class ManagerAgent(Workflow):
     def _initialize_app_card_provider(self) -> AppCardProvider:
         """Initialize app card provider based on configuration mode."""
         if not self.app_card_config.enabled:
-            return _DisabledAppCardProvider()
+            return DisabledAppCardProvider()
 
         mode = self.app_card_config.mode.lower()
 

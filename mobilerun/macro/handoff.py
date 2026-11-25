@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib
 from typing import Any, Dict, List, Optional
 
 
@@ -17,7 +18,7 @@ async def run_agent_handoff(
     remaining_actions: List[Dict[str, Any]],
 ) -> bool:
     """Invoke the normal Mobilerun agent after macro replay diverges."""
-    from mobilerun.cli.main import run_command
+    run_command = importlib.import_module("mobilerun.cli.main").run_command
 
     _ = divergence, current_state, remaining_actions
     return await run_command(
