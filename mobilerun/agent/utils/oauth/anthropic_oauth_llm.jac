@@ -8,8 +8,6 @@ import base64;
 
 import contextlib;
 
-import hashlib;
-
 import json;
 
 import os;
@@ -34,7 +32,7 @@ import from pathlib { Path }
 
 import from typing { Any, Dict, Iterator, Literal, Optional, Sequence }
 
-import from urllib.parse { parse_qs, urlencode, urlparse }
+import from urllib.parse { urlencode }
 
 import requests;
 
@@ -133,17 +131,11 @@ class AnthropicOAuthStreamError(requests.HTTPError, Exception) {
 
 def _iter_sse_events(response: Any) -> Generator[any, any, any];
 
-def _b64_no_pad(raw: builtins.bytes) -> builtins.str;
-
-def _pkce_pair -> builtins.tuple[builtins.str, builtins.str];
-
 with entry {
     _MAX_CODE_ATTEMPTS = 2;
 }
 
 def _is_headless_environment -> builtins.bool;
-
-def _normalize_manual_code(raw: builtins.str, expected_state: builtins.str) -> builtins.str;
 
 glob model_default_: any;
 

@@ -21,16 +21,6 @@ impl _camel_case_keys(config: Mapping[builtins.str, Any]) -> Dict[builtins.str, 
     return converted;
 }
 
-impl _b64_no_pad(raw: builtins.bytes) -> builtins.str {
-    return base64.urlsafe_b64encode(raw).decode("utf-8").rstrip("=");
-}
-
-impl _pkce_pair -> builtins.tuple[builtins.str, builtins.str] {
-    verifier: any = _b64_no_pad(secrets.token_bytes(64));
-    challenge: any = _b64_no_pad(hashlib.sha256(verifier.encode("utf-8")).digest());
-    return (verifier, challenge);
-}
-
 impl _is_headless_environment -> builtins.bool {
     if os.environ.get("SSH_CONNECTION") or os.environ.get("SSH_TTY") {
         return True;
@@ -44,43 +34,6 @@ impl _is_headless_environment -> builtins.bool {
         }
     }
     return False;
-}
-
-impl _normalize_manual_code(raw: builtins.str, expected_state: builtins.str) -> builtins.str {
-    value: any = raw.strip();
-    if not value {
-        return value;
-    }
-
-    first_token: any = value.split()[0];
-
-    if "error=" in first_token or "code=" in first_token {
-        parsed: any = urlparse(first_token);
-        params: any = parse_qs(parsed.query);
-        error: any = params.get("error", [None])[0];
-        if error {
-            desc: any = params.get("error_description", [error])[0];
-            raise RuntimeError(f"OAuth error: {desc}");
-        }
-        code: any = params.get("code", [None])[0];
-        state_from_url: any = params.get("state", [None])[0];
-        if state_from_url and state_from_url != expected_state {
-            raise RuntimeError("OAuth manual code state mismatch.");
-        }
-        if isinstance(code, `str) and code {
-            return code;
-        }
-    }
-
-    if "#" in first_token {
-        (code_part, fragment) = first_token.split("#", 1) as any;
-        if fragment and fragment != expected_state {
-            raise RuntimeError("OAuth manual code state mismatch.");
-        }
-        return code_part;
-    }
-
-    return first_token;
 }
 
 impl GeminiOAuthCodeAssistLLM.init(

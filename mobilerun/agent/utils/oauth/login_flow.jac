@@ -1,4 +1,10 @@
+import base64;
+
 import builtins;
+
+import hashlib;
+
+import secrets;
 
 import threading;
 
@@ -7,6 +13,12 @@ import from http.server { BaseHTTPRequestHandler }
 import from typing { Any }
 
 import from urllib.parse { parse_qs, urlparse }
+
+def b64_no_pad(raw: bytes) -> str;
+
+def pkce_pair -> tuple[str, str];
+
+def normalize_manual_code(raw: str, expected_state: str) -> str;
 
 """One OAuth redirect, received by a loopback HTTP server on its own thread."""
 class LoopbackCallback {

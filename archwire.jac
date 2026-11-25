@@ -1530,14 +1530,22 @@ graph import {
     mobilerun.telemetry ++> mobilerun.cli.main { print_telemetry_message }
     mobilerun.cli.main ++> mobilerun.__main__ { cli }
     include mobilerun.cli.main ++> mobilerun.cli { cli }
-    mobilerun.agent.utils.oauth.loopback ++> mobilerun.agent.utils.oauth.anthropic_oauth_llm {
+    mobilerun.agent.utils.oauth.login_flow ++> mobilerun.agent.utils.oauth.anthropic_oauth_llm {
         LoopbackCallback,
+        b64_no_pad as _b64_no_pad,
+        pkce_pair as _pkce_pair,
+        normalize_manual_code as _normalize_manual_code,
     }
-    mobilerun.agent.utils.oauth.loopback ++> mobilerun.agent.utils.oauth.gemini_oauth_code_assist_llm {
+    mobilerun.agent.utils.oauth.login_flow ++> mobilerun.agent.utils.oauth.gemini_oauth_code_assist_llm {
         LoopbackCallback,
+        b64_no_pad as _b64_no_pad,
+        pkce_pair as _pkce_pair,
+        normalize_manual_code as _normalize_manual_code,
     }
-    mobilerun.agent.utils.oauth.loopback ++> mobilerun.agent.utils.oauth.openai_oauth_llm {
+    mobilerun.agent.utils.oauth.login_flow ++> mobilerun.agent.utils.oauth.openai_oauth_llm {
         LoopbackCallback,
+        b64_no_pad as _b64_no_pad,
+        pkce_pair as _pkce_pair,
     }
 }
 

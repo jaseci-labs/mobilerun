@@ -8,16 +8,6 @@ impl _aclose_events(events: Any) -> None {
     }
 }
 
-impl _b64_no_pad(raw: bytes) -> str {
-    return base64.urlsafe_b64encode(raw).decode("utf-8").rstrip("=");
-}
-
-impl _pkce_pair -> tuple[str, str] {
-    verifier: any = _b64_no_pad(secrets.token_bytes(64));
-    challenge: any = _b64_no_pad(hashlib.sha256(verifier.encode("utf-8")).digest());
-    return (verifier, challenge);
-}
-
 impl _is_headless_environment -> bool {
     if os.environ.get("SSH_CONNECTION") or os.environ.get("SSH_TTY") {
         return True;

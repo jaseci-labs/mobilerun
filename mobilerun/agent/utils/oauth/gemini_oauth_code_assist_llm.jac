@@ -6,8 +6,6 @@ import from jaclang.comptime { target as target_ }
 
 import base64;
 
-import hashlib;
-
 import json;
 
 import os;
@@ -34,7 +32,7 @@ import from pathlib { Path }
 
 import from typing { Any, ClassVar, Dict, Optional, Sequence }
 
-import from urllib.parse { parse_qs, urlencode, urlparse }
+import from urllib.parse { urlencode }
 
 import requests;
 
@@ -110,17 +108,11 @@ with entry {
 
 def _camel_case_keys(config: Mapping[builtins.str, Any]) -> Dict[builtins.str, Any];
 
-def _b64_no_pad(raw: builtins.bytes) -> builtins.str;
-
-def _pkce_pair -> builtins.tuple[builtins.str, builtins.str];
-
 with entry {
     _MAX_CODE_ATTEMPTS = 2;
 }
 
 def _is_headless_environment -> builtins.bool;
-
-def _normalize_manual_code(raw: builtins.str, expected_state: builtins.str) -> builtins.str;
 
 glob credential_slot_default_: any;
 

@@ -6,8 +6,6 @@ import from jaclang.comptime { target as target_ }
 
 import base64;
 
-import hashlib;
-
 import inspect;
 
 import json;
@@ -106,10 +104,6 @@ with entry {
 }
 
 async def _aclose_events(events: Any) -> None;
-
-def _b64_no_pad(raw: bytes) -> str;
-
-def _pkce_pair -> tuple[str, str];
 
 def _is_headless_environment -> bool;
 
