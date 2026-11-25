@@ -620,18 +620,18 @@ impl GrokOAuthAuth.sync_auth_flow(request: httpx.Request) -> Generator[any, any,
     }
 }
 
-impl GrokOAuthAuth.async_auth_flow(request: httpx.Request) -> Generator[any, any, any] {
-    credentials: any = _jacm.Decimal(asyncio.to_thread(self.manager.get_valid_credentials));
+impl GrokOAuthAuth.async_auth_flow(request: httpx.Request) -> AsyncGenerator[any, any] {
+    credentials: any = (await asyncio.to_thread(self.manager.get_valid_credentials));
     self._authorize(request, credentials);
     response: any = yield request;
     if response.status_code == 401 {
-        _jacm.Decimal(response.aread());
-        credentials = _jacm.Decimal(
-            asyncio.to_thread(
+        (await response.aread());
+        credentials = (
+            await asyncio.to_thread(
                 self.manager.get_valid_credentials,
                 force_refresh=True,
                 rejected_access_token=credentials.access_token,
-            ),
+            )
         );
         self._authorize(request, credentials);
         yield request;
@@ -769,10 +769,10 @@ impl GrokOAuth.astructured_predict(
     sanitized.pop("tool_choice", None);
     messages: any = prompt.format_messages(**prompt_args);
     message_dicts: any = to_openai_message_dicts(messages, model=self.model, is_responses_api=True);
-    response: any = _jacm.Decimal(
-        self._aclient.responses.parse(
+    response: any = (
+        await self._aclient.responses.parse(
             model=self._responses_model, input=message_dicts, text_format=output_cls, **sanitized
-        ),
+        )
     );
     if response.output_parsed is not None {
         return response.output_parsed;

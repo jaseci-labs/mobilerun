@@ -7,8 +7,6 @@ to extract structured data from the text.
 
 import builtins;
 
-import decimal as _jacm;
-
 import logging;
 
 import from typing { Type }
@@ -39,5 +37,5 @@ class StructuredOutputAgent(Workflow) {
         Extract structured output using structured_predict().
         """
     @step
-    def extract_structured_output(ctx: Context, ev: StartEvent) -> StopEvent;
+    async def extract_structured_output(ctx: Context, ev: StartEvent) -> StopEvent;
 }

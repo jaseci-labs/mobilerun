@@ -6,8 +6,6 @@ Tries server first, falls back to local if server fails or returns empty.
 
 import builtins;
 
-import decimal as _jacm;
-
 import logging;
 
 import from typing { Dict }
@@ -54,7 +52,7 @@ class CompositeAppCardProvider(AppCardProvider) {
         Returns:
             App card content from server or local, or empty string if both fail
         """
-    def load_app_card(
+    async def load_app_card(
         package_name: builtins.str,
         instruction: builtins.str = "",
         platform: builtins.str | None = None,

@@ -15,7 +15,7 @@ impl MobilerunAnthropic.stream_chat(messages: Any, **kwargs: Any) -> Any {
 impl MobilerunAnthropic.astream_chat(messages: Any, **kwargs: Any) -> Any {
     usage: any = StreamUsage();
     with collect_stream_usage(usage) {
-        response: any = _jacm.Decimal(super.astream_chat(messages, **kwargs));
+        response: any = (await super.astream_chat(messages, **kwargs));
     }
     return usage.atrack(response);
 }

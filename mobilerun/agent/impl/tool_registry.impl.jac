@@ -82,7 +82,7 @@ impl ToolRegistry.execute(
     `entry: any = self.tools[name];
     try {
         if inspect.iscoroutinefunction(`entry.fn) {
-            result = _jacm.Decimal(`entry.fn(**args, ctx=ctx));
+            result = (await `entry.fn(**args, ctx=ctx));
         } else {
             result = `entry.fn(**args, ctx=ctx);
         }

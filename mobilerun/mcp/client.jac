@@ -4,8 +4,6 @@ import builtins;
 
 import from __future__ { annotations }
 
-import decimal as _jacm;
-
 import asyncio;
 
 import logging;
@@ -51,22 +49,22 @@ obj MCPClientManager {
     def init(config: "MCPConfig");
 
     """Discover tools from all configured servers."""
-    def discover_tools -> dict[str, MCPToolInfo];
+    async def discover_tools -> dict[str, MCPToolInfo];
 
     """Connect temporarily to fetch tool schemas."""
-    def _discover_server_tools(server_name: str, config: "MCPServerConfig") -> None;
+    async def _discover_server_tools(server_name: str, config: "MCPServerConfig") -> None;
 
     """Check if tool passes include/exclude filters."""
     def _should_include_tool(tool_name: str, config: "MCPServerConfig") -> bool;
 
     """Call an MCP tool, connecting lazily if needed."""
-    def call_tool(tool_name: str, arguments: dict) -> Any;
+    async def call_tool(tool_name: str, arguments: dict) -> Any;
 
     """Establish persistent connection to a server."""
-    def _connect_server(server_name: str) -> None;
+    async def _connect_server(server_name: str) -> None;
 
     """Clean up all server connections."""
-    def disconnect_all -> None;
+    async def disconnect_all -> None;
 
     has tools: dict[str, MCPToolInfo] {
         getter {

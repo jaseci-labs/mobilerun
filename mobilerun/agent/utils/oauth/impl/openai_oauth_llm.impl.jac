@@ -90,7 +90,7 @@ impl _request_device_code(
     retries: int = 2,
     *,
     deadline: OAuthLoginDeadline | None = None,
-) -> dict {
+) -> dict[str, any] {
     url: any = format(issuer.rstrip("/"), "") + "/api/accounts/deviceauth/usercode";
     post: any = http_client.post if http_client is not None else httpx.post;
     for attempt in range(1 + retries) {
@@ -150,7 +150,7 @@ impl _poll_device_code(
     timeout_seconds: float = timeout_seconds_default_,
     *,
     deadline: OAuthLoginDeadline | None = None,
-) -> dict {
+) -> dict[str, any] {
     url: any = format(issuer.rstrip("/"), "") + "/api/accounts/deviceauth/token";
     login_deadline: any = deadline
         or OAuthLoginDeadline(
@@ -1022,7 +1022,7 @@ impl OpenAIOAuth._sanitize_reasoning_kwargs(runtime_kwargs: dict[str, Any]) -> d
     if self.reasoning_effort is not None {
         merged["reasoning"] = {"effort": self.reasoning_effort};
     }
-    merged.update(self.additional_kwargs or {});
+    merged.update((self.additional_kwargs or {}) as dict[str, Any]);
     merged.update(runtime_kwargs);
 
     if self.model in OPENAI_GPT6_MODELS {
@@ -1107,7 +1107,7 @@ impl OpenAIOAuth._collect_stream_text_async(events: Any) -> tuple[str, Any, list
     final_response: Any = None;
     tool_calls: list[ToolCallBlock] = [];
     try {
-        for event in _jacm.localcontext(events) {
+        async for event in (events) {
             tool_calls.extend(self._done_function_calls(event));
             event_type: any = getattr(event, "type", "");
             if event_type == "response.output_text.delta" {
@@ -1120,7 +1120,7 @@ impl OpenAIOAuth._collect_stream_text_async(events: Any) -> tuple[str, Any, list
             }
         }
     } finally {
-        _jacm.Decimal(_aclose_events(events));
+        (await _aclose_events(events));
     }
 
     collected: any = "".join(text_parts);
@@ -1281,21 +1281,17 @@ impl OpenAIOAuth._achat(messages: list[ChatMessage], **kwargs: Any) -> ChatRespo
     payload: any = self._build_responses_payload(messages);
 
     try {
-        events: any = _jacm.Decimal(aclient.responses.create(input=payload, **request_kwargs));
+        events: any = (await aclient.responses.create(input=payload, **request_kwargs));
         text: any;
         response: any;
         tool_calls: any;
-        (text, response, tool_calls) = _jacm.Decimal(
-            self._collect_stream_text_async(events)
-        ) as any;
+        (text, response, tool_calls) = (await self._collect_stream_text_async(events)) as any;
     } except Exception as exc {
         if self._should_fall_back_to_backend_api(exc) {
             self._use_backend_api_base();
             aclient = self._get_aclient();
-            events = _jacm.Decimal(aclient.responses.create(input=payload, **request_kwargs));
-            (text, response, tool_calls) = _jacm.Decimal(
-                self._collect_stream_text_async(events)
-            ) as any;
+            events = (await aclient.responses.create(input=payload, **request_kwargs));
+            (text, response, tool_calls) = (await self._collect_stream_text_async(events)) as any;
         } else {
             raise;
         }
@@ -1354,27 +1350,23 @@ impl OpenAIOAuth._astream_chat(messages: list[ChatMessage], **kwargs: Any) -> Ch
     self._ensure_access_token();
     payload: any = self._build_responses_payload(messages);
     try {
-        events: any = _jacm.Decimal(
-            self._get_aclient().responses.create(input=payload, **request_kwargs)
-        );
+        events: any = (await self._get_aclient().responses.create(input=payload, **request_kwargs));
     } except Exception as exc {
         if not self._should_fall_back_to_backend_api(exc) {
             raise;
         }
         self._use_backend_api_base();
-        events = _jacm.Decimal(
-            self._get_aclient().responses.create(input=payload, **request_kwargs)
-        );
+        events = (await self._get_aclient().responses.create(input=payload, **request_kwargs));
     }
 
     return self._astream_chunks(events);
 }
 
-impl OpenAIOAuth._astream_chunks(events: Any) -> Generator[any, any, any] {
+impl OpenAIOAuth._astream_chunks(events: Any) -> AsyncIterator[any] {
     text: any = "";
     tool_calls: list[ToolCallBlock] = [];
     try {
-        for event in _jacm.localcontext(events) {
+        async for event in (events) {
             tool_calls.extend(self._done_function_calls(event));
             chunk: any = self._stream_event_chunk(event, text);
             if chunk is not None {
@@ -1386,6 +1378,6 @@ impl OpenAIOAuth._astream_chunks(events: Any) -> Generator[any, any, any] {
             }
         }
     } finally {
-        _jacm.Decimal(_aclose_events(events));
+        (await _aclose_events(events));
     }
 }

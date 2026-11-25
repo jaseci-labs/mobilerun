@@ -1,7 +1,5 @@
 import builtins;
 
-import decimal as _jacm;
-
 import asyncio;
 
 import json;
@@ -46,7 +44,7 @@ class WriteJob(ABC) {
 
     """Execute the write operation asynchronously."""
     @abstractmethod
-    def execute -> None;
+    async def execute -> None;
 }
 
 """Writes trajectory.json."""
@@ -56,7 +54,7 @@ class EventsWriteJob(WriteJob) {
 
     has serialized_events: builtins.str;
 
-    def execute -> None;
+    async def execute -> None;
 }
 
 """Writes macro.json."""
@@ -66,7 +64,7 @@ class MacroWriteJob(WriteJob) {
 
     has serialized_macro: builtins.str;
 
-    def execute -> None;
+    async def execute -> None;
 }
 
 """Writes individual screenshot PNG."""
@@ -76,7 +74,7 @@ class ScreenshotWriteJob(WriteJob) {
 
     has screenshot_bytes: builtins.bytes;
 
-    def execute -> None;
+    async def execute -> None;
 }
 
 """Creates animated GIF from screenshots on disk."""
@@ -90,7 +88,7 @@ class GifWriteJob(WriteJob) {
 
     has duration: builtins.int = 1000;
 
-    def execute -> None;
+    async def execute -> None;
 }
 
 """Writes UI state JSON."""
@@ -100,7 +98,7 @@ class UIStateWriteJob(WriteJob) {
 
     has serialized_state: builtins.str;
 
-    def execute -> None;
+    async def execute -> None;
 }
 
 """Async worker that processes write jobs from a queue.
@@ -118,7 +116,7 @@ obj WriterWorker {
     def init(max_queue_size: builtins.int = 300);
 
     """Start the worker task."""
-    def start -> None;
+    async def start -> None;
 
     """Stop worker and wait for pending writes to complete.
 
@@ -128,11 +126,11 @@ obj WriterWorker {
         Args:
             timeout: Maximum seconds to wait for queue to drain
         """
-    def stop(timeout: builtins.float = 30.0) -> None;
+    async def stop(timeout: builtins.float = 30.0) -> None;
 
     static def _consume_worker_result(task: asyncio.Task) -> None;
 
-    def _work_loop -> None;
+    async def _work_loop -> None;
 
     def submit(job: WriteJob) -> builtins.bool;
 
@@ -166,10 +164,10 @@ obj TrajectoryWriter {
     def init(queue_size: builtins.int = 300);
 
     """Start the background worker."""
-    def start -> None;
+    async def start -> None;
 
     """Stop the background worker and wait for pending writes."""
-    def stop(timeout: builtins.float = 30.0) -> None;
+    async def stop(timeout: builtins.float = 30.0) -> None;
 
     """Write trajectory data to disk in background (non-blocking).
 

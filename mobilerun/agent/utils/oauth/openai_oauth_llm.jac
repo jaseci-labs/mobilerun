@@ -18,10 +18,6 @@ import operator;
 
 import from jaclang.comptime { target as target_ }
 
-import from __future__ { annotations }
-
-import decimal as _jacm;
-
 import base64;
 
 import hashlib;
@@ -156,7 +152,7 @@ def _request_device_code(
     retries: int = 2,
     *,
     deadline: OAuthLoginDeadline | None = None,
-) -> dict;
+) -> dict[str, any];
 
 glob timeout_seconds_default_: any;
 
@@ -174,7 +170,7 @@ def _poll_device_code(
     timeout_seconds: float = timeout_seconds_default_,
     *,
     deadline: OAuthLoginDeadline | None = None,
-) -> dict;
+) -> dict[str, any];
 
 @dataclass
 class OpenAIOAuthCredentials {
@@ -401,7 +397,7 @@ class OpenAIOAuth(OpenAI) {
 
     def _collect_stream_text_sync(events: Any) -> tuple[str, Any, list[ToolCallBlock]];
 
-    def _collect_stream_text_async(events: Any) -> tuple[str, Any, list[ToolCallBlock]];
+    async def _collect_stream_text_async(events: Any) -> tuple[str, Any, list[ToolCallBlock]];
 
     static def _is_not_found_error(exc: Exception) -> bool;
 
@@ -429,12 +425,12 @@ class OpenAIOAuth(OpenAI) {
     def _chat(messages: list[ChatMessage], **kwargs: Any) -> ChatResponse;
 
     @llm_retry_decorator
-    def _achat(messages: list[ChatMessage], **kwargs: Any) -> ChatResponse;
+    async def _achat(messages: list[ChatMessage], **kwargs: Any) -> ChatResponse;
     @llm_retry_decorator
     def _stream_chat(messages: list[ChatMessage], **kwargs: Any) -> ChatResponseGen;
 
     @llm_retry_decorator
-    def _astream_chat(messages: list[ChatMessage], **kwargs: Any) -> ChatResponseAsyncGen;
+    async def _astream_chat(messages: list[ChatMessage], **kwargs: Any) -> ChatResponseAsyncGen;
 
-    def _astream_chunks(events: Any) -> Generator[any, any, any];
+    async def _astream_chunks(events: Any) -> AsyncIterator[any];
 }

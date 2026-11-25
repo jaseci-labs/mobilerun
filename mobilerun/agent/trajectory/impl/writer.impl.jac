@@ -46,22 +46,22 @@ impl WriteJob.execute -> None {}
 
 impl EventsWriteJob.execute -> None {
     f: any;
-    with _jacm.Context(aiofiles.open(self.target_path, "w")) as f {
-        _jacm.Decimal(f.write(self.serialized_events));
+    async with (aiofiles.open(self.target_path, "w")) as f {
+        (await f.write(self.serialized_events));
     }
 }
 
 impl MacroWriteJob.execute -> None {
     f: any;
-    with _jacm.Context(aiofiles.open(self.target_path, "w")) as f {
-        _jacm.Decimal(f.write(self.serialized_macro));
+    async with (aiofiles.open(self.target_path, "w")) as f {
+        (await f.write(self.serialized_macro));
     }
 }
 
 impl ScreenshotWriteJob.execute -> None {
     f: any;
-    with _jacm.Context(aiofiles.open(self.target_path, "wb")) as f {
-        _jacm.Decimal(f.write(self.screenshot_bytes));
+    async with (aiofiles.open(self.target_path, "wb")) as f {
+        (await f.write(self.screenshot_bytes));
     }
 }
 
@@ -106,14 +106,14 @@ impl GifWriteJob.execute -> None {
     }
 
     loop: any = asyncio.get_running_loop();
-    _jacm.Decimal(loop.run_in_executor(None, _create_gif));
+    (await loop.run_in_executor(None, _create_gif));
 }
 
 impl UIStateWriteJob.execute -> None {
-    if not _jacm.Decimal(ospath.exists(self.target_path)) {
+    if not (await ospath.exists(self.target_path)) {
         f: any;
-        with _jacm.Context(aiofiles.open(self.target_path, "w", encoding="utf-8")) as f {
-            _jacm.Decimal(f.write(self.serialized_state));
+        async with (aiofiles.open(self.target_path, "w", encoding="utf-8")) as f {
+            (await f.write(self.serialized_state));
         }
     }
 }
@@ -144,7 +144,7 @@ impl WriterWorker.stop(timeout: builtins.float = 30.0) -> None {
     try {
         done: any;
         _: any;
-        (done, _) = _jacm.Decimal(asyncio.wait({drain_task}, timeout=timeout)) as any;
+        (done, _) = (await asyncio.wait({drain_task}, timeout=timeout)) as any;
         if not done {
             logger.warning(f"Writer timeout after {timeout}s, {self.queue.qsize()} jobs remaining");
         }
@@ -170,10 +170,10 @@ impl WriterWorker._consume_worker_result(task: asyncio.Task) -> None {
 impl WriterWorker._work_loop -> None {
     while self.running {
         try {
-            job: any = _jacm.Decimal(self.queue.get());
+            job: any = (await self.queue.get());
 
             try {
-                _jacm.Decimal(job.execute());
+                (await job.execute());
                 self._write_count += 1;
             } except Exception as e {
                 self._error_count += 1;
@@ -215,12 +215,12 @@ impl TrajectoryWriter.init(queue_size: builtins.int = 300) {
 }
 
 impl TrajectoryWriter.start -> None {
-    _jacm.Decimal(self.worker.start());
+    (await self.worker.start());
     self._started = True;
 }
 
 impl TrajectoryWriter.stop(timeout: builtins.float = 30.0) -> None {
-    _jacm.Decimal(self.worker.stop(timeout=timeout));
+    (await self.worker.stop(timeout=timeout));
 }
 
 impl TrajectoryWriter.write(trajectory, stage: builtins.str) -> None {

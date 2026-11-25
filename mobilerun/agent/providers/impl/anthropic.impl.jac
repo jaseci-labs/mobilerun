@@ -30,8 +30,8 @@ impl StreamUsage.track(chunks: Any) -> Generator[any, any, any] {
     }
 }
 
-impl StreamUsage.atrack(chunks: Any) -> Generator[any, any, any] {
-    for chunk in _jacm.localcontext(chunks) {
+impl StreamUsage.atrack(chunks: Any) -> AsyncIterator[any] {
+    async for chunk in (chunks) {
         self._chunk = chunk;
         yield chunk;
     }
@@ -78,7 +78,7 @@ impl collect_stream_usage(usage: StreamUsage) -> Generator[any, any, any] {
     }
 }
 
-impl _wrap_stream(stream: Any, usage: StreamUsage | None, kwargs: dict) -> Any {
+impl _wrap_stream(stream: Any, usage: StreamUsage | None, kwargs: dict[str, any]) -> Any {
     if usage is None or not kwargs.get("stream") {
         return stream;
     }
@@ -125,8 +125,8 @@ impl _UsageRecordingStream.__iter__ -> Generator[any, any, any] {
     }
 }
 
-impl _UsageRecordingStream.__aiter__ -> Generator[any, any, any] {
-    for event in _jacm.localcontext(self._stream) {
+impl _UsageRecordingStream.__aiter__ -> AsyncIterator[any] {
+    async for event in (self._stream) {
         self._usage.record(event);
         yield event;
     }

@@ -2,8 +2,6 @@ import operator;
 
 import from __future__ { annotations }
 
-import decimal as _jacm;
-
 import from typing { Dict, List, Optional }
 
 import from uuid { uuid4 }
@@ -118,7 +116,7 @@ class MobileAgentState(BaseModel) {
         Accepts both ``reason`` and ``message`` params — FastAgent XML
         prompt uses ``message``, action signature uses ``reason``.
         """
-    def complete(success: bool, reason: str = "", message: str = "") -> None;
+    async def complete(success: bool, reason: str = "", message: str = "") -> None;
 
     def queue_user_message(message: str) -> QueuedUserMessage;
 

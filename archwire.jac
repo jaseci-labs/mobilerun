@@ -1297,7 +1297,7 @@ graph import {
         AuthProfileStore,
     }
     mobilerun.config_manager.credential_paths ++> mobilerun.config_manager.env_keys {
-        AUTH_PROFILES_PATH,
+        AUTH_PROFILES_PATH as _DEFAULT_AUTH_PROFILES_PATH,
     }
     include mobilerun.tools.formatters.base ++> mobilerun.tools.formatters { TreeFormatter }
     include mobilerun.tools.formatters.indexed_formatter ++> mobilerun.tools.formatters {

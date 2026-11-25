@@ -7,8 +7,6 @@ import builtins;
 
 import from __future__ { annotations }
 
-import decimal as _jacm;
-
 import inspect;
 
 import json;
@@ -92,7 +90,7 @@ obj ToolRegistry {
         - TypeError (bad arguments)
         - General exceptions
         """
-    def execute(
+    async def execute(
         name: str,
         args: Dict[str, Any],
         ctx: "ActionContext",

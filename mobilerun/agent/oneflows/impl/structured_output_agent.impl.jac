@@ -15,10 +15,10 @@ impl StructuredOutputAgent.extract_structured_output(ctx: Context, ev: StartEven
             "Extract structured information from the following text:\n\n{text}"
         );
         logger.info("🔍 StructuredOutput response:", extra={"color": "magenta"});
-        structured_output: any = _jacm.Decimal(
-            astructured_predict_with_retries(
+        structured_output: any = (
+            await astructured_predict_with_retries(
                 self.llm, self.pydantic_model, prompt, text=self.answer_text
-            ),
+            )
         );
 
         logger.debug("✅ Successfully extracted structured output");

@@ -2,10 +2,6 @@
 
 import builtins;
 
-import from __future__ { annotations }
-
-import decimal as _jacm;
-
 import from collections.abc { Iterator, MutableMapping }
 
 import from contextlib { contextmanager }
@@ -127,7 +123,7 @@ obj StreamUsage {
 
     def track(chunks: Any) -> Generator[any, any, any];
 
-    def atrack(chunks: Any) -> Generator[any, any, any];
+    async def atrack(chunks: Any) -> AsyncIterator[any];
 
     def record(event: Any) -> None;
 
@@ -146,7 +142,7 @@ with entry {
 @contextmanager
 def collect_stream_usage(usage: StreamUsage) -> Generator[any, any, any];
 
-def _wrap_stream(stream: Any, usage: StreamUsage | None, kwargs: dict) -> Any;
+def _wrap_stream(stream: Any, usage: StreamUsage | None, kwargs: dict[str, any]) -> Any;
 
 async def _acreate(create: Any, *args_: Any, **kwargs: Any) -> Any;
 
@@ -163,7 +159,7 @@ obj _UsageRecordingStream {
 
     def __iter__ -> Generator[any, any, any];
 
-    def __aiter__ -> Generator[any, any, any];
+    async def __aiter__ -> AsyncIterator[any];
 
     def __repr__ -> str;
 

@@ -72,9 +72,9 @@ impl DeviceConfig.resolve_auth_token -> Optional[str] {
     return os.environ.get("MOBILERUN_DEVICE_TOKEN") or self.auth_token;
 }
 
-impl MobileConfig.postinit -> any {
-    if not self.llm_profiles {
-        self.llm_profiles = self._default_profiles();
+impl _fill_default_profiles(config: any) -> None {
+    if not config.llm_profiles {
+        config.llm_profiles = MobileConfig._default_profiles();
     }
 }
 

@@ -10,8 +10,6 @@ import operator;
 
 import from __future__ { annotations }
 
-import decimal as _jacm;
-
 import asyncio;
 
 import logging;
@@ -115,10 +113,10 @@ obj StateProvider {
 
     def init(driver: "DeviceDriver");
 
-    def get_state -> UIState;
+    async def get_state -> UIState;
 
     """Read the final observation; subclasses may make this narrower."""
-    def get_final_state -> UIState;
+    async def get_final_state -> UIState;
 
     def __repr__ -> str;
 
@@ -186,14 +184,14 @@ obj AndroidStateProvider(StateProvider) {
     def _portal_recovery -> Optional[Callable[[], Awaitable[None]]];
 
     """Restart Portal's accessibility service, TCP server and keyboard."""
-    def _recover_portal -> None;
+    async def _recover_portal -> None;
 
-    def get_state -> UIState;
+    async def get_state -> UIState;
 
     """Finalization must not restart accessibility after a failed read."""
-    def get_final_state -> UIState;
+    async def get_final_state -> UIState;
 
-    def _state_from_data_async(combined_data: dict) -> UIState;
+    async def _state_from_data_async(combined_data: dict) -> UIState;
 
     def _state_from_data(combined_data: dict) -> UIState;
 

@@ -2,8 +2,6 @@
 
 import builtins;
 
-import decimal as _jacm;
-
 import from typing { Any }
 
 import from llama_index.llms.google_genai { GoogleGenAI }
@@ -17,11 +15,11 @@ class MobilerunGoogleGenAI(GoogleGenAI) {
 
     def _chat(messages: Any, **kwargs: Any) -> Any;
 
-    def _achat(messages: Any, **kwargs: Any) -> Any;
+    async def _achat(messages: Any, **kwargs: Any) -> Any;
 
     def _stream_chat(messages: Any, **kwargs: Any) -> Any;
 
-    def _astream_chat(messages: Any, **kwargs: Any) -> Any;
+    async def _astream_chat(messages: Any, **kwargs: Any) -> Any;
 
     def structured_predict_without_function_calling(
         output_cls: Any,
@@ -37,7 +35,7 @@ class MobilerunGoogleGenAI(GoogleGenAI) {
         **prompt_args: Any,
     ) -> Any;
 
-    def astructured_predict(
+    async def astructured_predict(
         output_cls: Any,
         prompt: Any,
         llm_kwargs: builtins.dict[builtins.str, Any] | None = None,
@@ -51,7 +49,7 @@ class MobilerunGoogleGenAI(GoogleGenAI) {
         **prompt_args: Any,
     ) -> Any;
 
-    def astream_structured_predict(
+    async def astream_structured_predict(
         output_cls: Any,
         prompt: Any,
         llm_kwargs: builtins.dict[builtins.str, Any] | None = None,

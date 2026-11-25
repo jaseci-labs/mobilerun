@@ -7,8 +7,6 @@ Supports multiple backends: local files, remote servers, or composite strategies
 
 import builtins;
 
-import decimal as _jacm;
-
 import from abc { ABC, abstractmethod }
 
 """Abstract interface for loading app-specific instruction cards."""
@@ -25,7 +23,7 @@ class AppCardProvider(ABC) {
             App card content as string, or empty string if not found or on error
         """
     @abstractmethod
-    def load_app_card(
+    async def load_app_card(
         package_name: builtins.str,
         instruction: builtins.str = "",
         platform: builtins.str | None = None,

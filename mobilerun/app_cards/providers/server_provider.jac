@@ -6,8 +6,6 @@ Fetches app cards from a remote HTTP server.
 
 import builtins;
 
-import decimal as _jacm;
-
 import logging;
 
 import from typing { Dict }
@@ -45,7 +43,7 @@ class ServerAppCardProvider(AppCardProvider) {
         Returns:
             App card content or empty string if not found or on error
         """
-    def load_app_card(
+    async def load_app_card(
         package_name: builtins.str,
         instruction: builtins.str = "",
         platform: builtins.str | None = None,

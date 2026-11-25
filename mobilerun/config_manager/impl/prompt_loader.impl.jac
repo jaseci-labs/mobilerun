@@ -17,8 +17,8 @@ impl PromptLoader.load_prompt(
         raise FileNotFoundError(f"Prompt file not found: {file_path}");
     }
     f: any;
-    with _jacm.Context(aiofiles.open(path, mode="r", encoding="utf-8")) as f {
-        template_content: any = _jacm.Decimal(f.read());
+    async with (aiofiles.open(path, mode="r", encoding="utf-8")) as f {
+        template_content: any = (await f.read());
     }
     return PromptLoader.render_template(template_content, variables);
 }

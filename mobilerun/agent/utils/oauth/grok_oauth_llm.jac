@@ -9,10 +9,6 @@ import builtins;
 
 import operator;
 
-import from __future__ { annotations }
-
-import decimal as _jacm;
-
 import asyncio;
 
 import base64;
@@ -362,7 +358,7 @@ class GrokOAuthAuth(httpx.Auth) {
 
     def sync_auth_flow(request: httpx.Request) -> Generator[any, any, any];
 
-    def async_auth_flow(request: httpx.Request) -> Generator[any, any, any];
+    async def async_auth_flow(request: httpx.Request) -> AsyncGenerator[any, any];
 }
 
 glob model_default_: any;
@@ -431,7 +427,7 @@ class GrokOAuth(OpenAIResponses) {
         output_cls: Any, prompt: Any, llm_kwargs: dict[str, Any] | None = None, **prompt_args: Any
     ) -> Any;
 
-    def astructured_predict(
+    async def astructured_predict(
         output_cls: Any, prompt: Any, llm_kwargs: dict[str, Any] | None = None, **prompt_args: Any
     ) -> Any;
 

@@ -7,8 +7,6 @@ app_cards.json mapping.
 
 import builtins;
 
-import decimal as _jacm;
-
 import json;
 
 import logging;
@@ -61,7 +59,7 @@ class LocalAppCardProvider(AppCardProvider) {
         Returns:
             App card content or empty string if not found
         """
-    def load_app_card(
+    async def load_app_card(
         package_name: builtins.str,
         instruction: builtins.str = "",
         platform: builtins.str | None = None,

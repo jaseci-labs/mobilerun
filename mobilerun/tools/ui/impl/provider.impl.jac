@@ -126,7 +126,7 @@ impl StateProvider.get_state -> UIState {
 }
 
 impl StateProvider.get_final_state -> UIState {
-    return _jacm.Decimal(self.get_state());
+    return (await self.get_state());
 }
 
 impl StateProvider.__repr__ -> str {
@@ -216,21 +216,19 @@ impl AndroidStateProvider._recover_portal -> None {
 
     a11y: any = portal_a11y_service(PORTAL_PACKAGE_NAME);
     logger.debug("Restarting Portal accessibility service...");
-    _jacm.Decimal(device.shell("settings put secure accessibility_enabled 0"));
-    _jacm.Decimal(asyncio.sleep(0.5));
-    _jacm.Decimal(device.shell(f"settings put secure enabled_accessibility_services {a11y}"));
-    _jacm.Decimal(device.shell("settings put secure accessibility_enabled 1"));
+    (await device.shell("settings put secure accessibility_enabled 0"));
+    (await asyncio.sleep(0.5));
+    (await device.shell(f"settings put secure enabled_accessibility_services {a11y}"));
+    (await device.shell("settings put secure accessibility_enabled 1"));
     portal: any = self.driver.portal;
     if portal is not None and portal.tcp_available {
         logger.debug("Restarting Portal TCP socket server...");
         toggle_uri: any = portal_content_uri(PORTAL_PACKAGE_NAME, "toggle_socket_server");
         try {
-            _jacm.Decimal(
-                device.shell(f"content insert --uri {toggle_uri} --bind enabled:b:false")
-            );
-            _jacm.Decimal(asyncio.sleep(0.3));
-            _jacm.Decimal(device.shell(f"content insert --uri {toggle_uri} --bind enabled:b:true"));
-            new_token: any = _jacm.Decimal(portal._fetch_auth_token());
+            (await device.shell(f"content insert --uri {toggle_uri} --bind enabled:b:false"));
+            (await asyncio.sleep(0.3));
+            (await device.shell(f"content insert --uri {toggle_uri} --bind enabled:b:true"));
+            new_token: any = (await portal._fetch_auth_token());
             if new_token {
                 portal._auth_token = new_token;
                 logger.debug("Auth token refreshed after TCP server restart");
@@ -243,25 +241,27 @@ impl AndroidStateProvider._recover_portal -> None {
         import from mobilerun_core_local.driver.android.portal { setup_keyboard }
 
         try {
-            _jacm.Decimal(setup_keyboard(device));
+            (await setup_keyboard(device));
         } except Exception as e {
             logger.debug(f"Portal keyboard restore failed: {e}");
         }
     }
 
-    _jacm.Decimal(asyncio.sleep(1.5));
+    (await asyncio.sleep(1.5));
 }
 
 impl AndroidStateProvider.get_state -> UIState {
-    combined_data: any = _jacm.Decimal(
-        fetch_state_with_retry(fetch=self.driver.get_ui_tree, recovery=self._portal_recovery())
+    combined_data: any = (
+        await fetch_state_with_retry(
+            fetch=self.driver.get_ui_tree, recovery=self._portal_recovery()
+        )
     );
-    return _jacm.Decimal(self._state_from_data_async(combined_data));
+    return (await self._state_from_data_async(combined_data));
 }
 
 impl AndroidStateProvider.get_final_state -> UIState {
-    combined_data: any = _jacm.Decimal(self.driver.get_ui_tree());
-    return _jacm.Decimal(self._state_from_data_async(combined_data));
+    combined_data: any = (await self.driver.get_ui_tree());
+    return (await self._state_from_data_async(combined_data));
 }
 
 impl AndroidStateProvider._state_from_data_async(combined_data: dict) -> UIState {
@@ -278,7 +278,7 @@ impl AndroidStateProvider._state_from_data_async(combined_data: dict) -> UIState
 
     state: any;
     resize: any;
-    (state, resize) = _jacm.Decimal(asyncio.to_thread(process)) as any;
+    (state, resize) = (await asyncio.to_thread(process)) as any;
     self.resize_model_screenshot = resize;
     self.model_screenshot_width = state.model_screenshot_width;
     self.model_screenshot_height = state.model_screenshot_height;

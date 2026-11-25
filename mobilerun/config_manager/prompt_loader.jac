@@ -15,8 +15,6 @@ Features:
 
 import builtins;
 
-import decimal as _jacm;
-
 import from pathlib { Path }
 
 import from typing { Any, Dict }
@@ -51,7 +49,7 @@ obj PromptLoader {
             FileNotFoundError: If template file doesn't exist
 
         """
-    static def load_prompt(
+    static async def load_prompt(
         file_path: builtins.str, variables: Dict[builtins.str, Any] = None
     ) -> builtins.str;
 

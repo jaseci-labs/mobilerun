@@ -18,6 +18,8 @@ glob API_KEY_ENV_VARS: any = {
 
 glob _API_KEYS_SECTION: any = "apiKeys";
 
+glob AUTH_PROFILES_PATH: any = _DEFAULT_AUTH_PROFILES_PATH;
+
 """API key values from the shell and the saved env file."""
 @dataclass(frozen=True)
 class ApiKeySources {

@@ -1665,8 +1665,11 @@ def test_async_structured_predict_sanitizes_runtime_kwargs(monkeypatch, tmp_path
 
 
 def test_grok_integration_source_does_not_bridge_to_external_credentials():
-    source = (Path(__import__("mobilerun").__file__).parent / "agent/utils/oauth/grok_oauth_llm.py").read_text(
-        encoding="utf-8"
+    root = next(d for d in Path(__file__).resolve().parents if (d / "jac.toml").exists())
+    oauth = root / "mobilerun/agent/utils/oauth"
+    source = "".join(
+        path.read_text(encoding="utf-8")
+        for path in (oauth / "grok_oauth_llm.jac", oauth / "impl/grok_oauth_llm.impl.jac")
     )
     forbidden = (
         "." + "grok" + "/" + "auth.json",

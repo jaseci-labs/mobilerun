@@ -1,7 +1,5 @@
 import builtins;
 
-import decimal as _jacm;
-
 import logging;
 
 import from typing { Any, Dict, Optional }
@@ -48,10 +46,10 @@ class FileCredentialManager(CredentialManager) {
     def _load_from_file(file_path: builtins.str) -> Dict[builtins.str, builtins.str];
 
     """Get secret value by key."""
-    def resolve_key(key: builtins.str) -> builtins.str;
+    async def resolve_key(key: builtins.str) -> builtins.str;
 
     """Get all available credential keys."""
-    def get_keys -> builtins.list[builtins.str];
+    async def get_keys -> builtins.list[builtins.str];
 
     """Check if secret ID exists."""
     def has_credential(secret_id: builtins.str) -> builtins.bool;

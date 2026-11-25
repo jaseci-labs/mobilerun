@@ -26,8 +26,8 @@ impl ServerAppCardProvider.load_app_card(
     for attempt in range(1, self.max_retries + 1) {
         try {
             client: any;
-            with _jacm.Context(httpx.AsyncClient(timeout=self.timeout)) as client {
-                response: any = _jacm.Decimal(client.post(endpoint, json=payload));
+            async with (httpx.AsyncClient(timeout=self.timeout)) as client {
+                response: any = (await client.post(endpoint, json=payload));
 
                 if response.status_code == 200 {
                     data: any = response.json();

@@ -4,8 +4,6 @@ import builtins;
 
 import operator;
 
-import decimal as _jacm;
-
 import from typing { Any }
 
 import from llama_index.core.base.llms.types { LLMMetadata }
@@ -21,7 +19,7 @@ class MobilerunAnthropic(Anthropic) {
 
     def stream_chat(messages: Any, **kwargs: Any) -> Any;
 
-    def astream_chat(messages: Any, **kwargs: Any) -> Any;
+    async def astream_chat(messages: Any, **kwargs: Any) -> Any;
 
     @wraps(Anthropic._prepare_chat_with_tools)
     def _prepare_chat_with_tools(*args_: Any, **kwargs: Any) -> builtins.dict[builtins.str, Any];

@@ -98,7 +98,7 @@ impl LocalAppCardProvider.load_app_card(
         import asyncio;
 
         loop: any = asyncio.get_running_loop();
-        content: any = _jacm.Decimal(loop.run_in_executor(None, app_card_path.read_text, "utf-8"));
+        content: any = (await loop.run_in_executor(None, app_card_path.read_text, "utf-8"));
         self._content_cache[cache_key] = content;
         logger.debug(f"Loaded app card for {package_name} from {app_card_path}");
         return content;

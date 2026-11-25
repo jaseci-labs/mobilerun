@@ -42,7 +42,7 @@ impl MobilerunGoogleGenAI._chat(messages: Any, **kwargs: Any) -> Any {
 }
 
 impl MobilerunGoogleGenAI._achat(messages: Any, **kwargs: Any) -> Any {
-    return _jacm.Decimal(super._achat(messages, **self._sanitize_call_kwargs(`dict(kwargs))));
+    return (await super._achat(messages, **self._sanitize_call_kwargs(`dict(kwargs))));
 }
 
 impl MobilerunGoogleGenAI._stream_chat(messages: Any, **kwargs: Any) -> Any {
@@ -50,9 +50,7 @@ impl MobilerunGoogleGenAI._stream_chat(messages: Any, **kwargs: Any) -> Any {
 }
 
 impl MobilerunGoogleGenAI._astream_chat(messages: Any, **kwargs: Any) -> Any {
-    return _jacm.Decimal(
-        super._astream_chat(messages, **self._sanitize_call_kwargs(`dict(kwargs)))
-    );
+    return (await super._astream_chat(messages, **self._sanitize_call_kwargs(`dict(kwargs))));
 }
 
 impl MobilerunGoogleGenAI.structured_predict_without_function_calling(
@@ -89,13 +87,13 @@ impl MobilerunGoogleGenAI.astructured_predict(
     llm_kwargs: builtins.dict[builtins.str, Any] | None = None,
     **prompt_args: Any,
 ) -> Any {
-    return _jacm.Decimal(
-        super.astructured_predict(
+    return (
+        await super.astructured_predict(
             output_cls,
             prompt,
             llm_kwargs=self._sanitize_call_kwargs(`dict(llm_kwargs or {})),
             **prompt_args,
-        ),
+        )
     );
 }
 
@@ -119,12 +117,12 @@ impl MobilerunGoogleGenAI.astream_structured_predict(
     llm_kwargs: builtins.dict[builtins.str, Any] | None = None,
     **prompt_args: Any,
 ) -> Any {
-    return _jacm.Decimal(
-        super.astream_structured_predict(
+    return (
+        await super.astream_structured_predict(
             output_cls,
             prompt,
             llm_kwargs=self._sanitize_call_kwargs(`dict(llm_kwargs or {})),
             **prompt_args,
-        ),
+        )
     );
 }

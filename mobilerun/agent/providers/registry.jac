@@ -24,7 +24,7 @@ glob _OPENAI_LOW_TO_MAX_EFFORTS: any;
 
 glob _OPENAI_NONE_TO_MAX_EFFORTS: any;
 
-glob OPENAI_REASONING_EFFORTS: dict[str, frozenset[str]];
+glob OPENAI_REASONING_EFFORTS: dict[str, any];
 
 glob GEMINI_API_DEFAULT_MODEL: any;
 

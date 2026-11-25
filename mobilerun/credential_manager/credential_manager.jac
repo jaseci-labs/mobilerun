@@ -1,7 +1,5 @@
 import builtins;
 
-import decimal as _jacm;
-
 import from abc { ABC, abstractmethod }
 
 import from typing { List }
@@ -30,7 +28,7 @@ class CredentialManager(ABC) {
             CredentialNotFoundError: If key doesn't exist
         """
     @abstractmethod
-    def resolve_key(key: builtins.str) -> builtins.str;
+    async def resolve_key(key: builtins.str) -> builtins.str;
 
     """
         Get all available credential keys.
@@ -39,5 +37,5 @@ class CredentialManager(ABC) {
             List of credential identifiers
         """
     @abstractmethod
-    def get_keys -> List[builtins.str];
+    async def get_keys -> List[builtins.str];
 }

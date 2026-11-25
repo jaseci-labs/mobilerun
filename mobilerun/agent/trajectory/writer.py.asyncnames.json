@@ -1,1 +1,0 @@
-[["WriteJob", "execute"], ["EventsWriteJob", "execute"], ["MacroWriteJob", "execute"], ["ScreenshotWriteJob", "execute"], ["GifWriteJob", "execute"], ["UIStateWriteJob", "execute"], ["WriterWorker", "start"], ["WriterWorker", "stop"], ["WriterWorker", "_work_loop"], ["TrajectoryWriter", "start"], ["TrajectoryWriter", "stop"]]

@@ -44,7 +44,7 @@ impl MCPClientManager.discover_tools -> dict[str, MCPToolInfo] {
             continue;
         }
         try {
-            _jacm.Decimal(self._discover_server_tools(server_name, server_config));
+            (await self._discover_server_tools(server_name, server_config));
         } except Exception as e {
             logger.warning(f"MCP '{server_name}': discovery failed: {e}");
         }
@@ -69,15 +69,15 @@ impl MCPClientManager._discover_server_tools(server_name: str, config: "MCPServe
     server_tool_names: list[str] = [];
 
     stack: any;
-    with _jacm.Context(AsyncExitStack()) as stack {
-        transport: any = _jacm.Decimal(stack.enter_async_context(stdio_client(server_params)));
+    async with (AsyncExitStack()) as stack {
+        transport: any = (await stack.enter_async_context(stdio_client(server_params)));
         read: any;
         write: any;
         (read, write) = transport as any;
-        session: any = _jacm.Decimal(stack.enter_async_context(ClientSession(read, write)));
-        _jacm.Decimal(session.initialize());
+        session: any = (await stack.enter_async_context(ClientSession(read, write)));
+        (await session.initialize());
 
-        response: any = _jacm.Decimal(session.list_tools());
+        response: any = (await session.list_tools());
         prefix: any = config.prefix if config.prefix is not None else f"{server_name}_";
 
         for tool in response.tools {
@@ -119,11 +119,11 @@ impl MCPClientManager.call_tool(tool_name: str, arguments: dict) -> Any {
     server_name: any = tool_info.server_name;
 
     if server_name not in self._sessions {
-        _jacm.Decimal(self._connect_server(server_name));
+        (await self._connect_server(server_name));
     }
 
     session: any = self._sessions[server_name];
-    return _jacm.Decimal(session.call_tool(tool_info.original_name, arguments));
+    return (await session.call_tool(tool_info.original_name, arguments));
 }
 
 impl MCPClientManager._connect_server(server_name: str) -> None {
@@ -143,10 +143,10 @@ impl MCPClientManager._connect_server(server_name: str) -> None {
         _own_connection(server_params, ready, shutdown), name=f"mcp:{server_name}"
     );
     try {
-        session: any = _jacm.Decimal(ready);
+        session: any = (await ready);
     } except BaseException {
         task.cancel();
-        _jacm.Decimal(asyncio.gather(task, return_exceptions=True));
+        (await asyncio.gather(task, return_exceptions=True));
         raise;
     }
 
@@ -163,7 +163,7 @@ impl MCPClientManager.disconnect_all -> None {
 
     for (server_name, task) in `list(self._connection_tasks.items()) {
         try {
-            _jacm.Decimal(task);
+            (await task);
             logger.debug(f"MCP '{server_name}': disconnected");
         } except Exception as e {
             logger.warning(f"MCP '{server_name}': disconnect error: {e}");

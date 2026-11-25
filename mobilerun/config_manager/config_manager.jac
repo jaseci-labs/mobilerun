@@ -183,6 +183,9 @@ class LoggingConfig {
     has trajectory_gifs: bool = True;
 }
 
+"""Give a MobileConfig the default profiles when it has none; its dataclass __post_init__."""
+def _fill_default_profiles(config: any) -> None;
+
 glob DEFAULT_DISABLED_TOOLS: tuple[str, ...];
 
 glob DroidConfig: any;
@@ -236,8 +239,7 @@ class MobileConfig {
 
     has mcp: MCPConfig = field(default_factory=MCPConfig);
 
-    """Ensure default profiles exist."""
-    def postinit -> any;
+    static has __post_init__: any = _fill_default_profiles;
 
     """Get default agent specific LLM profiles."""
     static def _default_profiles -> Dict[str, LLMProfile];
