@@ -74,6 +74,24 @@ Medians; ×n is relative to `orig 3.15`.
 | `mobilerun whoami` | 2631 ms | 2250 ms | 2603 ms (×0.99) | 2515 ms (×0.96) | 36→26 |
 | pytest suite (1474 tests) | 33.5 s (min 28.7) | 44.2 s (min 30.5) | 39.7 s (min 26.8) | 41.7 s (min 27.8) | 26→20 |
 
+### At the current HEAD (`3f947e2`)
+
+The table above freezes `jac after` at commit `386b9b5`. Two cuts came after it: `_collect_all`
+and the element-bounds reads. This run compares that snapshot with the current build. It used
+11 alternating rounds with digests checked, at load 15→13 for `ui`, 13→26 for `search` and
+26→16 for `macro`:
+
+| Workload | orig 3.15 | jac after (`386b9b5`) | jac at HEAD |
+|---|---:|---:|---:|
+| `ui` | 205 ms | 287 ms (×1.40) | **270 ms (×1.32)** |
+| `search` | 237 ms | 471 ms (×1.99) | **386 ms (×1.63)** |
+| `macro` | 185 ms | 246 ms (×1.33) | 245 ms (×1.32) |
+
+`macro` has the same bytecode in both builds, so its two columns show the run-to-run noise.
+A 5-variant run at load 21–35 just before this one was too noisy to use: two identical
+`macro` builds came out 277 vs 562 ms. Its output is kept in
+`~/neojac-deslop/perf/mobilerun/final_work2.txt`.
+
 The 11-run CLI and 5-run suite timings are in `~/neojac-deslop/perf/mobilerun/final_*.txt`. A load spike in the
 middle of the `--version` and `--help` rows inflated their medians, so their minimums are given
 too. By minimum, every CLI command is within ±5% of the original on the same interpreter. The
