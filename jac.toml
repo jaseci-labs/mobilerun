@@ -287,9 +287,9 @@ files = [
     "mobilerun/tools/helpers/images.jac",
     "mobilerun/tools/ios/__init__.jac",
     "mobilerun/tools/ui/__init__.py",
-    "mobilerun/tools/ui/ios_provider.py",
+    "mobilerun/tools/ui/ios_provider.jac",
     "mobilerun/tools/ui/provider.jac",
-    "mobilerun/tools/ui/screenshot_provider.py",
+    "mobilerun/tools/ui/screenshot_provider.jac",
     "mobilerun/tools/ui/state.jac",
     "mobilerun/tools/ui/stealth_state.jac",
 ]

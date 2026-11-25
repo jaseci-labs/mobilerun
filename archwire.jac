@@ -433,22 +433,6 @@ graph import {
         acomplete_with_retries,
     }
     mobilerun.agent.utils.llm_picker --> mobilerun.agent.oneflows.app_starter_workflow { load_llm }
-    mobilerun.tools.helpers.coordinate --> mobilerun.tools.ui.ios_provider {
-        NORMALIZED_STATE_NOTE,
-        bounds_to_normalized,
-    }
-    mobilerun.tools.helpers.images --> mobilerun.tools.ui.ios_provider {
-        fit_dimensions_to_max_side,
-        image_dimensions,
-    }
-    mobilerun.tools.ui.provider --> mobilerun.tools.ui.ios_provider { StateProvider }
-    mobilerun.tools.ui.state --> mobilerun.tools.ui.ios_provider { UIState }
-    mobilerun.tools.helpers.images --> mobilerun.tools.ui.screenshot_provider {
-        fit_dimensions_to_max_side,
-        image_dimensions,
-    }
-    mobilerun.tools.ui.provider --> mobilerun.tools.ui.screenshot_provider { StateProvider }
-    mobilerun.tools.ui.state --> mobilerun.tools.ui.screenshot_provider { UIState }
     mobilerun.macro.replay --> mobilerun.macro;
     mobilerun.agent.utils.trajectory --> mobilerun.macro.replay { Trajectory }
     mobilerun.macro.handoff --> mobilerun.macro.replay { run_agent_handoff }
@@ -1615,6 +1599,22 @@ graph import {
         collect_stream_usage,
         record_stream_usage,
     }
+    mobilerun.tools.helpers.coordinate ++> mobilerun.tools.ui.ios_provider {
+        NORMALIZED_STATE_NOTE,
+        bounds_to_normalized,
+    }
+    mobilerun.tools.helpers.images ++> mobilerun.tools.ui.ios_provider {
+        fit_dimensions_to_max_side,
+        image_dimensions,
+    }
+    mobilerun.tools.ui.state ++> mobilerun.tools.ui.ios_provider { UIState }
+    mobilerun.tools.ui.provider ++> mobilerun.tools.ui.ios_provider { StateProvider }
+    mobilerun.tools.helpers.images ++> mobilerun.tools.ui.screenshot_provider {
+        fit_dimensions_to_max_side,
+        image_dimensions,
+    }
+    mobilerun.tools.ui.state ++> mobilerun.tools.ui.screenshot_provider { UIState }
+    mobilerun.tools.ui.provider ++> mobilerun.tools.ui.screenshot_provider { StateProvider }
 }
 
 graph spaces {
