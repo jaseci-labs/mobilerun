@@ -4,7 +4,7 @@ import from __future__ { annotations }
 
 import time;
 
-import from typing { Any, Dict, List, Optional }
+import from typing { Any, Dict }
 
 class MacroRecorder {
     has actions: any,

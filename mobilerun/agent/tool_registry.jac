@@ -12,7 +12,7 @@ import logging;
 
 import from dataclasses { dataclass }
 
-import from typing { TYPE_CHECKING, Any, Callable, Dict, Optional, Set }
+import from typing { Any, Callable, Dict, Optional, Set }
 
 glob logger: any = logging.getLogger("mobilerun");
 

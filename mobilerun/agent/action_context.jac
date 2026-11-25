@@ -1,8 +1,6 @@
-import builtins;
-
 import from __future__ { annotations }
 
-import from typing { TYPE_CHECKING, Optional }
+import from typing { Optional }
 
 """Everything an action function needs to interact with the device."""
 class ActionContext {

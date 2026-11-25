@@ -8,7 +8,7 @@ import json;
 
 import logging;
 
-import from typing { TYPE_CHECKING, Optional }
+import from typing { Optional }
 
 import from llama_index.core.base.llms.types { ChatMessage, ImageBlock, TextBlock }
 

@@ -12,7 +12,7 @@ import from contextvars { ContextVar }
 
 import from copy { copy }
 
-import from typing { TYPE_CHECKING, Any, Optional }
+import from typing { Any, Optional }
 
 import from opentelemetry { trace }
 

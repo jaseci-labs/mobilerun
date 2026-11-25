@@ -6,7 +6,7 @@ import asyncio;
 
 import logging;
 
-import from typing { Optional, Type, TypeVar }
+import from typing { Type, TypeVar }
 
 import from llama_index.core.base.llms.types {
     ChatMessage,

@@ -30,7 +30,7 @@ import from http.server { ThreadingHTTPServer as HTTPServer }
 
 import from pathlib { Path }
 
-import from typing { Any, Callable, ClassVar, Iterator }
+import from typing { Any, Callable, ClassVar }
 
 import from urllib.parse { parse_qs, urlencode, urlparse }
 

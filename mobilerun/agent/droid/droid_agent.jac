@@ -16,7 +16,7 @@ import time;
 
 import traceback;
 
-import from typing { TYPE_CHECKING, Any, Awaitable, Type, Union, cast }
+import from typing { Any, Awaitable, Type, Union }
 
 import from async_adbutils { adb }
 

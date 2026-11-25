@@ -1,6 +1,6 @@
 import builtins;
 
-import from collections.abc { Iterator, MutableMapping }
+import from collections.abc { MutableMapping }
 
 import from contextlib { contextmanager }
 

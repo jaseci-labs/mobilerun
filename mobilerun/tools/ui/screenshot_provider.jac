@@ -1,8 +1,6 @@
-import builtins;
-
 import from __future__ { annotations }
 
-import from typing { TYPE_CHECKING, Any, Optional }
+import from typing { Any }
 
 glob _SCREENSHOT_ONLY_GUIDANCE: any = "Prefer click_at on the center of visible text or controls, especially in dense lists, adjacent rows, and compact menus. Use click_area only for large, unambiguous targets. If a tap does not change the screen, do not repeat the same coordinate; choose a better point on the intended target or use navigation. For text entry, focus a field with a coordinate action first, then use direct text typing.";
 

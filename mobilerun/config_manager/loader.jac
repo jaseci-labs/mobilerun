@@ -1,5 +1,3 @@
-import builtins;
-
 import from jaclang.comptime { target }
 
 import from __future__ { annotations }

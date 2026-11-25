@@ -4,7 +4,7 @@ import builtins;
 
 import logging;
 
-import from typing { TYPE_CHECKING, Optional, Type }
+import from typing { Optional, Type }
 
 import from llama_index.core.llms.llm { LLM }
 

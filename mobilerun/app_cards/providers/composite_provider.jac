@@ -2,8 +2,6 @@ import builtins;
 
 import logging;
 
-import from typing { Dict }
-
 glob logger: any = logging.getLogger("mobilerun");
 
 """

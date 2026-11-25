@@ -8,7 +8,7 @@ import logging;
 
 import re;
 
-import from typing { Any, Dict, List, Optional }
+import from typing { Any, Dict, List }
 
 import from mobilerun_core_local.driver.base { DeviceDisconnectedError, DeviceDriver }
 

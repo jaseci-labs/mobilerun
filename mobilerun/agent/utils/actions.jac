@@ -6,7 +6,7 @@ import asyncio;
 
 import logging;
 
-import from typing { TYPE_CHECKING, List }
+import from typing { List }
 
 glob logger: any = logging.getLogger("mobilerun");
 

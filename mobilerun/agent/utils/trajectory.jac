@@ -12,8 +12,6 @@ import uuid;
 
 import from typing { Any, Dict, List }
 
-import from llama_index.core.workflow { Event }
-
 glob logger: any = logging.getLogger("mobilerun");
 
 class Trajectory {

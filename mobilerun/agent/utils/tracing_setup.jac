@@ -12,8 +12,6 @@ import os;
 
 import threading;
 
-import from collections.abc { Iterator }
-
 import from contextlib { contextmanager }
 
 import from contextvars { Token }

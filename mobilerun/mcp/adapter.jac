@@ -2,7 +2,7 @@ import from __future__ { annotations }
 
 import functools;
 
-import from typing { TYPE_CHECKING, Any }
+import from typing { Any }
 
 def schema_to_parameters(input_schema: dict) -> dict[str, dict[str, Any]];
 

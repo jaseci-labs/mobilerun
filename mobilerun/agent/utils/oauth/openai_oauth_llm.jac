@@ -14,8 +14,6 @@ import os;
 
 import secrets;
 
-import sys;
-
 import threading;
 
 import time;

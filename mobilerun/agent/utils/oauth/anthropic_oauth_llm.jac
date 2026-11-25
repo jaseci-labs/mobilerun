@@ -14,8 +14,6 @@ import os;
 
 import secrets;
 
-import sys;
-
 import time;
 
 import weakref;
@@ -26,7 +24,7 @@ import from http.server { ThreadingHTTPServer as HTTPServer }
 
 import from pathlib { Path }
 
-import from typing { Any, Dict, Iterator, Literal, Optional, Sequence }
+import from typing { Any, Dict, Literal, Optional, Sequence }
 
 import from urllib.parse { urlencode }
 

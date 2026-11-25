@@ -4,7 +4,7 @@ import builtins;
 
 import logging;
 
-import from typing { Any, Dict, Optional }
+import from typing { Any, Dict }
 
 import yaml;
 

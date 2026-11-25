@@ -14,7 +14,7 @@ import from copy { copy, deepcopy }
 
 import from types { SimpleNamespace }
 
-import from typing { TYPE_CHECKING, Any, Awaitable, Callable, Dict, List, Optional }
+import from typing { Any, Awaitable, Callable, Dict, List, Optional }
 
 import httpx;
 
