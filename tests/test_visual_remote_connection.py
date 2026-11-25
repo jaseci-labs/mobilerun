@@ -94,7 +94,7 @@ class ScreenshotOnlyStateProviderTest(unittest.TestCase):
         self.assertTrue(gridded.startswith(b"\x89PNG\r\n\x1a\n"))
 
     def _render_fast_agent_prompt(self, *, screenshot_only: bool) -> str:
-        repo = Path(__file__).resolve().parents[1]
+        repo = Path(__import__("mobilerun").__file__).resolve().parents[1]
         template = (
             repo / "mobilerun/config/prompts/fast_agent/system.jinja2"
         ).read_text()
@@ -327,7 +327,7 @@ class ScreenshotOnlyStateProviderTest(unittest.TestCase):
         self.assertIn("Duration is in seconds", registry.tools["swipe"].description)
 
     def test_screenshot_only_agent_sources_resize_screenshots(self):
-        repo = Path(__file__).resolve().parents[1]
+        repo = Path(__import__("mobilerun").__file__).resolve().parents[1]
         agent_files = [
             repo / "mobilerun/agent/fast_agent/fast_agent.py",
             repo / "mobilerun/agent/manager/manager_agent.py",

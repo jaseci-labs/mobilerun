@@ -1,0 +1,69 @@
+"""External agent loader — dynamic imports.
+
+External agents are self-contained modules that receive raw ADB access
+via ``async_adbutils.AdbDevice``. They bring their own LLM client, prompts,
+parsing, and action loop — zero imports from ``mobilerun``.
+
+An external agent can be either:
+- A single file: ``mobilerun/agent/external/my_agent.py``
+- A package:     ``mobilerun/agent/external/my_agent/__init__.py``
+
+Required contract::
+
+    from async_adbutils import AdbDevice
+
+    async def run(
+        device: AdbDevice,       # raw ADB, already connected
+        instruction: str,        # the task
+        config: dict,            # from external_agents.<name> in config.yaml
+        max_steps: int,          # step limit
+    ) -> dict:                   # {"success": bool, "reason": str, "steps": int}
+
+Optional: ``DEFAULT_CONFIG: dict`` — merged under the user's config.
+"""
+
+import from __future__ { annotations }
+
+import asyncio;
+
+import importlib;
+
+import logging;
+
+import from pathlib { Path }
+
+import from typing { Any, Callable, Dict, List, Optional, TypedDict }
+
+glob logger: any;
+
+glob _EXTERNAL_DIR: any;
+
+with entry {
+    logger = logging.getLogger("mobilerun");
+
+    _EXTERNAL_DIR = Path(__file__).parent;
+}
+
+"""Type for a loaded external agent module."""
+class ExternalAgentModule(TypedDict) {
+    has run: Callable;
+
+    has config: Dict[str, Any];
+}
+
+"""Discover available external agents by scanning the external/ directory.
+
+    Returns:
+        Sorted list of agent names (module stems or package directory names).
+    """
+def list_agents -> List[str];
+
+"""Dynamically load an external agent by name.
+
+    Args:
+        name: Agent module name (e.g., ``"my_agent"``).
+
+    Returns:
+        Dict with ``run`` function and ``config`` defaults, or *None* on failure.
+    """
+def load_agent(name: str) -> Optional[ExternalAgentModule];

@@ -14,7 +14,7 @@ from mobilerun.config_manager.config_manager import (
 )
 from mobilerun.config_manager.migrations import CURRENT_VERSION, migrate
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__import__("mobilerun").__file__).resolve().parents[1]
 
 
 def _run(coro):

@@ -1,0 +1,654 @@
+impl flatten_tree(`root: Dict[builtins.str, Any]) -> List[Dict[builtins.str, Any]] {
+    results: any = [`root];
+    for child in `root.get("children") or [] {
+        results.extend(flatten_tree(child));
+    }
+    return results;
+}
+
+impl get_element_center(`node: Dict[builtins.str, Any]) -> Tuple[builtins.int, builtins.int] {
+    bounds: any = `node.get("boundsInScreen", {});
+    left: any = bounds.get("left", 0);
+    top: any = bounds.get("top", 0);
+    right: any = bounds.get("right", 0);
+    bottom: any = bounds.get("bottom", 0);
+
+    center_x: any = (left + right) // 2;
+    center_y: any = (top + bottom) // 2;
+
+    return (center_x, center_y);
+}
+
+impl sort_by_position(nodes: List[Dict[builtins.str, Any]]) -> List[Dict[builtins.str, Any]] {
+    def get_sort_key(`node: Dict) -> Tuple[builtins.int, builtins.int] {
+        bounds: any = `node.get("boundsInScreen", {});
+        top: any = bounds.get("top", 0);
+        left: any = bounds.get("left", 0);
+        return (top, left);
+    }
+
+    return sorted(nodes, key=get_sort_key);
+}
+
+impl Filters.text_matches(pattern: builtins.str | re.Pattern) -> ElementFilter {
+    regex: any;
+    pattern_str: any;
+    if isinstance(pattern, `str) {
+        regex = re.compile(re.escape(pattern), re.IGNORECASE);
+        pattern_str = pattern;
+    } else {
+        regex = pattern;
+        pattern_str = pattern.pattern;
+    }
+
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        all_nodes: any = [];
+        `node: any;
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        results: any = [];
+
+        for `node in all_nodes {
+            text: any = `node.get("text", "");
+            content_desc: any = `node.get("contentDescription", "");
+            hint: any = `node.get("hint", "");
+
+            for field_value in [text, content_desc, hint] {
+                if not field_value {
+                    continue;
+                }
+                if pattern_str == field_value {
+                    results.append(`node);
+                    break;
+                }
+                if regex.search(field_value) {
+                    results.append(`node);
+                    break;
+                }
+                normalized: any = field_value.replace("\n", " ");
+                if pattern_str == normalized or regex.search(normalized) {
+                    results.append(`node);
+                    break;
+                }
+            }
+        }
+
+        return results;
+    }
+
+    return filter_fn;
+}
+
+impl Filters.id_matches(pattern: builtins.str | re.Pattern) -> ElementFilter {
+    regex: any;
+    pattern_str: any;
+    if isinstance(pattern, `str) {
+        regex = re.compile(re.escape(pattern), re.IGNORECASE);
+        pattern_str = pattern;
+    } else {
+        regex = pattern;
+        pattern_str = pattern.pattern;
+    }
+
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        all_nodes: any = [];
+        `node: any;
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        results: any = [];
+
+        for `node in all_nodes {
+            resource_id: any = `node.get("resourceId", "");
+
+            if not resource_id {
+                continue;
+            }
+
+            short_id: any = resource_id.split("/")[-1] if "/" in resource_id else resource_id;
+            if pattern_str == resource_id or regex.search(resource_id) {
+                results.append(`node);
+                continue;
+            }
+            if pattern_str == short_id or regex.search(short_id) {
+                results.append(`node);
+            }
+        }
+
+        return results;
+    }
+
+    return filter_fn;
+}
+
+impl Filters.below(anchor_filter: ElementFilter) -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        anchor_results: any = anchor_filter(nodes);
+
+        if not anchor_results {
+            return [];
+        }
+
+        anchor: any = anchor_results[0];
+        anchor_bounds: any = anchor.get("boundsInScreen", {});
+        anchor_bottom: any = anchor_bounds.get("bottom", 0);
+        anchor_center_x: any;
+        anchor_center_y: any;
+        (anchor_center_x, anchor_center_y) = get_element_center(anchor) as any;
+
+        all_nodes: any = [];
+        `node: any;
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        candidates: any = [];
+        for `node in all_nodes {
+            if `node == anchor {
+                continue;
+            }
+
+            node_bounds: any = `node.get("boundsInScreen", {});
+            node_top: any = node_bounds.get("top", 0);
+
+            if node_top > anchor_bottom {
+                node_center_x: any;
+                node_center_y: any;
+                (node_center_x, node_center_y) = get_element_center(`node) as any;
+                distance: any = (
+                    (node_center_x - anchor_center_x) ** 2 + (node_center_y - anchor_center_y) ** 2
+                ) ** 0.5;
+                candidates.append((distance, `node));
+            }
+        }
+
+        candidates.sort(key=lambda (x) -> any { x[0] });
+        return [`node for (dist, `node) in candidates];
+    }
+
+    return filter_fn;
+}
+
+impl Filters.above(anchor_filter: ElementFilter) -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        anchor_results: any = anchor_filter(nodes);
+
+        if not anchor_results {
+            return [];
+        }
+
+        anchor: any = anchor_results[0];
+        anchor_bounds: any = anchor.get("boundsInScreen", {});
+        anchor_top: any = anchor_bounds.get("top", 0);
+        anchor_center_x: any;
+        anchor_center_y: any;
+        (anchor_center_x, anchor_center_y) = get_element_center(anchor) as any;
+
+        all_nodes: any = [];
+        `node: any;
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        candidates: any = [];
+        for `node in all_nodes {
+            if `node == anchor {
+                continue;
+            }
+
+            node_bounds: any = `node.get("boundsInScreen", {});
+            node_bottom: any = node_bounds.get("bottom", 0);
+
+            if node_bottom < anchor_top {
+                node_center_x: any;
+                node_center_y: any;
+                (node_center_x, node_center_y) = get_element_center(`node) as any;
+                distance: any = (
+                    (node_center_x - anchor_center_x) ** 2 + (node_center_y - anchor_center_y) ** 2
+                ) ** 0.5;
+                candidates.append((distance, `node));
+            }
+        }
+
+        candidates.sort(key=lambda (x) -> any { x[0] });
+        return [`node for (dist, `node) in candidates];
+    }
+
+    return filter_fn;
+}
+
+impl Filters.left_of(anchor_filter: ElementFilter) -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        anchor_results: any = anchor_filter(nodes);
+
+        if not anchor_results {
+            return [];
+        }
+
+        anchor: any = anchor_results[0];
+        anchor_bounds: any = anchor.get("boundsInScreen", {});
+        anchor_left: any = anchor_bounds.get("left", 0);
+        anchor_center_x: any;
+        anchor_center_y: any;
+        (anchor_center_x, anchor_center_y) = get_element_center(anchor) as any;
+
+        all_nodes: any = [];
+        `node: any;
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        candidates: any = [];
+        for `node in all_nodes {
+            if `node == anchor {
+                continue;
+            }
+
+            node_bounds: any = `node.get("boundsInScreen", {});
+            node_right: any = node_bounds.get("right", 0);
+
+            if node_right < anchor_left {
+                node_center_x: any;
+                node_center_y: any;
+                (node_center_x, node_center_y) = get_element_center(`node) as any;
+                distance: any = (
+                    (node_center_x - anchor_center_x) ** 2 + (node_center_y - anchor_center_y) ** 2
+                ) ** 0.5;
+                candidates.append((distance, `node));
+            }
+        }
+
+        candidates.sort(key=lambda (x) -> any { x[0] });
+        return [`node for (dist, `node) in candidates];
+    }
+
+    return filter_fn;
+}
+
+impl Filters.right_of(anchor_filter: ElementFilter) -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        anchor_results: any = anchor_filter(nodes);
+
+        if not anchor_results {
+            return [];
+        }
+
+        anchor: any = anchor_results[0];
+        anchor_bounds: any = anchor.get("boundsInScreen", {});
+        anchor_right: any = anchor_bounds.get("right", 0);
+        anchor_center_x: any;
+        anchor_center_y: any;
+        (anchor_center_x, anchor_center_y) = get_element_center(anchor) as any;
+
+        all_nodes: any = [];
+        `node: any;
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        candidates: any = [];
+        for `node in all_nodes {
+            if `node == anchor {
+                continue;
+            }
+
+            node_bounds: any = `node.get("boundsInScreen", {});
+            node_left: any = node_bounds.get("left", 0);
+
+            if node_left > anchor_right {
+                node_center_x: any;
+                node_center_y: any;
+                (node_center_x, node_center_y) = get_element_center(`node) as any;
+                distance: any = (
+                    (node_center_x - anchor_center_x) ** 2 + (node_center_y - anchor_center_y) ** 2
+                ) ** 0.5;
+                candidates.append((distance, `node));
+            }
+        }
+
+        candidates.sort(key=lambda (x) -> any { x[0] });
+        return [`node for (dist, `node) in candidates];
+    }
+
+    return filter_fn;
+}
+
+impl Filters.clickable -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        all_nodes: any = [];
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        return [`node for `node in all_nodes if `node.get("isClickable", False)];
+    }
+
+    return filter_fn;
+}
+
+impl Filters.non_clickable -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        all_nodes: any = [];
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        return [`node for `node in all_nodes if not `node.get("isClickable", False)];
+    }
+
+    return filter_fn;
+}
+
+impl Filters.enabled(expected: builtins.bool = True) -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        all_nodes: any = [];
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        return [`node for `node in all_nodes if `node.get("isEnabled", False) == expected];
+    }
+
+    return filter_fn;
+}
+
+impl Filters.selected(expected: builtins.bool = True) -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        all_nodes: any = [];
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        return [`node for `node in all_nodes if `node.get("isSelected", False) == expected];
+    }
+
+    return filter_fn;
+}
+
+impl Filters.checked(expected: builtins.bool = True) -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        all_nodes: any = [];
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        return [`node for `node in all_nodes if `node.get("isChecked", False) == expected];
+    }
+
+    return filter_fn;
+}
+
+impl Filters.focused(expected: builtins.bool = True) -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        all_nodes: any = [];
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        return [`node for `node in all_nodes if `node.get("isFocused", False) == expected];
+    }
+
+    return filter_fn;
+}
+
+impl Filters.size_matches(
+    width: builtins.int = None, height: builtins.int = None, tolerance: builtins.int = 0
+) -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        all_nodes: any = [];
+        `node: any;
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        results: any = [];
+        for `node in all_nodes {
+            bounds: any = `node.get("boundsInScreen", {});
+
+            actual_width: any = bounds.get("right", 0) - bounds.get("left", 0);
+            actual_height: any = bounds.get("bottom", 0) - bounds.get("top", 0);
+
+            if width is not None {
+                if abs(actual_width - width) > tolerance {
+                    continue;
+                }
+            }
+
+            if height is not None {
+                if abs(actual_height - height) > tolerance {
+                    continue;
+                }
+            }
+
+            results.append(`node);
+        }
+
+        return results;
+    }
+
+    return filter_fn;
+}
+
+impl Filters.contains_child(child_filter: ElementFilter) -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        all_nodes: any = [];
+        `node: any;
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        results: any = [];
+
+        for `node in all_nodes {
+            children: any = `node.get("children") or [];
+
+            if not children {
+                continue;
+            }
+
+            matching_children: any = child_filter(children);
+
+            if matching_children {
+                results.append(`node);
+            }
+        }
+
+        return results;
+    }
+
+    return filter_fn;
+}
+
+impl Filters.contains_descendants(filters: List[ElementFilter]) -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        all_nodes: any = [];
+        `node: any;
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        results: any = [];
+
+        for `node in all_nodes {
+            descendants: any = flatten_tree(`node);
+
+            all_match: any = True;
+
+            for descendant_filter in filters {
+                matches: any = descendant_filter(descendants);
+
+                if not matches {
+                    all_match = False;
+                    break;
+                }
+            }
+
+            if all_match {
+                results.append(`node);
+            }
+        }
+
+        return results;
+    }
+
+    return filter_fn;
+}
+
+impl Filters.child_of(parent_filter: ElementFilter) -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        parents: any = parent_filter(nodes);
+
+        if not parents {
+            return [];
+        }
+
+        results: any = [];
+        for parent in parents {
+            results.extend(parent.get("children") or []);
+        }
+
+        return results;
+    }
+
+    return filter_fn;
+}
+
+impl Filters.has_text -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        all_nodes: any = [];
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        return [
+            `node
+            for `node in all_nodes
+            if `node.get("text") or `node.get("contentDescription") or `node.get("hint")
+        ];
+    }
+
+    return filter_fn;
+}
+
+impl Filters.clickable_first -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        all_nodes: any = [];
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        return sorted(all_nodes, key=lambda (n) -> any { not n.get("isClickable", False) });
+    }
+
+    return filter_fn;
+}
+
+impl Filters.index(idx: builtins.int) -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        all_nodes: any = [];
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        sorted_nodes: any = sort_by_position(all_nodes);
+
+        try {
+            return [sorted_nodes[idx]];
+        } except IndexError {
+            return [];
+        }
+    }
+
+    return filter_fn;
+}
+
+impl Filters.compose(filters: List[ElementFilter]) -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        result: any = nodes;
+
+        for f in filters {
+            result = f(result);
+
+            if not result {
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    return filter_fn;
+}
+
+impl Filters.intersect(filters: List[ElementFilter]) -> ElementFilter {
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        if not filters {
+            return nodes;
+        }
+
+        result_sets: any = [`set(id(n) for n in filters[0](nodes))];
+
+        for f in filters[1:] {
+            result_ids: any = `set(id(n) for n in f(nodes));
+            result_sets.append(result_ids);
+        }
+
+        common_ids: any = result_sets[0].intersection(*result_sets[1:]);
+
+        all_nodes: any = [];
+        for `node in nodes {
+            all_nodes.extend(flatten_tree(`node));
+        }
+
+        return [n for n in all_nodes if id(n) in common_ids];
+    }
+
+    return filter_fn;
+}
+
+impl Filters.deepest_matching(base_filter: ElementFilter) -> ElementFilter {
+    def find_deepest_in_node(`node: Dict) -> List[Dict] {
+        child_matches: any = [];
+        for child in `node.get("children") or [] {
+            child_matches.extend(find_deepest_in_node(child));
+        }
+
+        if child_matches {
+            return child_matches;
+        }
+
+        current_matches: any = base_filter([`node]);
+        if current_matches {
+            return [`node];
+        }
+
+        return [];
+    }
+
+    def filter_fn(nodes: List[Dict]) -> List[Dict] {
+        results: any = [];
+
+        for `node in nodes {
+            results.extend(find_deepest_in_node(`node));
+        }
+
+        return results;
+    }
+
+    return filter_fn;
+}
+
+impl Filters.__repr__ -> str {
+    return (getattr(builtins.object, "__repr__") as any)(self);
+}
+
+impl Filters.__eq__(other: any) -> bool {
+    return self is other;
+}
+
+impl Filters.__hash__ -> int {
+    return id(self);
+}

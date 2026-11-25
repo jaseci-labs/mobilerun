@@ -25,7 +25,6 @@ graph import {
     }
     mobilerun.macro --> mobilerun { MacroPlayer, replay_macro_file, replay_macro_folder }
     mobilerun.tools --> mobilerun { AndroidDriver, DeviceDriver, RecordingDriver }
-    mobilerun.agent.droid.events --> mobilerun.agent { ResultEvent }
     mobilerun.agent.droid.droid_agent --> mobilerun.agent.droid { MobileAgent }
     mobilerun.agent.droid.state --> mobilerun.agent.droid { MobileAgentState }
     mobilerun.agent.action_context --> mobilerun.agent.droid.droid_agent { ActionContext }
@@ -134,15 +133,6 @@ graph import {
     mobilerun.tools.ui.provider --> mobilerun.agent.action_context { StateProvider }
     mobilerun.tools.ui.state --> mobilerun.agent.action_context { UIState }
     mobilerun.telemetry --> mobilerun.agent.droid.state { PackageVisitEvent, capture }
-    mobilerun.telemetry.events --> mobilerun.telemetry {
-        DroidAgentFinalizeEvent,
-        DroidAgentInitEvent,
-        MobileAgentFinalizeEvent,
-        MobileAgentInitEvent,
-        PackageVisitEvent,
-    }
-    mobilerun.telemetry.tracker --> mobilerun.telemetry { capture, flush, print_telemetry_message }
-    mobilerun.telemetry.events --> mobilerun.telemetry.tracker { TelemetryEvent }
     mobilerun.credential_manager.credential_manager --> mobilerun.credential_manager {
         CredentialManager,
         CredentialNotFoundError,
@@ -214,7 +204,6 @@ graph import {
     mobilerun.config_manager.credential_paths --> mobilerun.config_manager.env_keys {
         AUTH_PROFILES_PATH,
     }
-    mobilerun.macro.state --> mobilerun.macro.recorder { build_screen_snapshot }
     mobilerun.tools.helpers.coordinate --> mobilerun.tools.ui.provider { NORMALIZED_STATE_NOTE }
     mobilerun.tools.helpers.images --> mobilerun.tools.ui.provider {
         fit_dimensions_to_max_side,
@@ -225,18 +214,7 @@ graph import {
     mobilerun.tools.ui.stealth_state --> mobilerun.tools.ui.provider { StealthUIState }
     mobilerun.tools.filters --> mobilerun.tools.ui.provider { TreeFilter }
     mobilerun.tools.formatters --> mobilerun.tools.ui.provider { TreeFormatter }
-    mobilerun.tools.helpers.coordinate --> mobilerun.tools.ui.state { NORMALIZED_MAX, to_absolute }
-    mobilerun.tools.helpers.geometry --> mobilerun.tools.ui.state {
-        find_clear_point,
-        find_uncovered_point,
-        rects_overlap,
-    }
     mobilerun.tools.ui.state --> mobilerun.tools.ui.stealth_state { UIState }
-    mobilerun.tools.filters.base --> mobilerun.tools.filters { TreeFilter }
-    mobilerun.tools.filters.concise_filter --> mobilerun.tools.filters { ConciseFilter }
-    mobilerun.tools.filters.detailed_filter --> mobilerun.tools.filters { DetailedFilter }
-    mobilerun.tools.filters.base --> mobilerun.tools.filters.concise_filter { TreeFilter }
-    mobilerun.tools.filters.base --> mobilerun.tools.filters.detailed_filter { TreeFilter }
     mobilerun.tools.formatters.base --> mobilerun.tools.formatters { TreeFormatter }
     mobilerun.tools.formatters.indexed_formatter --> mobilerun.tools.formatters { IndexedFormatter }
     mobilerun.tools.helpers.coordinate --> mobilerun.tools.formatters.indexed_formatter {
@@ -259,7 +237,6 @@ graph import {
         ExecutorResponseEvent,
     }
     mobilerun.agent.executor.executor_agent --> mobilerun.agent.executor { ExecutorAgent }
-    mobilerun.agent.usage --> mobilerun.agent.executor.events { UsageResult }
     mobilerun.agent.executor.events --> mobilerun.agent.executor.executor_agent {
         ExecutorActionEvent,
         ExecutorActionResultEvent,
@@ -351,17 +328,6 @@ graph import {
     mobilerun.agent.action_context --> mobilerun.agent.fast_agent.fast_agent { ActionContext }
     mobilerun.agent.droid --> mobilerun.agent.fast_agent.fast_agent { MobileAgentState }
     mobilerun.agent.tool_registry --> mobilerun.agent.fast_agent.fast_agent { ToolRegistry }
-    mobilerun.agent.fast_agent.xml_parser --> mobilerun.agent.fast_agent.events {
-        ToolCallParseStatus,
-    }
-    mobilerun.agent.usage --> mobilerun.agent.fast_agent.events { UsageResult }
-    mobilerun.agent.fast_agent.xml_parser --> mobilerun.agent.fast_agent.native_tools {
-        ToolCall,
-        ToolCallParseResult,
-        ToolCallParseStatus,
-        ToolResult,
-        _coerce_param,
-    }
     mobilerun.config_manager.config_manager --> mobilerun.agent.utils.tracing_setup {
         TracingConfig,
     }
@@ -389,7 +355,6 @@ graph import {
     mobilerun.agent.manager.stateless_manager_agent --> mobilerun.agent.manager {
         StatelessManagerAgent,
     }
-    mobilerun.agent.usage --> mobilerun.agent.manager.events { UsageResult }
     mobilerun.agent.common.events --> mobilerun.agent.manager.manager_agent {
         RecordUIStateEvent,
         ScreenshotEvent,
@@ -878,32 +843,6 @@ graph import {
     mobilerun.config_manager.credential_paths --> mobilerun.cli.device_commands {
         OAUTH_CREDENTIAL_DIR,
     }
-    mobilerun.agent.common.events --> mobilerun.cli.event_handler {
-        RecordUIStateEvent,
-        ScreenshotEvent,
-    }
-    mobilerun.agent.droid.events --> mobilerun.cli.event_handler {
-        ExecutorResultEvent,
-        FastAgentExecuteEvent,
-        FastAgentResultEvent,
-        FinalizeEvent,
-    }
-    mobilerun.agent.executor.events --> mobilerun.cli.event_handler {
-        ExecutorActionEvent,
-        ExecutorActionResultEvent,
-    }
-    mobilerun.agent.fast_agent.events --> mobilerun.cli.event_handler {
-        FastAgentEndEvent,
-        FastAgentInputEvent,
-        FastAgentOutputEvent,
-        FastAgentResponseEvent,
-        FastAgentToolCallEvent,
-    }
-    mobilerun.agent.manager.events --> mobilerun.cli.event_handler {
-        ManagerContextEvent,
-        ManagerPlanDetailsEvent,
-        ManagerResponseEvent,
-    }
     mobilerun.agent.utils.oauth.anthropic_oauth_llm --> mobilerun.cli.oauth_actions {
         AnthropicOAuthLLM,
         DEFAULT_SETUP_TOKEN_SCOPE,
@@ -937,7 +876,6 @@ graph import {
     mobilerun.config_manager --> mobilerun.cli.doctor { ConfigLoader }
     mobilerun.config_manager.loader --> mobilerun.cli.doctor { OutdatedConfigError }
     mobilerun.cli.main --> mobilerun.cli.doctor { _setup_portal }
-    mobilerun.macro.state --> mobilerun.macro.matcher { node_semantic_key }
     mobilerun.tools.ui --> mobilerun.tools { AndroidStateProvider, StateProvider, UIState }
     mobilerun.tools.ui.ios_provider --> mobilerun.tools.ui { IOSStateProvider }
     mobilerun.tools.ui.provider --> mobilerun.tools.ui { AndroidStateProvider, StateProvider }
@@ -955,23 +893,10 @@ graph import {
     mobilerun.agent.utils.signatures --> mobilerun.agent.utils { build_tool_registry }
     mobilerun.agent.utils.trajectory --> mobilerun.agent.utils { Trajectory }
     mobilerun.cli.main --> mobilerun.cli { cli }
-    mobilerun.log_handlers --> mobilerun.cli.logs {
-        CLILogHandler,
-        TUILogHandler,
-        configure_logging,
-    }
     mobilerun.macro.cli --> mobilerun.macro.__main__ { macro_cli }
     mobilerun.mcp.adapter --> mobilerun.mcp { mcp_to_mobilerun_tools }
     mobilerun.mcp.client --> mobilerun.mcp { MCPClientManager, MCPToolInfo }
     mobilerun.mcp.config --> mobilerun.mcp { MCPConfig, MCPServerConfig }
-    mobilerun.tools.helpers.coordinate --> mobilerun.tools.helpers {
-        NORMALIZED_MAX,
-        bounds_to_normalized,
-        to_absolute,
-        to_normalized,
-    }
-    mobilerun.tools.helpers.geometry --> mobilerun.tools.helpers { find_clear_point, rects_overlap }
-    mobilerun.tools.helpers.images --> mobilerun.tools.helpers { image_dimensions }
     mobilerun.agent.utils.actions --> tests.eval_coordinate_grounding { _convert_action_point }
     mobilerun.agent.utils.llm_picker --> tests.eval_coordinate_grounding { load_llm }
     mobilerun.agent.utils.vision_sizing --> tests.eval_coordinate_grounding { VisionResizePolicy }
@@ -1582,6 +1507,88 @@ graph import {
         ScreenshotOnlyStateProvider,
     }
     mobilerun.tools.ui.state --> tests.test_visual_remote_connection { UIState }
+    include mobilerun.agent.droid.events ++> mobilerun.agent { ResultEvent }
+    mobilerun.telemetry.events ++> mobilerun.telemetry.tracker { TelemetryEvent }
+    mobilerun.macro.state ++> mobilerun.macro.recorder { build_screen_snapshot }
+    mobilerun.tools.filters.base ++> mobilerun.tools.filters.concise_filter { TreeFilter }
+    mobilerun.tools.filters.base ++> mobilerun.tools.filters.detailed_filter { TreeFilter }
+    mobilerun.tools.helpers.coordinate ++> mobilerun.tools.ui.state { NORMALIZED_MAX, to_absolute }
+    mobilerun.tools.helpers.geometry ++> mobilerun.tools.ui.state {
+        find_clear_point,
+        find_uncovered_point,
+        rects_overlap,
+    }
+    mobilerun.agent.usage ++> mobilerun.agent.executor.events { UsageResult }
+    mobilerun.agent.fast_agent.xml_parser ++> mobilerun.agent.fast_agent.events {
+        ToolCallParseStatus,
+    }
+    mobilerun.agent.usage ++> mobilerun.agent.fast_agent.events { UsageResult }
+    mobilerun.agent.fast_agent.xml_parser ++> mobilerun.agent.fast_agent.native_tools {
+        ToolCall,
+        ToolCallParseResult,
+        ToolCallParseStatus,
+        ToolResult,
+        _coerce_param,
+    }
+    mobilerun.agent.usage ++> mobilerun.agent.manager.events { UsageResult }
+    mobilerun.macro.state ++> mobilerun.macro.matcher { node_semantic_key }
+    include mobilerun.log_handlers ++> mobilerun.cli.logs {
+        CLILogHandler,
+        TUILogHandler,
+        configure_logging,
+    }
+    include mobilerun.tools.helpers.coordinate ++> mobilerun.tools.helpers {
+        NORMALIZED_MAX,
+        bounds_to_normalized,
+        to_absolute,
+        to_normalized,
+    }
+    include mobilerun.tools.helpers.geometry ++> mobilerun.tools.helpers {
+        find_clear_point,
+        rects_overlap,
+    }
+    include mobilerun.tools.helpers.images ++> mobilerun.tools.helpers { image_dimensions }
+    include mobilerun.telemetry.events ++> mobilerun.telemetry {
+        DroidAgentFinalizeEvent,
+        DroidAgentInitEvent,
+        MobileAgentFinalizeEvent,
+        MobileAgentInitEvent,
+        PackageVisitEvent,
+    }
+    include mobilerun.telemetry.tracker ++> mobilerun.telemetry {
+        capture,
+        flush,
+        print_telemetry_message,
+    }
+    include mobilerun.tools.filters.base ++> mobilerun.tools.filters { TreeFilter }
+    include mobilerun.tools.filters.concise_filter ++> mobilerun.tools.filters { ConciseFilter }
+    include mobilerun.tools.filters.detailed_filter ++> mobilerun.tools.filters { DetailedFilter }
+    mobilerun.agent.common.events ++> mobilerun.cli.event_handler {
+        RecordUIStateEvent,
+        ScreenshotEvent,
+    }
+    mobilerun.agent.droid.events ++> mobilerun.cli.event_handler {
+        ExecutorResultEvent,
+        FastAgentExecuteEvent,
+        FastAgentResultEvent,
+        FinalizeEvent,
+    }
+    mobilerun.agent.executor.events ++> mobilerun.cli.event_handler {
+        ExecutorActionEvent,
+        ExecutorActionResultEvent,
+    }
+    mobilerun.agent.fast_agent.events ++> mobilerun.cli.event_handler {
+        FastAgentEndEvent,
+        FastAgentInputEvent,
+        FastAgentOutputEvent,
+        FastAgentResponseEvent,
+        FastAgentToolCallEvent,
+    }
+    mobilerun.agent.manager.events ++> mobilerun.cli.event_handler {
+        ManagerContextEvent,
+        ManagerPlanDetailsEvent,
+        ManagerResponseEvent,
+    }
 }
 
 graph spaces {
