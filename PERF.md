@@ -74,7 +74,7 @@ Medians; ×n is relative to `orig 3.15`.
 | `mobilerun whoami` | 2631 ms | 2250 ms | 2603 ms (×0.99) | 2515 ms (×0.96) | 36→26 |
 | pytest suite (1474 tests) | 33.5 s (min 28.7) | 44.2 s (min 30.5) | 39.7 s (min 26.8) | 41.7 s (min 27.8) | 26→20 |
 
-The 11-run CLI and 5-run suite timings are in `perf/mobilerun/final_*.txt`. A load spike in the
+The 11-run CLI and 5-run suite timings are in `~/neojac-deslop/perf/mobilerun/final_*.txt`. A load spike in the
 middle of the `--version` and `--help` rows inflated their medians, so their minimums are given
 too. By minimum, every CLI command is within ±5% of the original on the same interpreter. The
 suite is mostly mock setup, asyncio and library code. Its five runs per variant spread by ±30%
@@ -155,7 +155,7 @@ after every step, and no test edited.
 1. **A native space can't be used from this package without an HTTP crossing.** The program's
    host is CPython: the wheel, `python -m mobilerun`, pytest, and users' `import mobilerun`. A
    call from a `cpython` space into a `native` space is a remote crossing, even inside one app.
-   Minimal reproduction (`perf/mobilerun/scratch2/`):
+   Minimal reproduction (`~/neojac-deslop/perf/mobilerun/scratch2/`):
 
    ```jac
    # archwire.jac
@@ -186,7 +186,7 @@ after every step, and no test edited.
    - Typing the value converts it, and `x as T` does the same as `x: T = ...`: it walks every
      item.
 
-   Reproduction (`perf/mobilerun/repro_held_convert.txt`):
+   Reproduction (`~/neojac-deslop/perf/mobilerun/repro_held_convert.txt`):
 
    ```jac
    def via_typing(nd: Dict[str, Any]) -> any { b = nd.get("bounds", {}); return b.get("left", 0); }
@@ -208,7 +208,7 @@ after every step, and no test edited.
    `_jac.convert(d, (dict, str, None))` on an 8-key dict takes 6.4 µs.
 
 3. **`from __future__ import annotations` silently makes typed annotations `any`.**
-   (`perf/mobilerun/repro_future_annotations.txt`):
+   (`~/neojac-deslop/perf/mobilerun/repro_future_annotations.txt`):
 
    ```jac
    import from __future__ { annotations }
@@ -222,7 +222,7 @@ after every step, and no test edited.
    That means `index: int` had been read as `any` in the module that kept the import.
 
 4. **Iterating a fixed-size tuple of typed elements yields `any`.**
-   (`perf/mobilerun/repro_tuple_iter.txt`):
+   (`~/neojac-deslop/perf/mobilerun/repro_tuple_iter.txt`):
    `for p in (a, a) { total += p[0]; }` with `a: tuple[int, int, int, int]` emits
    `total += _jac.held(p[0])`. The workaround is a `list[T]` literal. It was used while typing
    `geometry.find_uncovered_point`, before that cold path was left untyped on purpose.
