@@ -1,10 +1,3 @@
-"""
-MobileAgent coordination events.
-
-These events route between MobileAgent and child agents.
-For internal agent events, see each agent's events.py file.
-"""
-
 import builtins;
 
 import from typing { Dict, List, Optional }

@@ -1,12 +1,3 @@
-"""
-MobileAgent - A wrapper class that coordinates the planning and execution of tasks
-to achieve a user's goal on a mobile device.
-
-Architecture:
-- When reasoning=False: Uses FastAgent directly
-- When reasoning=True: Uses Manager (planning) + Executor (action) workflows
-"""
-
 import builtins;
 
 import operator;
@@ -102,14 +93,12 @@ with entry {
     _ABANDONED_FINALIZE_TASKS = set[any]();
 }
 
-"""Consume a task's terminal exception without waiting for it."""
 def _reap_abandoned_finalize_task(task: asyncio.Task[Any]) -> None;
 
 async def _capped_finalize_stage(
     name: builtins.str, awaitable: Awaitable[Any], cap: builtins.float
 ) -> Any;
 
-"""Run one best-effort epilog stage without letting cancellation linger."""
 async def _run_finalize_stage(
     name: builtins.str,
     awaitable: Awaitable[Any],
@@ -123,7 +112,6 @@ async def _extract_structured_output(
     structured_agent: StructuredOutputAgent, ctx: Context
 ) -> StopEvent;
 
-"""Run direct extraction with the observations of the nested workflow path."""
 def _structured_output_extraction(
     structured_agent: StructuredOutputAgent, ctx: Context
 ) -> Awaitable[StopEvent];
@@ -151,9 +139,6 @@ class MobileAgent(Workflow) {
 
     has _tracing_user_id: builtins.str | None = None;
 
-    """
-        Configure default logging for MobileAgent if no real handler is present.
-        """
     static def _configure_default_logging(debug: builtins.bool = False) -> any;
 
     def init(
@@ -174,10 +159,8 @@ class MobileAgent(Workflow) {
 
     def run(*args__, **kwargs) -> Awaitable[ResultEvent] | WorkflowHandler;
 
-    """Store a deadline owned by the runtime execution of this run."""
     async def _initialize_workflow_deadline(ctx: Context) -> None;
 
-    """Create trajectory state and a writer owned by the current run."""
     async def _initialize_run_trajectory -> None;
 
     @step

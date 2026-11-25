@@ -1,5 +1,3 @@
-"""State matching for guarded macro replay."""
-
 import operator;
 
 import from __future__ { annotations }

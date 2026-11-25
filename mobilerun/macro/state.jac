@@ -1,5 +1,3 @@
-"""State snapshots for guarded macro replay."""
-
 import operator;
 
 import from __future__ { annotations }
@@ -10,10 +8,8 @@ glob MACRO_SCHEMA_VERSION: any = "2.0";
 
 glob UNSUPPORTED_SCHEMA_MESSAGE: any = "Unsupported macro schema. Re-record this macro with the current Mobilerun version.";
 
-"""Normalize a UI state into the stable fields used by macro replay."""
 def normalize_ui_state(ui_state: Any) -> Dict[str, Any];
 
-"""Return the serializable screen/action state snapshot for a macro action."""
 def build_screen_snapshot(ui_state: Any) -> Dict[str, Any];
 
 def node_semantic_key(`node: Dict[str, Any]) -> Tuple[Any, ...];

@@ -1,11 +1,3 @@
-"""Device driver compat surface for Mobilerun.
-
-All driver implementations live in ``mobilerun-core-local`` (cloud ones
-behind its ``[cloud]`` extra). Framework code imports them from there
-directly; this package is kept only so the historical public
-``mobilerun.tools.driver`` import path keeps working for external consumers.
-"""
-
 import from mobilerun_core_local.driver.android { AndroidDriver }
 
 import from mobilerun_core_local.driver.base { DeviceDisconnectedError, DeviceDriver }

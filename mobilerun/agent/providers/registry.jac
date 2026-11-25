@@ -103,10 +103,6 @@ with entry {
     GEMINI_UNSUPPORTED_SAMPLING_PARAMS = frozenset({"temperature", "top_p", "top_k"});
 }
 
-"""Whether mobilerun should leave sampling at Google's default.
-
-    Google recommends the default temperature for Gemini 3 and later models.
-    """
 def gemini_model_omits_sampling_params(model: object) -> bool;
 
 with entry {
@@ -315,8 +311,6 @@ def resolve_provider_variant(family_id: str, auth_mode: str | None = None) -> Pr
 
 def list_models_for_variant(family_id: str, auth_mode: str | None = None) -> tuple[str, ...];
 
-"""Return a user-facing model name without changing its canonical id."""
 def model_display_name_for_variant(family_id: str, auth_mode: str | None, model_id: str) -> str;
 
-"""Normalize accepted model aliases to the canonical model id for a variant."""
 def normalize_model_id_for_variant(family_id: str, auth_mode: str | None, model_id: str) -> str;

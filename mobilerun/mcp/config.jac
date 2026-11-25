@@ -1,5 +1,3 @@
-"""MCP configuration models."""
-
 import builtins;
 
 import from dataclasses { dataclass, field }

@@ -28,7 +28,6 @@ with entry {
     logger = logging.getLogger("mobilerun");
 }
 
-"""Recursively make objects JSON serializable."""
 def make_serializable(`obj) -> any;
 
 """Immutable write operation.
@@ -115,17 +114,8 @@ class WriterWorker {
 
     def init(max_queue_size: builtins.int = 300);
 
-    """Start the worker task."""
     async def start -> None;
 
-    """Stop worker and wait for pending writes to complete.
-
-        Drains the queue before canceling. Any jobs still pending after
-        timeout are dropped with a warning.
-
-        Args:
-            timeout: Maximum seconds to wait for queue to drain
-        """
     async def stop(timeout: builtins.float = 30.0) -> None;
 
     static def _consume_worker_result(task: asyncio.Task) -> None;
@@ -157,28 +147,12 @@ class TrajectoryWriter {
 
     def init(queue_size: builtins.int = 300);
 
-    """Start the background worker."""
     async def start -> None;
 
-    """Stop the background worker and wait for pending writes."""
     async def stop(timeout: builtins.float = 30.0) -> None;
 
-    """Write trajectory data to disk in background (non-blocking).
-
-        Creates a snapshot of trajectory data and queues write jobs.
-        Returns immediately - actual writes happen asynchronously.
-
-        Args:
-            trajectory: Trajectory instance with data to persist
-            stage: Label for this save point (e.g. "init", "step_1", "final")
-        """
     def write(trajectory, stage: builtins.str) -> None;
 
-    """Write final trajectory data including GIF creation.
-
-        Args:
-            trajectory: Trajectory instance to finalize
-        """
     def write_final(trajectory, trajectory_gifs) -> None;
 
     def _create_events_job(

@@ -17,7 +17,6 @@ class SelectChoice {
 
 def _import_inquirer_select -> any;
 
-"""Interactive select prompt with arrow-key UX when available."""
 def select_prompt(
     message: str, choices: Sequence[SelectChoice], *, `default: str | None = None
 ) -> str;

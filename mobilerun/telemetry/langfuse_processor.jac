@@ -1,9 +1,3 @@
-"""OpenTelemetry span preprocessing for the Langfuse integration.
-
-Langfuse owns span export, batching, and media upload. Its processor receives
-a normalized export snapshot; other processors retain the original ended span.
-"""
-
 import builtins;
 
 import operator;
@@ -50,7 +44,6 @@ with entry {
 
 def set_current_agent(agent: "MobileAgent") -> None;
 
-"""Store the root span context for screenshots created outside an active span."""
 def set_root_span_context(span: Span) -> None;
 
 def get_root_span_context -> Optional[Context];
@@ -106,17 +99,14 @@ class LangfuseSpanProcessor(SpanProcessor) {
 
     def on_end(span: ReadableSpan) -> None;
 
-    """No-op: the public Langfuse client owns exporter shutdown."""
     def shutdown -> None;
 
-    """The processor has no queue; all preprocessing is synchronous."""
     def force_flush(timeout_millis: builtins.int = 30000) -> builtins.bool;
 
     def _format_complete(span: ReadableSpan) -> None;
 
     def _format_chat(span: ReadableSpan) -> None;
 
-    """Normalize an OpenInference input/output value for Langfuse."""
     def _process_field(attrs: builtins.dict, field: builtins.str) -> None;
 
     static def _has_blocks_to_transform(data: builtins.object) -> builtins.bool;
@@ -131,11 +121,9 @@ class LangfuseSpanProcessor(SpanProcessor) {
 
     def _convert_blocks_to_content(blocks: builtins.list) -> builtins.list;
 
-    """Apply media limits to base64 data URIs already serialized as content."""
     class def _sanitize_serialized_data_uris(value: Any) -> builtins.tuple[Any, builtins.bool];
 
     def _process_screenshot_span(span: ReadableSpan) -> None;
 
-    """Return media in a form Langfuse v4 uploads during span export."""
     static def _prepare_image_for_native_upload(block: builtins.dict) -> Optional[builtins.dict];
 }

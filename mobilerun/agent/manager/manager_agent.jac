@@ -1,13 +1,3 @@
-"""
-ManagerAgent - Planning and reasoning workflow.
-
-This agent is responsible for:
-- Analyzing the current state
-- Creating plans and subgoals
-- Tracking progress
-- Deciding when tasks are complete
-"""
-
 import from __future__ { annotations }
 
 import builtins;
@@ -40,7 +30,6 @@ with entry {
     logger = logging.getLogger("mobilerun");
 }
 
-"""Return "android" or "ios" for app card lookups, or None."""
 def _card_platform(platform: str | None) -> str | None;
 
 """
@@ -67,33 +56,18 @@ class ManagerAgent(Workflow) {
         **kwargs,
     );
 
-    """Initialize app card provider based on configuration mode."""
     def _initialize_app_card_provider -> AppCardProvider;
 
-    """Load the app card for the foreground app on the current platform."""
     async def _load_app_card -> None;
 
-    """Build system prompt with all context."""
     async def _build_system_prompt -> str;
 
-    """Build user message content with last action context."""
     def _build_user_message_content -> str;
 
-    """
-        Build messages from history and inject current context.
-
-        Args:
-            system_prompt: System prompt text
-            screenshot: Current screenshot if vision enabled
-
-        Returns:
-            List of ChatMessage objects ready for LLM
-        """
     def _build_messages_with_context(
         system_prompt: str, screenshot: bytes | None = None
     ) -> list[ChatMessage];
 
-    """Validate LLM response and retry if needed."""
     async def _validate_and_retry(messages: list[ChatMessage], initial_response: str) -> str;
 
     """Gather context and prepare manager prompt."""

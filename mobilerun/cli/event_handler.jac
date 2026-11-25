@@ -1,11 +1,3 @@
-"""
-Shared event handler for CLI and SDK.
-
-Translates workflow events into ``logging`` calls with ``extra`` params
-(color, step_increment, etc.).  The actual rendering is handled by
-whichever ``logging.Handler`` is attached (CLILogHandler, TUILogHandler, …).
-"""
-
 import builtins;
 
 import logging;

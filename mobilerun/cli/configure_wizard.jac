@@ -144,22 +144,14 @@ def _any_ollama_profile(config) -> bool;
 
 def _any_minimax_profile(config) -> bool;
 
-"""Return a toggle indicator: ON/OFF."""
 def _toggle_label(enabled: bool) -> str;
 
-"""Check if vision is enabled on any agent."""
 def _is_vision_enabled(config) -> bool;
 
-"""Set vision on all agents at once."""
 def _set_vision_all(config, enabled: bool) -> None;
 
 def _configure_advanced_settings(console: Console, config) -> None;
 
-"""Run the provider → auth → model → credentials flow.
-
-    Returns True when the flow completes and the selection has been applied
-    to *config*.  Returns False when the user backs out entirely.
-    """
 def _configure_provider_model(
     console: Console,
     config,

@@ -1,7 +1,3 @@
-"""
-Utility modules for Mobilerun agents.
-"""
-
 glob __all__: any = [
     "to_chat_messages",
     "has_content",

@@ -1,10 +1,3 @@
-"""
-StructuredOutputAgent - Extract structured data from final answers.
-
-Takes a raw text answer and a Pydantic model, uses structured_predict()
-to extract structured data from the text.
-"""
-
 import builtins;
 
 import logging;

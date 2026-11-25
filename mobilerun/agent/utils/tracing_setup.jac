@@ -1,10 +1,3 @@
-"""
-Tracing setup utility for MobileAgent.
-
-This module provides a centralized way to configure tracing providers
-(Phoenix, Langfuse, etc.) based on the TracingConfig.
-"""
-
 import builtins;
 
 import operator;
@@ -71,51 +64,30 @@ with entry {
 
 def setup_tracing(tracing_config: TracingConfig, agent: Optional[builtins.object] = None) -> None;
 
-"""Ping the Phoenix server to check if it's reachable."""
 def _check_phoenix_reachable(
     endpoint: builtins.str, timeout: builtins.float = 3.0
 ) -> builtins.bool;
 
-"""Set up Arize Phoenix tracing. Returns True if successful."""
 def _setup_phoenix_tracing -> builtins.bool;
 
-"""
-    Set up Langfuse tracing with a preprocessor and the public v4 client.
-
-    Args:
-        tracing_config: TracingConfig instance containing Langfuse credentials
-        agent: Optional MobileAgent instance to pass to span processor
-    """
 def _setup_langfuse_tracing(
     tracing_config: TracingConfig, agent: Optional[builtins.object] = None
 ) -> builtins.bool;
 
-"""Resolve the Langfuse endpoint, keeping LANGFUSE_HOST as a fallback."""
 def _resolve_langfuse_base_url(tracing_config: TracingConfig) -> builtins.str;
 
-"""Keep custom Mobilerun spans alongside standard LLM spans in Langfuse."""
 def _export_all_spans(_span) -> builtins.bool;
 
-"""Detect both directly registered and wrapped Langfuse processors."""
 def _provider_has_langfuse_processor(tracer_provider: builtins.object) -> builtins.bool;
 
-"""Confirm exactly one SDK processor uses our snapshot normalizer."""
 def _provider_has_owned_langfuse_pipeline(tracer_provider: builtins.object) -> builtins.bool;
 
-"""Read the active OTel pipeline for ordering validation."""
 def _provider_span_processors(tracer_provider: builtins.object) -> any;
 
-"""Attach explicit identifiers and return the token used to restore them."""
 def _attach_session_context(
     session_id: Optional[builtins.str], user_id: Optional[builtins.str]
 ) -> Token;
 
-"""Deprecated: use session_context for scoped tracing instead.
-
-    Retains the legacy no-argument behavior: attach the last configured session
-    and user identifiers without detaching them. MobileAgent does not use this
-    compatibility state.
-    """
 def apply_session_context -> None;
 
 """Scope Langfuse identifiers and agent metadata to workflow scheduling."""
@@ -126,11 +98,6 @@ def session_context(
     agent: Optional[builtins.object] = None,
 ) -> Generator[any, any, any];
 
-"""
-    Emit a tracing span that carries a screenshot for Langfuse uploads.
-
-    Only active when Langfuse tracing is enabled and screenshots are enabled.
-    """
 def record_langfuse_screenshot(
     screenshot: builtins.bytes,
     mime_type: builtins.str = "image/png",

@@ -1,9 +1,3 @@
-"""StateProvider — orchestrates fetching and parsing device state.
-
-Fetches raw data from a ``DeviceDriver``, applies tree filters/formatters,
-and produces a ``UIState`` snapshot.
-"""
-
 import builtins;
 
 import operator;
@@ -50,14 +44,8 @@ with entry {
     _A11Y_SERVICE_NOT_AVAILABLE = "Accessibility service not available";
 }
 
-"""True when the device accepted the request but did not answer in time.
-
-    Connect and pool timeouts are excluded: those requests never reached the
-    device, so retrying them does not queue work behind a busy one.
-    """
 def _is_timeout(error: BaseException) -> bool;
 
-"""Await *fetch*, logging once at INFO if it runs past the notice delay."""
 async def _fetch_with_notice(
     fetch: Callable[[], Awaitable[Dict[str, Any]]], notice: bool
 ) -> Dict[str, Any];
@@ -71,28 +59,6 @@ with entry {
     recovery_after_default_ = _RECOVERY_AFTER_ATTEMPT;
 }
 
-"""Fetch raw device state with retries, backoff, and mid-retry recovery.
-
-    Args:
-        fetch: Async callable that returns the raw state dict from Portal.
-        recovery: Optional async callable invoked once after *recovery_after*
-            consecutive failures (e.g. restart accessibility service), or
-            after the first failure if Portal's service is not available,
-            or before the single retry of a timed-out fetch.
-        max_retries: Total number of attempts before giving up. Timeouts
-            stop after ``_MAX_TIMEOUT_ATTEMPTS`` timed-out attempts.
-        retry_delays: Per-attempt delays. If shorter than max_retries - 1,
-            the last value is reused for remaining delays.
-        recovery_after: Trigger *recovery* after this many failures.
-
-    Returns:
-        The raw state dict (guaranteed to contain ``a11y_tree``,
-        ``phone_state``, ``device_context``).
-
-    Raises:
-        DeviceDisconnectedError: Re-raised immediately.
-        Exception: After all retries are exhausted.
-    """
 async def fetch_state_with_retry(
     fetch: Callable[[], Awaitable[Dict[str, Any]]],
     recovery: Optional[Callable[[], Awaitable[None]]] = None,
@@ -115,30 +81,13 @@ class StateProvider {
 
     async def get_state -> UIState;
 
-    """Read the final observation; subclasses may make this narrower."""
     async def get_final_state -> UIState;
 }
 
-"""True when screenshots attached to LLM messages must be resized (with
-    the labeled grid) into the coordinate space the provider declared.
-
-    Falls back to the legacy ``requires_coordinate_tools`` contract: injected
-    screenshot-only providers that predate ``resize_model_screenshot`` are
-    still treated as screenshot-coordinate mode by the tool registry, prompts,
-    and validation, so they must keep receiving resized screenshots too.
-    """
 def should_resize_model_screenshot(state_provider: Any) -> bool;
 
-"""Resize a screenshot to the exact model-facing dims the provider declared.
-
-    The provider stores ``model_screenshot_width/height`` (resolved from the
-    active vision model's effective image size) on each ``get_state``. Resizing
-    to those exact dims keeps the image the model grounds on equal to the
-    declared coordinate space. Falls back to the legacy max-side resize when no
-    dims are available (e.g. injected screenshot-only providers)."""
 def resize_model_screenshot_with_grid(state_provider: Any, screenshot: bytes) -> bytes;
 
-"""Resize when required, snapshotting model geometry before offloading."""
 async def resize_model_screenshot_async(state_provider: Any, screenshot: bytes) -> bytes;
 
 """Fetches state from an Android device via ``driver.get_ui_tree()``.
@@ -174,15 +123,12 @@ class AndroidStateProvider(StateProvider) {
         vision_resize_policy: Any = None,
     );
 
-    """Return Portal recovery, or None when there is no ADB device."""
     def _portal_recovery -> Optional[Callable[[], Awaitable[None]]];
 
-    """Restart Portal's accessibility service, TCP server and keyboard."""
     async def _recover_portal -> None;
 
     async def get_state -> UIState;
 
-    """Finalization must not restart accessibility after a failed read."""
     async def get_final_state -> UIState;
 
     async def _state_from_data_async(combined_data: dict) -> UIState;

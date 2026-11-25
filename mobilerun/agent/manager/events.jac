@@ -1,10 +1,3 @@
-"""
-Events for the ManagerAgent workflow.
-
-Internal events for streaming to frontend/logging.
-For MobileAgent coordination events, see droid/events.py
-"""
-
 import builtins;
 
 import from typing { Optional }

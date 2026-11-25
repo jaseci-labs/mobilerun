@@ -1,12 +1,3 @@
-"""
-ExecutorAgent - Action execution workflow.
-
-This agent is responsible for:
-- Taking a specific subgoal from the Manager
-- Analyzing the current UI state
-- Selecting and executing appropriate actions
-"""
-
 import from __future__ { annotations }
 
 import builtins;

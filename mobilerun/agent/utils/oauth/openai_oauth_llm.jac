@@ -1,17 +1,3 @@
-"""Standalone OpenAI OAuth subclass for LlamaIndex.
-
-Usage:
-    from openai_oauth_llm import OpenAIOAuth
-
-    llm = OpenAIOAuth(
-        auth_model="openai-codex/gpt-6-astra",
-        custom_model="gpt-6.1-sol",  # optional override
-        oauth_refresh_token="rt_...",
-        oauth_access_token="eyJ...",  # optional if cached file already exists
-        oauth_credential_path=str(OPENAI_OAUTH_CREDENTIAL_PATH),
-    )
-"""
-
 import builtins;
 
 import operator;
@@ -128,14 +114,8 @@ def _b64_no_pad(raw: bytes) -> str;
 
 def _pkce_pair -> tuple[str, str];
 
-"""Detect SSH, WSL, or missing display where browser popups won't work."""
 def _is_headless_environment -> bool;
 
-"""Probe the OAuth issuer to detect TLS/certificate issues before login.
-
-    Raises RuntimeError on TLS certificate errors (with fix suggestions).
-    Prints warnings for non-TLS connection errors but does not block.
-    """
 def _tls_preflight(
     issuer: str, timeout: float = 5.0, *, deadline: OAuthLoginDeadline | None = None
 ) -> None;
@@ -358,10 +338,6 @@ class OpenAIOAuth(OpenAI) {
         deadline: OAuthLoginDeadline | None = None,
     ) -> OpenAIOAuthCredentials;
 
-    """Device Code login for headless/SSH environments.
-
-        timeout_seconds is capped at 15 min (device code expiry).
-        """
     def _login_device_code(
         *,
         open_browser: bool = False,

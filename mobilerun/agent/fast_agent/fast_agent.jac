@@ -1,12 +1,3 @@
-"""FastAgent — tool-calling agent for device interaction.
-
-Uses a structured XML tool-calling protocol by default. The LLM emits
-<function_calls> blocks, the agent parses them, executes the tools via
-ToolRegistry, and feeds <function_results> back as user messages. LLMs that
-support native function calling receive the tools as API tool definitions
-instead and get tool-result messages back.
-"""
-
 import builtins;
 
 import operator;
@@ -52,10 +43,8 @@ with entry {
     _NATIVE_CONTINUE = "The tool results are above. Continue with the next step.";
 }
 
-"""Build a focused retry instruction without echoing malformed model output."""
 def _malformed_tool_call_correction(attempt: builtins.int) -> builtins.str;
 
-"""Cut text at offset ``end`` of ``message.content``, keeping non-text blocks."""
 def _truncate_message_text(message: ChatMessage, end: builtins.int) -> ChatMessage;
 
 def _format_results(
@@ -84,10 +73,8 @@ class FastAgent(Workflow) {
         **kwargs,
     );
 
-    """Build system prompt message."""
     async def _build_system_prompt -> ChatMessage;
 
-    """Build initial user prompt message."""
     async def _build_user_prompt(goal: builtins.str) -> ChatMessage;
 
     """Initialize message history with goal."""

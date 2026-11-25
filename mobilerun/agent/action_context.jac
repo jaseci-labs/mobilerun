@@ -1,9 +1,3 @@
-"""ActionContext — composed bag of dependencies for action functions.
-
-Replaces the ``tools=tools_instance`` parameter that action functions
-previously received.
-"""
-
 import builtins;
 
 import from __future__ { annotations }

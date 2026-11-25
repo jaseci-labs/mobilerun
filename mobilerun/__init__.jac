@@ -1,7 +1,3 @@
-"""
-Mobilerun - A framework for controlling Android devices through LLM agents.
-"""
-
 import sys;
 
 import logging;

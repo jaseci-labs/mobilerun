@@ -1,10 +1,3 @@
-"""xAI subscription OAuth transport for the Responses API.
-
-Credentials are owned by Mobilerun and stored in its shared auth profile.  The
-OAuth client and inference proxy values are deliberately pinned: accepting
-caller-controlled endpoints would let an attacker exfiltrate refresh tokens.
-"""
-
 import builtins;
 
 import operator;
@@ -156,7 +149,6 @@ def _pkce_pair -> tuple[str, str];
 
 def _is_headless_environment -> bool;
 
-"""Parse a callback exactly once, rejecting ambiguous duplicate values."""
 def _parse_callback_query(query: str) -> dict[str, str | None];
 
 """A safe OAuth failure that never includes a token response body."""
@@ -279,7 +271,6 @@ class GrokOAuthSessionManager {
         deadline: OAuthLoginDeadline | None = None,
     ) -> GrokOAuthCredentials;
 
-    """POST a form, retrying only grants that are safe to replay."""
     def _post_form(
         url: str,
         *,

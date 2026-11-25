@@ -1,13 +1,3 @@
-"""IOSStateProvider — builds UIState from iOS portal accessibility data.
-
-Parses the raw text-based accessibility tree returned by the iOS portal
-into structured elements compatible with UIState.
-
-Known limitations:
-- Normalized coordinates untested on real iOS devices
-- No filter/formatter pipeline (iOS UIState still formats from raw a11y text)
-"""
-
 import operator;
 
 import from __future__ { annotations }
@@ -87,17 +77,12 @@ class IOSStateProvider(StateProvider) {
     async def get_state -> UIState;
 }
 
-"""Parse iOS accessibility tree text into structured elements.
-
-    Moved verbatim from ``IOSTools._parse_ios_accessibility_tree``.
-    """
 def _parse_a11y_tree(a11y_text: str) -> List[Dict[str, Any]];
 
 def _normalize_phone_state(phone_state: Dict[str, Any], a11y_text: str) -> Dict[str, Any];
 
 def _prioritize_actionable_elements(elements: List[Dict[str, Any]]) -> List[Dict[str, Any]];
 
-"""Build the text representation shown to the agent."""
 def _format_elements(
     elements: List[Dict[str, Any]], screen_width: int, screen_height: int, normalized: bool = False
 ) -> str;

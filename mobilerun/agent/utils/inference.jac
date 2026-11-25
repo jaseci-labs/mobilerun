@@ -51,7 +51,6 @@ def _as_dict(value: builtins.object) -> builtins.dict;
 
 def _first_choice(mapping: builtins.dict, key: builtins.str) -> builtins.dict;
 
-"""Redacted metadata (types, key names, scalars) for an unusable response. Never content."""
 def _empty_response_diagnostics(
     response: builtins.object, llm: builtins.object, *, stream: builtins.bool = False
 ) -> builtins.dict[builtins.str, builtins.object];
@@ -64,27 +63,10 @@ def _log_empty_response(
     stream: builtins.bool = False,
 ) -> None;
 
-"""Return whether an HTTP client error should fail without another attempt."""
 def _is_permanent_http_client_error(error: any) -> builtins.bool;
 
-"""Log a stream's deltas as they arrive; return the text and the last chunk."""
 async def _collect_stream(await_stream) -> builtins.tuple;
 
-"""
-    Call LLM with retries and timeout handling.
-
-    Args:
-        llm: The LLM client instance
-        messages: List of messages to send
-        retries: Number of retry attempts
-        timeout: Timeout in seconds for each attempt
-        delay: Base delay between retries (multiplied by attempt number)
-        stream: If True, stream response chunks to console in real-time
-        chat_kwargs: Extra request arguments, such as native tool definitions
-
-    Returns:
-        The LLM ChatResponse object
-    """
 async def acall_with_retries(
     llm,
     messages: builtins.list,
@@ -95,35 +77,10 @@ async def acall_with_retries(
     **chat_kwargs,
 ) -> ChatResponse;
 
-"""
-    Stream LLM response chunks to console and return accumulated response.
-
-    Args:
-        llm: The LLM client instance
-        messages: List of messages to send
-        timeout: Timeout in seconds for the entire stream
-
-    Returns:
-        ChatResponse with accumulated content
-    """
 async def _stream_response(
     llm, messages: builtins.list, timeout: builtins.float, **chat_kwargs
 ) -> ChatResponse;
 
-"""
-    Call LLM completion with retries and timeout handling.
-
-    Args:
-        llm: The LLM client instance
-        prompt: The prompt string to send
-        retries: Number of retry attempts
-        timeout: Timeout in seconds for each attempt
-        delay: Base delay between retries (multiplied by attempt number)
-        stream: If True, stream response chunks to console in real-time
-
-    Returns:
-        The LLM CompletionResponse object
-    """
 async def acomplete_with_retries(
     llm,
     prompt: builtins.str,
@@ -133,36 +90,10 @@ async def acomplete_with_retries(
     stream: builtins.bool = False,
 ) -> CompletionResponse;
 
-"""
-    Stream LLM completion response chunks to console and return accumulated response.
-
-    Args:
-        llm: The LLM client instance
-        prompt: The prompt string to send
-        timeout: Timeout in seconds for the entire stream
-
-    Returns:
-        CompletionResponse with accumulated content
-    """
 async def _stream_complete_response(
     llm, prompt: builtins.str, timeout: builtins.float
 ) -> CompletionResponse;
 
-"""
-    Call LLM structured predict with retries and timeout handling.
-
-    Args:
-        llm: The LLM client instance
-        output_cls: The Pydantic model class for structured output
-        prompt: PromptTemplate with {variables}
-        retries: Number of retry attempts
-        timeout: Timeout in seconds for each attempt
-        delay: Base delay between retries (multiplied by attempt number)
-        **prompt_args: Values for template variables
-
-    Returns:
-        Instance of the output_cls Pydantic model
-    """
 async def astructured_predict_with_retries(
     llm,
     output_cls: Type[T],

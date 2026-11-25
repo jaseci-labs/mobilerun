@@ -1,10 +1,3 @@
-"""
-Abstract base class for app card providers.
-
-Providers load app-specific instruction cards based on package names.
-Supports multiple backends: local files, remote servers, or composite strategies.
-"""
-
 import builtins;
 
 import from abc { ABC, abstractmethod }

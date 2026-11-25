@@ -35,7 +35,6 @@ def run_gemini_oauth_login(
     open_browser: bool = True,
 ) -> None;
 
-"""Authenticate directly with xAI and save Mobilerun-owned credentials."""
 def run_grok_oauth_login(
     credential_path: str,
     model: str | None,

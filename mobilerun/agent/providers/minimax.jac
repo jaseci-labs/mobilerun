@@ -35,16 +35,13 @@ with entry {
 
 def _normalize_base_url(base_url: str | None) -> str;
 
-"""Return the documented context window for a known MiniMax model."""
 def minimax_model_context_window(model: object) -> int | None;
 
 def is_minimax_base_url(base_url: str | None) -> bool;
 
-"""Fill MiniMax capabilities that OpenAILike cannot infer."""
 def apply_minimax_defaults(kwargs: dict[str, Any]) -> dict[str, Any];
 
 @lru_cache(maxsize=1)
 def _warn_about_legacy_endpoint_once -> None;
 
-"""Warn once per process when a profile still uses MiniMax's legacy endpoint."""
 def warn_if_legacy_minimax_endpoint(base_url: str | None) -> None;

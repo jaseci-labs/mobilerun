@@ -1,5 +1,3 @@
-"""Base interface for tree formatters."""
-
 import builtins;
 
 import from abc { ABC, abstractmethod }

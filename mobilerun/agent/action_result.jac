@@ -1,5 +1,3 @@
-"""ActionResult — structured return type from action functions."""
-
 import from __future__ { annotations }
 
 import from dataclasses { dataclass }

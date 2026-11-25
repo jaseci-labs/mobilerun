@@ -1,5 +1,3 @@
-"""Shared Grok/xAI model and transport metadata."""
-
 import from __future__ { annotations }
 
 import from collections.abc { Mapping, MutableMapping }
@@ -35,10 +33,8 @@ with entry {
     GROK_UNSUPPORTED_SAMPLING_PARAMS = frozenset({"presence_penalty", "frequency_penalty", "stop"});
 }
 
-"""Normalize public xAI/Grok aliases to Mobilerun's canonical model id."""
 def normalize_grok_model_id(model: object) -> str;
 
-"""Apply Grok's Responses API parameter contract to a final payload."""
 def sanitize_grok_responses_kwargs(
     payload: MutableMapping[str, Any],
     *,

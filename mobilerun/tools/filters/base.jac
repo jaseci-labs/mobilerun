@@ -1,5 +1,3 @@
-"""Base interface for accessibility tree filters."""
-
 import builtins;
 
 import from abc { ABC, abstractmethod }

@@ -141,7 +141,6 @@ impl _setup_langfuse_tracing(
         if not getattr(_handler._encoder, "_mobilerun_pydantic_v2", False) {
             original_encoder = _handler._encoder;
 
-            """Encode Pydantic v2 models for OpenInference."""
             def _fixed_encoder(`obj) -> any {
                 if isinstance(`obj, PydanticV2BaseModel) {
                     return `obj.model_dump();

@@ -1,5 +1,3 @@
-"""Helper utilities for tools."""
-
 glob __all__: any = [
     "find_clear_point",
     "rects_overlap",

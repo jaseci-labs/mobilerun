@@ -136,7 +136,6 @@ impl _find_top_level_manager_result_tags(
 }
 
 impl parse_manager_response(response: builtins.str) -> builtins.dict {
-    """Extract content between XML-style tags (handles attributes)."""
     def extract(tag: builtins.str) -> builtins.str {
         matches: any = _find_tag_matches(response, tag);
         if matches {
@@ -145,7 +144,6 @@ impl parse_manager_response(response: builtins.str) -> builtins.dict {
         return "";
     }
 
-    """Extract and combine content from all occurrences of a tag."""
     def extract_all(tag: builtins.str) -> builtins.str {
         matches: any = [_tag_content(`match) for `match in _find_tag_matches(response, tag)];
         if not matches {

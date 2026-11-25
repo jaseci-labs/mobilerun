@@ -127,7 +127,6 @@ with entry {
     _UNSET = object();
 }
 
-"""Use the API's camelCase field names so snake_case overrides don't collide."""
 def _camel_case_keys(config: Mapping[builtins.str, Any]) -> Dict[builtins.str, Any];
 
 def _b64_no_pad(raw: builtins.bytes) -> builtins.str;
@@ -138,10 +137,8 @@ with entry {
     _MAX_CODE_ATTEMPTS = 2;
 }
 
-"""Detect SSH, WSL, or missing display where browser popups won't work."""
 def _is_headless_environment -> builtins.bool;
 
-"""Parse pasted input: full URL with code= param, code#state, or bare code."""
 def _normalize_manual_code(raw: builtins.str, expected_state: builtins.str) -> builtins.str;
 
 glob credential_slot_default_: any;
@@ -304,14 +301,6 @@ class GeminiOAuthCodeAssistLLM(CustomLLM) {
 
     def _build_headers(token: builtins.str) -> Dict[builtins.str, builtins.str];
 
-    """Agent-usable Gemini models for the current entitlement.
-
-        Calls Code Assist ``fetchAvailableModels`` and returns dicts with
-        ``id``, ``display_name`` and ``supports_images``. Internal/tab/aux,
-        image-generation and deprecated ids are filtered out. Used to verify
-        login and to optionally discover the live catalog. Requires the
-        Antigravity client headers.
-        """
     def fetch_available_models(
         *, deadline: OAuthLoginDeadline | None = None, access_token: builtins.str | None = None
     ) -> builtins.list[Dict[builtins.str, Any]];
@@ -347,7 +336,6 @@ class GeminiOAuthCodeAssistLLM(CustomLLM) {
         persist_credentials: builtins.bool = True,
     ) -> builtins.str;
 
-    """Headless OAuth flow for SSH/WSL environments."""
     def login_headless(
         *,
         open_browser: builtins.bool = False,

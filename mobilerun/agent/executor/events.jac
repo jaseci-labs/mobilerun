@@ -1,10 +1,3 @@
-"""
-Events for the ExecutorAgent workflow.
-
-Internal events for streaming to frontend/logging.
-For MobileAgent coordination events, see droid/events.py
-"""
-
 import builtins;
 
 import from typing { Dict, Optional }

@@ -1,9 +1,3 @@
-"""UIState — parsed UI elements with element resolution and coordinate conversion.
-
-Replaces ``clickable_elements_cache``, ``_extract_element_coordinates_by_index``,
-and the scattered ``find_element_by_index`` local functions from ``adb.py``.
-"""
-
 import builtins;
 
 import operator;
@@ -42,28 +36,16 @@ class UIState {
         model_screenshot_height: Optional[int] = None,
     );
 
-    """Recursively find an element by its index."""
     def get_element(index: int) -> Optional[Dict[str, Any]];
 
-    """Return the centre, avoiding known touchable sibling obstructions.
-
-        Raises ``ValueError`` when the element is missing or has no bounds.
-        """
     def get_element_coords(index: int) -> Tuple[int, int];
 
-    """Keep a preferred point unless the formatter identified an obstruction."""
     def _avoid_tap_blockers(element: Dict[str, Any], point: Tuple[int, int]) -> Tuple[int, int];
 
-    """Return a dict with common element fields for display."""
     def get_element_info(index: int) -> Dict[str, Any];
 
-    """Find a tap point for *index* that avoids overlapping elements.
-
-        Falls back to the centre if no clear point exists.
-        """
     def get_clear_point(index: int) -> Tuple[int, int];
 
-    """Convert point to absolute pixels if normalized mode is active."""
     def convert_point(x: int, y: int) -> Tuple[int, int];
 
     static def _find_by_index(

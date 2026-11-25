@@ -1,7 +1,3 @@
-"""
-StatelessManagerAgent - Stateless planning agent that rebuilds context each turn.
-"""
-
 import from __future__ { annotations }
 
 import builtins;

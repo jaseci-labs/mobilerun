@@ -1,5 +1,3 @@
-"""MCP client integration for Mobilerun."""
-
 glob __all__: any = [
     "MCPConfig",
     "MCPServerConfig",

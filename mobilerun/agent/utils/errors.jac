@@ -1,5 +1,3 @@
-"""Short, log-safe descriptions of provider errors."""
-
 import from __future__ { annotations }
 
 import logging;
@@ -39,12 +37,10 @@ with entry {
 
 def http_status_code(error: BaseException) -> int | None;
 
-"""Return scheme, host and path only: no credentials or query string."""
 def _request_url(error: BaseException) -> str | None;
 
 def _clean_prefix(prefix: str) -> str;
 
-"""Summarize ``text`` if it is an HTML page, optionally after a short prefix."""
 def _summarize_html_page(
     text: str,
     *,
@@ -60,7 +56,6 @@ with entry {
     max_chars_default_ = _MAX_ERROR_CHARS;
 }
 
-"""Return ``str(error)`` with HTML error pages summarized and length capped."""
 def describe_error(error: BaseException, max_chars: int = max_chars_default_) -> str;
 
 """Shorten HTML error pages that third-party retry logs include verbatim."""

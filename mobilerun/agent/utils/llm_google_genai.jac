@@ -1,5 +1,3 @@
-"""MobilerunGoogleGenAI, kept apart so its provider package loads only when used."""
-
 import builtins;
 
 import from typing { Any }

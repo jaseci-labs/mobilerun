@@ -37,7 +37,6 @@ class LLMProfile {
 
     has kwargs: Dict[str, Any] = field(default_factory=dict[any, any]);
 
-    """Convert profile to kwargs for load_llm function."""
     def to_load_llm_kwargs -> Dict[str, Any];
 }
 
@@ -185,7 +184,6 @@ class LoggingConfig {
     has trajectory_gifs: bool = True;
 }
 
-"""Give a MobileConfig the default profiles when it has none; its dataclass __post_init__."""
 def _fill_default_profiles(config: any) -> None;
 
 glob DEFAULT_DISABLED_TOOLS: tuple[str, ...];
@@ -243,35 +241,12 @@ class MobileConfig {
 
     static has __post_init__: any = _fill_default_profiles;
 
-    """Get default agent specific LLM profiles."""
     static def _default_profiles -> Dict[str, LLMProfile];
 
-    """Convert config to dictionary."""
     def to_dict -> Dict[str, Any];
 
-    """Create config from dictionary.
-
-        If ``data`` carries a ``_version`` lower than the current schema
-        version, migrations are applied before parsing so SDK callers using
-        ``MobileConfig.from_yaml()`` / ``from_dict()`` get the same upgrade
-        path as ``ConfigLoader``. In-memory dicts without ``_version`` are
-        assumed to already match the current schema.
-        """
     class def from_dict(data: Dict[str, Any]) -> "MobileConfig";
 
-    """
-        Load config from YAML file.
-
-        Args:
-            path: Path to config file (relative to CWD or absolute)
-
-        Returns:
-            MobileConfig instance
-
-        Raises:
-            FileNotFoundError: If file doesn't exist
-            Exception: If file can't be parsed
-        """
     class def from_yaml(path: str) -> "MobileConfig";
 }
 

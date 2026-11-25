@@ -1,5 +1,3 @@
-"""Action-level macro recorder for schema v2."""
-
 import builtins;
 
 import from __future__ { annotations }

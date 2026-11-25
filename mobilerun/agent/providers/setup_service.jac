@@ -61,15 +61,6 @@ def _probe_zai_chat_completions(
     *, base_url: str, api_key: str, model_id: str, timeout_seconds: float = 5.0
 ) -> bool;
 
-"""Resolve the effective ZAI base URL and model.
-
-    We only support the two user-facing modes:
-    - api_key -> global endpoint
-    - coding_api -> coding-global endpoint
-
-    For coding_api, probe glm-5 first and fall back to glm-4.7 when the
-    provided token/plan does not expose glm-5 on the coding endpoint.
-    """
 def _resolve_zai_selection(selection: SetupSelection, base_url: str | None) -> tuple[str
     | None, str];
 

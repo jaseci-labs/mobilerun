@@ -1,7 +1,3 @@
-"""
-Prompts for the ManagerAgent.
-"""
-
 import builtins;
 
 import operator;
@@ -62,53 +58,12 @@ def _find_tag_matches(
 
 def _tag_content(`match: re.Match[builtins.str]) -> builtins.str;
 
-"""Return a final tag's one valid, explicit success attribute.
-
-    Only an attribute whose *name* is exactly ``success`` is accepted.  This
-    deliberately rejects look-alikes such as ``data-success`` and strings in
-    another attribute's value, as well as duplicate or unquoted attributes.
-    """
 def _success_from_attrs(attrs: builtins.str) -> builtins.bool | None;
 
-"""Find well-formed top-level result tags and report unsafe control tags.
-
-    Manager output is XML-like rather than a complete XML document, so a small
-    stack parser is more robust than globally matching ``<plan>`` and terminal
-    tags.  In particular, manager response tags inside metadata or a result
-    must not turn into a top-level plan or final result.  Ordinary markup in
-    a top-level result remains body text.
-    """
 def _find_top_level_manager_result_tags(
     response: builtins.str
 ) -> builtins.tuple[builtins.list[builtins.dict[builtins.str, builtins.str]], builtins.list[builtins.str]];
 
-"""
-    Parse manager LLM response into structured dict.
-
-    Extracts XML-style tags from the response:
-    - <thought>...</thought>
-    - <add_memory>...</add_memory>
-    - <plan>...</plan>
-    - <request_accomplished success="true|false">...</request_accomplished> (answer)
-
-    Also derives:
-    - current_subgoal: first line of plan (with list markers removed)
-    - If first item is <script> tag, extract script content as current_subgoal
-    - success: bool | None parsed from request_accomplished success attribute
-
-    Args:
-        response: Raw LLM response text
-
-    Returns:
-        Dict with keys:
-            - thought: str
-            - memory: str
-            - plan: str
-            - current_subgoal: str (first line of plan, cleaned, or script content)
-            - answer: str (from request_accomplished tag)
-            - success: bool | None (True/False if task complete, None if still in progress)
-    """
 def parse_manager_response(response: builtins.str) -> builtins.dict;
 
-"""Validate the manager output contract parsed by parse_manager_response."""
 def validate_manager_response(parsed: builtins.dict) -> ManagerResponseValidation;

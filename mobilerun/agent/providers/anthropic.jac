@@ -1,5 +1,3 @@
-"""Shared Anthropic model catalog and capability metadata."""
-
 import builtins;
 
 import from collections.abc { Iterator, MutableMapping }
@@ -99,13 +97,10 @@ with entry {
     });
 }
 
-"""Return the verified context window for a known Anthropic model."""
 def anthropic_model_context_window(model: object) -> int | None;
 
-"""Whether the model rejects Anthropic sampling controls."""
 def anthropic_model_omits_sampling_params(model: object) -> bool;
 
-"""Remove unsupported sampling fields from a final Anthropic payload."""
 def strip_anthropic_sampling_params(payload: MutableMapping[str, Any]) -> MutableMapping[str, Any];
 
 """Usage of one Anthropic stream, attached to its latest chunk.
@@ -140,7 +135,6 @@ def _wrap_stream(stream: Any, usage: StreamUsage | None, kwargs: dict[str, any])
 
 async def _acreate(create: Any, *args_: Any, **kwargs: Any) -> Any;
 
-"""Wrap an SDK ``messages`` resource so streams report their usage."""
 def record_stream_usage(messages: Any, *, is_async: bool = False) -> None;
 
 class _UsageRecordingStream {

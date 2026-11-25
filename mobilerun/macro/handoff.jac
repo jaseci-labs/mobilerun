@@ -1,12 +1,9 @@
-"""Agent handoff for guarded macro replay divergence."""
-
 import from __future__ { annotations }
 
 import importlib;
 
 import from typing { Any, Dict, List, Optional }
 
-"""Invoke the normal Mobilerun agent after macro replay diverges."""
 async def run_agent_handoff(
     *,
     goal: str,

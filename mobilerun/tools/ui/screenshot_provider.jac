@@ -1,5 +1,3 @@
-"""Screenshot-only state provider for visual control backends."""
-
 import builtins;
 
 import from __future__ { annotations }

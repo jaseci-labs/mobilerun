@@ -38,9 +38,7 @@ class OAuthLoginDeadline {
 
     def sleep(delay_seconds: float) -> None;
 
-    """Return a view capped by a provider-issued expiry, never a reset budget."""
     def limited_to(timeout_seconds: float) -> OAuthLoginDeadline;
 }
 
-"""Launch a browser without letting OS integration consume the login budget."""
 def open_browser_async(url: str, opener: Callable[[str], object]) -> None;

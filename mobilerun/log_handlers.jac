@@ -1,14 +1,3 @@
-"""
-Logging handlers for Mobilerun.
-
-Provides CLILogHandler (Rich colored terminal output) and TUILogHandler
-(record buffer for deferred Textual rendering). Both support extra params:
-
-    color:      logger.info("msg", extra={"color": "blue"})
-    stream:     logger.info(token, extra={"stream": True})
-    stream_end: logger.info("", extra={"stream_end": True})
-"""
-
 import builtins;
 
 import logging;
@@ -21,7 +10,6 @@ with entry {
     COLORS = frozenset({"blue", "cyan", "green", "red", "yellow", "magenta", "white", "dim"});
 }
 
-"""Replace all handlers on the ``mobilerun`` logger."""
 def configure_logging(debug: builtins.bool, handler: logging.Handler) -> None;
 
 glob level_default_: any;

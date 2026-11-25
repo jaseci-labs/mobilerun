@@ -1,10 +1,3 @@
-"""Safe shared storage for Mobilerun authentication profiles.
-
-All OAuth providers and saved API keys share one JSON object.  Writes therefore
-need to be serialized across processes and must preserve slots owned by other
-providers.
-"""
-
 import builtins;
 
 import from __future__ { annotations }

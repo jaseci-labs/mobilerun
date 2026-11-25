@@ -108,24 +108,14 @@ class MobileAgentState(BaseModel) {
 
     has output_dir: str = "";
 
-    """Append text to agent_memory (shared by FastAgent and Manager)."""
     def append_memory(text: str) -> None;
 
-    """Mark task as finished.
-
-        Accepts both ``reason`` and ``message`` params — FastAgent XML
-        prompt uses ``message``, action signature uses ``reason``.
-        """
     async def complete(success: bool, reason: str = "", message: str = "") -> None;
 
     def queue_user_message(message: str) -> QueuedUserMessage;
 
     def drain_user_messages -> list[QueuedUserMessage];
 
-    """
-        Update package and activity together, capturing telemetry event only once.
-        Skips empty values — won't overwrite a known package/activity with "".
-        """
     def update_current_app(package_name: str, activity_name: str) -> any;
 }
 

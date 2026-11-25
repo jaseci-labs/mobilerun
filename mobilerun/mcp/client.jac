@@ -1,5 +1,3 @@
-"""MCP Client Manager - handles connections to MCP servers."""
-
 import builtins;
 
 import from __future__ { annotations }
@@ -32,7 +30,6 @@ class MCPToolInfo {
     has input_schema: dict;
 }
 
-"""Open one server's transport and hold it until shutdown is signalled."""
 async def _own_connection(
     server_params: Any, ready: asyncio.Future, shutdown: asyncio.Event
 ) -> None;
@@ -48,22 +45,16 @@ class MCPClientManager {
 
     def init(config: "MCPConfig");
 
-    """Discover tools from all configured servers."""
     async def discover_tools -> dict[str, MCPToolInfo];
 
-    """Connect temporarily to fetch tool schemas."""
     async def _discover_server_tools(server_name: str, config: "MCPServerConfig") -> None;
 
-    """Check if tool passes include/exclude filters."""
     def _should_include_tool(tool_name: str, config: "MCPServerConfig") -> bool;
 
-    """Call an MCP tool, connecting lazily if needed."""
     async def call_tool(tool_name: str, arguments: dict) -> Any;
 
-    """Establish persistent connection to a server."""
     async def _connect_server(server_name: str) -> None;
 
-    """Clean up all server connections."""
     async def disconnect_all -> None;
 
     has tools: dict[str, MCPToolInfo] {

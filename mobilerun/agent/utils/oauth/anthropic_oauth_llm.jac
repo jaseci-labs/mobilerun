@@ -148,7 +148,6 @@ class AnthropicOAuthStreamError(requests.HTTPError, Exception) {
     );
 }
 
-"""Yield the JSON data of each server-sent event."""
 def _iter_sse_events(response: Any) -> Generator[any, any, any];
 
 def _b64_no_pad(raw: builtins.bytes) -> builtins.str;
@@ -159,7 +158,6 @@ with entry {
     _MAX_CODE_ATTEMPTS = 2;
 }
 
-"""Detect SSH, WSL, or missing display where browser popups won't work."""
 def _is_headless_environment -> builtins.bool;
 
 def _normalize_manual_code(raw: builtins.str, expected_state: builtins.str) -> builtins.str;
@@ -360,7 +358,6 @@ class AnthropicOAuthLLM(CustomLLM) {
         deadline: OAuthLoginDeadline | None = None,
     ) -> builtins.str;
 
-    """Headless OAuth flow for SSH/WSL environments."""
     def login_headless(
         *,
         open_browser: builtins.bool = False,
@@ -388,17 +385,14 @@ class AnthropicOAuthLLM(CustomLLM) {
 
     def _use_billing_header(model_id: builtins.str) -> builtins.bool;
 
-    """Whether the model accepts Anthropic sampling controls."""
     static def _supports_temperature(model_id: builtins.str) -> builtins.bool;
 
     def _system_blocks(
         user_system_lines: Sequence[builtins.str], model_id: builtins.str
     ) -> builtins.list[builtins.dict[builtins.str, builtins.str]];
 
-    """Drop framework-only kwargs that are invalid for Anthropic's API."""
     static def _sanitize_request_kwargs(kwargs: Dict[builtins.str, Any]) -> Dict[builtins.str, Any];
 
-    """Build the Messages API URL, headers and payload."""
     def _messages_request(
         messages: Sequence[ChatMessage], kwargs: Dict[builtins.str, Any]
     ) -> builtins.tuple[builtins.str, Dict[builtins.str, builtins.str], Dict[builtins.str, Any]];

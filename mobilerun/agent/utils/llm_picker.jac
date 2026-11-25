@@ -99,7 +99,6 @@ with entry {
     DEEPSEEK_FUNCTION_CALLING_MODELS = {"deepseek-flash", "deepseek-v4-pro"};
 }
 
-"""Map user-facing provider names to Mobilerun runtime providers."""
 def normalize_provider_name(provider_name: builtins.str) -> builtins.str;
 
 def _validate_openai_oauth_model(model: builtins.object) -> None;
@@ -112,24 +111,10 @@ with entry {
     _warned_ollama_kwargs = set[any]();
 }
 
-"""Translate provider-portable kwargs for llama-index's Ollama class.
-
-    ``max_tokens`` is not an Ollama constructor field and pydantic silently
-    drops it; translate it to ``additional_kwargs.num_predict`` (an explicit
-    ``num_predict`` wins). Also default ``context_window`` (see
-    ``_OLLAMA_DEFAULT_CONTEXT_WINDOW``) and keep it aligned with an explicit
-    ``additional_kwargs.num_ctx`` so the -1 path's hidden ``client.show()``
-    lookup is never triggered by mobilerun defaults.
-    """
 def _prepare_ollama_kwargs(
     kwargs: builtins.dict[builtins.str, Any], llm_class: Any
 ) -> builtins.dict[builtins.str, Any];
 
-"""Parse Responses output items one at a time.
-
-    llama-index-llms-openai re-appends earlier message text for every message
-    item, so multi-message outputs repeat text.
-    """
 def _patch_responses_output_parser(responses_cls: Any) -> None;
 
 def _load_openai_responses(*, grok: builtins.bool = False, **kwargs: Any) -> LLM;
@@ -140,42 +125,8 @@ def _load_anthropic(**kwargs: Any) -> LLM;
 
 def _load_deepseek(**kwargs: Any) -> LLM;
 
-"""Load and initialize a configured LLM backend.
-
-    Args:
-        provider_name: Case-sensitive provider name (e.g. "OpenAIResponses", "Ollama").
-        model: Model name (e.g. "gpt-6-astra", "gemini-3.8-flash").
-        **kwargs: Keyword arguments for the LLM class constructor.
-
-    Returns:
-        An initialized LLM instance.
-    """
 def load_llm(provider_name: builtins.str, model: builtins.str | None = None, **kwargs: Any) -> LLM;
 
-"""
-    Load multiple LLMs from LLMProfile objects.
-
-    Args:
-        profiles: Dict of profile_name -> LLMProfile objects
-        profile_names: List of profile names to load. If None, loads all profiles
-        **override_kwargs_per_profile: Dict of profile-specific overrides
-            Example: manager={'temperature': 0.1}, executor={'max_tokens': 8000}
-
-    Returns:
-        Dict mapping profile names to initialized LLM instances
-
-    Example:
-        >>> config = MobileConfig.from_yaml("config.yaml")
-        >>> llms = load_llms_from_profiles(config.llm_profiles)
-        >>> manager_llm = llms['manager']
-
-        >>> # Load specific profiles with overrides
-        >>> llms = load_llms_from_profiles(
-        ...     config.llm_profiles,
-        ...     profile_names=['manager', 'executor'],
-        ...     manager={'temperature': 0.1}
-        ... )
-    """
 def load_llms_from_profiles(
     profiles: builtins.dict[builtins.str, "LLMProfile"],
     profile_names: builtins.list[builtins.str] | None = None,

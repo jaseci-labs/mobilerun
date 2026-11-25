@@ -1,9 +1,3 @@
-"""
-Events for the FastAgent workflow.
-
-Internal events for streaming to frontend/logging.
-"""
-
 import builtins;
 
 import from typing { Optional }

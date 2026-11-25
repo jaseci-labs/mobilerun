@@ -1,10 +1,3 @@
-"""
-Telemetry event models for Mobilerun analytics.
-
-This module defines Pydantic models for telemetry events captured during
-agent execution. All events inherit from TelemetryEvent base class.
-"""
-
 import builtins;
 
 import from typing { Dict, Optional }
