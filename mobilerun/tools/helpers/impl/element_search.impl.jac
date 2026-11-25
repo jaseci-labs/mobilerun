@@ -640,15 +640,3 @@ impl Filters.deepest_matching(base_filter: ElementFilter) -> ElementFilter {
 
     return filter_fn;
 }
-
-impl Filters.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl Filters.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl Filters.__hash__ -> int {
-    return id(self);
-}

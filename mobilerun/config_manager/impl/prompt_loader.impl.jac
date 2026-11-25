@@ -30,15 +30,3 @@ impl PromptLoader.render_template(
     template: any = env.from_string(template_string);
     return template.render(**(variables or {}));
 }
-
-impl PromptLoader.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl PromptLoader.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl PromptLoader.__hash__ -> int {
-    return id(self);
-}

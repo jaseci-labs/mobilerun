@@ -64,7 +64,7 @@ with entry {
 }
 
 """Produces ``UIState`` from an iOS device's accessibility tree."""
-obj IOSStateProvider(StateProvider) {
+class IOSStateProvider(StateProvider) {
     has use_normalized: any,
         vision_enabled: any,
         vision_resize_policy: any,
@@ -85,12 +85,6 @@ obj IOSStateProvider(StateProvider) {
     );
 
     async def get_state -> UIState;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }
 
 """Parse iOS accessibility tree text into structured elements.

@@ -57,18 +57,6 @@ impl StreamUsage.record(event: Any) -> None {
     }
 }
 
-impl StreamUsage.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl StreamUsage.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl StreamUsage.__hash__ -> int {
-    return id(self);
-}
-
 impl collect_stream_usage(usage: StreamUsage) -> Generator[any, any, any] {
     token: any = _stream_usage.set(usage);
     try {
@@ -130,16 +118,4 @@ impl _UsageRecordingStream.__aiter__ -> AsyncIterator[any] {
         self._usage.record(event);
         yield event;
     }
-}
-
-impl _UsageRecordingStream.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl _UsageRecordingStream.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl _UsageRecordingStream.__hash__ -> int {
-    return id(self);
 }

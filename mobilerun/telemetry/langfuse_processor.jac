@@ -75,7 +75,7 @@ class _LangfuseSpanProcessor(SpanProcessor) {
 }
 
 """Let the public Langfuse client register its processor on our provider."""
-obj _LangfuseTracerProvider {
+class _LangfuseTracerProvider {
     has _provider: any,
         _normalizer: any;
 
@@ -84,12 +84,6 @@ obj _LangfuseTracerProvider {
     def add_span_processor(processor: SpanProcessor) -> None;
 
     def __getattr__(name) -> any;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }
 
 """Enrich live spans and normalize writable Langfuse export snapshots.

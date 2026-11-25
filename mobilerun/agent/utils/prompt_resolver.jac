@@ -19,7 +19,7 @@ import from typing { Dict, Optional }
         resolver = PromptResolver(custom_prompts={"fast_agent_system": "..."})
         prompt = resolver.get_prompt("fast_agent_system", fallback_path="/path/to/prompt.j2")
     """
-obj PromptResolver {
+class PromptResolver {
     has custom_prompts: any;
 
     """
@@ -56,10 +56,4 @@ obj PromptResolver {
             List of valid prompt key strings
         """
     static def get_valid_prompt_keys -> builtins.list[builtins.str];
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }

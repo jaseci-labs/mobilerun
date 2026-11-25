@@ -34,15 +34,3 @@ impl MacroRecorder.record_wait(duration: float, *, pre_ui: Any = None, post_ui: 
         {"action_type": "wait", "duration": duration}, pre_ui=pre_ui, post_ui=post_ui
     );
 }
-
-impl MacroRecorder.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl MacroRecorder.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl MacroRecorder.__hash__ -> int {
-    return id(self);
-}

@@ -57,18 +57,6 @@ impl OAuthLoginDeadline.limited_to(timeout_seconds: float) -> OAuthLoginDeadline
     );
 }
 
-impl OAuthLoginDeadline.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl OAuthLoginDeadline.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl OAuthLoginDeadline.__hash__ -> int {
-    return id(self);
-}
-
 impl open_browser_async(url: str, opener: Callable[[str], object]) -> None {
     def _open -> None {
         try {

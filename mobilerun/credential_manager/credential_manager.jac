@@ -5,13 +5,7 @@ import from abc { ABC, abstractmethod }
 import from typing { List }
 
 """Raised when a credential key is not found."""
-obj CredentialNotFoundError(KeyError) {
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
-}
+class CredentialNotFoundError(KeyError) {}
 
 """Abstract base class for credential resolution."""
 class CredentialManager(ABC) {

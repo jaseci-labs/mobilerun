@@ -73,18 +73,6 @@ impl _LangfuseTracerProvider.__getattr__(name) -> any {
     return getattr(self._provider, name);
 }
 
-impl _LangfuseTracerProvider.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl _LangfuseTracerProvider.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl _LangfuseTracerProvider.__hash__ -> int {
-    return id(self);
-}
-
 impl LangfuseSpanProcessor.init(agent: Optional["MobileAgent"] = None) {
     if agent is not None {
         set_current_agent(agent);

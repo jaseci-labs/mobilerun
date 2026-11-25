@@ -41,7 +41,7 @@ def model_effective_dims(model_id: str, width: int, height: int) -> tuple[int, i
     smallest (most conservative) result across models, then an optional explicit
     max-side cap (escape hatch for undocumented local/Ollama models).
     """
-obj VisionResizePolicy {
+class VisionResizePolicy {
     has _model_ids: any,
         _cap: any;
 
@@ -53,10 +53,4 @@ obj VisionResizePolicy {
 
     """Smallest effective dims across all models, after the optional cap."""
     def effective_dims(width: int, height: int) -> tuple[int, int];
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }

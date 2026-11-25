@@ -44,7 +44,7 @@ class ToolEntry {
 }
 
 """Central registry of all agent-callable tools."""
-obj ToolRegistry {
+class ToolRegistry {
     has tools: any;
 
     def init;
@@ -124,10 +124,4 @@ obj ToolRegistry {
     static def _format_params(parameters: Dict[str, Any]) -> str;
 
     static def _spec_to_json(name: str, `entry: ToolEntry) -> str;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }

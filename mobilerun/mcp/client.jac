@@ -38,7 +38,7 @@ async def _own_connection(
 ) -> None;
 
 """Manages MCP server connections with lazy initialization."""
-obj MCPClientManager {
+class MCPClientManager {
     has config: any,
         _tools: any,
         _server_tools: any,
@@ -77,10 +77,4 @@ obj MCPClientManager {
             return `list(self._sessions.keys());
         }
     }
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }

@@ -11,7 +11,7 @@ import time;
 import from collections.abc { Callable }
 
 """One monotonic timeout budget shared by every OAuth login stage."""
-obj OAuthLoginDeadline {
+class OAuthLoginDeadline {
     has _clock: any,
         _sleeper: any,
         _timeout_message: any,
@@ -40,12 +40,6 @@ obj OAuthLoginDeadline {
 
     """Return a view capped by a provider-issued expiry, never a reset budget."""
     def limited_to(timeout_seconds: float) -> OAuthLoginDeadline;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }
 
 """Launch a browser without letting OS integration consume the login budget."""

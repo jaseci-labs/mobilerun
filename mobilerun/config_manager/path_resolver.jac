@@ -19,7 +19,7 @@ import from typing { Union }
     2. Relative paths → check working dir first, then package dir (bundled resources)
     3. For creation → prefer working dir
     """
-obj PathResolver {
+class PathResolver {
     """
         Get the package root directory (where config/ bundled resources live).
 
@@ -75,10 +75,4 @@ obj PathResolver {
         create_if_missing: builtins.bool = False,
         must_exist: builtins.bool = False,
     ) -> Path;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }

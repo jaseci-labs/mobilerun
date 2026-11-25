@@ -239,15 +239,3 @@ impl ToolRegistry._spec_to_json(name: str, `entry: ToolEntry) -> str {
     };
     return json.dumps(tool_dict, separators=(",", ":"));
 }
-
-impl ToolRegistry.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl ToolRegistry.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl ToolRegistry.__hash__ -> int {
-    return id(self);
-}

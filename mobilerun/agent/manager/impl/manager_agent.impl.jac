@@ -84,8 +84,8 @@ impl ManagerAgent._load_app_card -> None {
         return;
     }
     try {
-        self.shared_state.app_card = (await 
-            self.app_card_provider.load_app_card(
+        self.shared_state.app_card = (
+            await self.app_card_provider.load_app_card(
                 package_name=self.shared_state.current_package_name,
                 instruction=self.shared_state.instruction,
                 platform=_card_platform(self.shared_state.platform),
@@ -146,8 +146,10 @@ impl ManagerAgent._build_system_prompt -> str {
     if custom_prompt {
         return PromptLoader.render_template(custom_prompt, variables);
     }
-    return (await 
-        PromptLoader.load_prompt(self.agent_config.get_manager_system_prompt_path(), variables)
+    return (
+        await PromptLoader.load_prompt(
+            self.agent_config.get_manager_system_prompt_path(), variables
+        )
     );
 }
 
@@ -236,8 +238,10 @@ impl ManagerAgent._validate_and_retry(messages: list[ChatMessage], initial_respo
         ];
 
         try {
-            response: any = (await 
-                acall_with_retries(self.llm, retry_messages, stream=self.agent_config.streaming)
+            response: any = (
+                await acall_with_retries(
+                    self.llm, retry_messages, stream=self.agent_config.streaming
+                )
             );
             output = response.message.content;
             parsed = parse_manager_response(output);
@@ -336,8 +340,8 @@ impl ManagerAgent.get_response(ctx: Context, ev: ManagerContextEvent) -> Manager
 
     try {
         logger.info("📋 Manager response:", extra={"color": "cyan"});
-        response: any = (await 
-            acall_with_retries(self.llm, messages, stream=self.agent_config.streaming)
+        response: any = (
+            await acall_with_retries(self.llm, messages, stream=self.agent_config.streaming)
         );
         output: any = response.message.content;
     } except Exception as e {

@@ -21,12 +21,6 @@ with entry {
     No UI state tracking — purely converts events into log records with
     ``extra`` params so that any attached handler can render them.
     """
-obj EventHandler {
+class EventHandler {
     def handle(event) -> None;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }

@@ -116,7 +116,9 @@ class FastAgent(Workflow) {
 
     """Add execution result to history and loop back."""
     @step
-    async def handle_execution_result(ctx: Context, ev: FastAgentOutputEvent) -> FastAgentInputEvent;
+    async def handle_execution_result(
+        ctx: Context, ev: FastAgentOutputEvent
+    ) -> FastAgentInputEvent;
 
     @step
     async def finalize(ev: FastAgentEndEvent, ctx: Context) -> StopEvent;

@@ -15,15 +15,3 @@ impl PromptResolver.has_custom_prompt(prompt_key: builtins.str) -> builtins.bool
 impl PromptResolver.get_valid_prompt_keys -> builtins.list[builtins.str] {
     return ["fast_agent_system", "fast_agent_user", "manager_system", "executor_system"];
 }
-
-impl PromptResolver.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl PromptResolver.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl PromptResolver.__hash__ -> int {
-    return id(self);
-}

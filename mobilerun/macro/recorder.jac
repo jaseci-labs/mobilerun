@@ -8,7 +8,7 @@ import time;
 
 import from typing { Any, Dict, List, Optional }
 
-obj MacroRecorder {
+class MacroRecorder {
     has actions: any,
         _last_recorded_at_ms: any;
 
@@ -19,10 +19,4 @@ obj MacroRecorder {
     ) -> Dict[str, Any];
 
     def record_wait(duration: float, *, pre_ui: Any = None, post_ui: Any = None) -> any;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }

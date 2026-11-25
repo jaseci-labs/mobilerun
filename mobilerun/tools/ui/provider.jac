@@ -102,7 +102,7 @@ async def fetch_state_with_retry(
 ) -> Dict[str, Any];
 
 """Base class — subclass to support different platforms."""
-obj StateProvider {
+class StateProvider {
     has driver: any;
 
     static has supported: any = set[any]();
@@ -117,12 +117,6 @@ obj StateProvider {
 
     """Read the final observation; subclasses may make this narrower."""
     async def get_final_state -> UIState;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }
 
 """True when screenshots attached to LLM messages must be resized (with
@@ -153,7 +147,7 @@ async def resize_model_screenshot_async(state_provider: Any, screenshot: bytes) 
     (accessibility service restart) for robustness against intermittent
     Portal/a11y failures.
     """
-obj AndroidStateProvider(StateProvider) {
+class AndroidStateProvider(StateProvider) {
     has tree_filter: any,
         tree_formatter: any,
         use_normalized: any,
@@ -194,10 +188,4 @@ obj AndroidStateProvider(StateProvider) {
     async def _state_from_data_async(combined_data: dict) -> UIState;
 
     def _state_from_data(combined_data: dict) -> UIState;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }

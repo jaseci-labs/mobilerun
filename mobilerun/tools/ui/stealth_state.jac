@@ -6,13 +6,7 @@ import random;
 
 import from typing { Tuple }
 
-obj StealthUIState(UIState) {
+class StealthUIState(UIState) {
     def get_element_coords(index: int) -> Tuple[int, int];
     def get_clear_point(index: int) -> Tuple[int, int];
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }

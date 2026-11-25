@@ -1,15 +1,3 @@
-impl AndroidDeviceSelectionError.__repr__ -> str {
-    return (getattr(builtins.super(AndroidDeviceSelectionError, self), "__repr__") as any)();
-}
-
-impl AndroidDeviceSelectionError.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl AndroidDeviceSelectionError.__hash__ -> int {
-    return id(self);
-}
-
 impl is_portal_http_url(device: builtins.str | None) -> builtins.bool {
     return `bool(device) and device.lower().startswith(("http://", "https://"));
 }

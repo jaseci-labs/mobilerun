@@ -220,18 +220,6 @@ impl Trajectory.print_trajectory_summary(trajectory_data: Dict[builtins.str, Any
     print("==========================");
 }
 
-impl Trajectory.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl Trajectory.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl Trajectory.__hash__ -> int {
-    return id(self);
-}
-
 impl get_trajectory_statistics(
     trajectory_steps: List[Dict[builtins.str, Any]]
 ) -> Dict[builtins.str, Any] {

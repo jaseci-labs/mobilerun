@@ -67,15 +67,3 @@ impl ScreenshotOnlyStateProvider.get_state -> UIState {
         model_screenshot_height=screen_height,
     );
 }
-
-impl ScreenshotOnlyStateProvider.__repr__ -> str {
-    return (getattr(builtins.super(ScreenshotOnlyStateProvider, self), "__repr__") as any)();
-}
-
-impl ScreenshotOnlyStateProvider.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl ScreenshotOnlyStateProvider.__hash__ -> int {
-    return id(self);
-}

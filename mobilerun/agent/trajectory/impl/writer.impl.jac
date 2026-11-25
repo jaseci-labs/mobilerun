@@ -197,18 +197,6 @@ impl WriterWorker.submit(job: WriteJob) -> builtins.bool {
     }
 }
 
-impl WriterWorker.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl WriterWorker.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl WriterWorker.__hash__ -> int {
-    return id(self);
-}
-
 impl TrajectoryWriter.init(queue_size: builtins.int = 300) {
     self.worker = WriterWorker(max_queue_size=queue_size);
     self._started = False;
@@ -401,16 +389,4 @@ impl TrajectoryWriter._create_ui_state_jobs(
     }
 
     return jobs;
-}
-
-impl TrajectoryWriter.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl TrajectoryWriter.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl TrajectoryWriter.__hash__ -> int {
-    return id(self);
 }

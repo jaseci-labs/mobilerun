@@ -63,8 +63,10 @@ impl StatelessManagerAgent._build_prompt -> str {
         return PromptLoader.render_template(custom_prompt, variables);
     }
 
-    return (await 
-        PromptLoader.load_prompt(self.agent_config.get_manager_system_prompt_path(), variables)
+    return (
+        await PromptLoader.load_prompt(
+            self.agent_config.get_manager_system_prompt_path(), variables
+        )
     );
 }
 
@@ -177,8 +179,8 @@ impl StatelessManagerAgent.get_response(
 
     try {
         logger.info("Manager response:", extra={"color": "cyan"});
-        response: any = (await 
-            acall_with_retries(self.llm, chat_messages, stream=self.agent_config.streaming)
+        response: any = (
+            await acall_with_retries(self.llm, chat_messages, stream=self.agent_config.streaming)
         );
         output: any = response.message.content;
     } except Exception as e {

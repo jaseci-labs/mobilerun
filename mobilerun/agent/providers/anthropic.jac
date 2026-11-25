@@ -115,7 +115,7 @@ def strip_anthropic_sampling_params(payload: MutableMapping[str, Any]) -> Mutabl
     written onto the last yielded chunk before the stream ends, where both
     callers and LlamaIndex callbacks read it.
     """
-obj StreamUsage {
+class StreamUsage {
     has usage: any,
         _chunk: any;
 
@@ -126,12 +126,6 @@ obj StreamUsage {
     async def atrack(chunks: Any) -> AsyncIterator[any];
 
     def record(event: Any) -> None;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }
 
 with entry {
@@ -149,7 +143,7 @@ async def _acreate(create: Any, *args_: Any, **kwargs: Any) -> Any;
 """Wrap an SDK ``messages`` resource so streams report their usage."""
 def record_stream_usage(messages: Any, *, is_async: bool = False) -> None;
 
-obj _UsageRecordingStream {
+class _UsageRecordingStream {
     has _stream: any,
         _usage: any;
 
@@ -160,10 +154,4 @@ obj _UsageRecordingStream {
     def __iter__ -> Generator[any, any, any];
 
     async def __aiter__ -> AsyncIterator[any];
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }

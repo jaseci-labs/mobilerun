@@ -106,7 +106,7 @@ class UIStateWriteJob(WriteJob) {
     Jobs are executed sequentially (FIFO order). Errors are logged but
     don't stop the worker - it continues processing remaining jobs.
     """
-obj WriterWorker {
+class WriterWorker {
     has queue: any,
         worker_task: any,
         running: any,
@@ -133,12 +133,6 @@ obj WriterWorker {
     async def _work_loop -> None;
 
     def submit(job: WriteJob) -> builtins.bool;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }
 
 """Background writer that persists trajectory data without blocking.
@@ -157,7 +151,7 @@ obj WriterWorker {
         writer.write_final(trajectory)
         await writer.stop()
     """
-obj TrajectoryWriter {
+class TrajectoryWriter {
     has worker: any,
         _started: any;
 
@@ -204,10 +198,4 @@ obj TrajectoryWriter {
     def _create_ui_state_jobs(
         ui_states_snapshot, trajectory, trajectory_id, stage
     ) -> List[UIStateWriteJob];
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }

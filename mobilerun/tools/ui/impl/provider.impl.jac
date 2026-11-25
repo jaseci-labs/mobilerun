@@ -129,18 +129,6 @@ impl StateProvider.get_final_state -> UIState {
     return (await self.get_state());
 }
 
-impl StateProvider.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl StateProvider.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl StateProvider.__hash__ -> int {
-    return id(self);
-}
-
 impl should_resize_model_screenshot(state_provider: Any) -> bool {
     return `bool(
         getattr(state_provider, "resize_model_screenshot", False)
@@ -360,16 +348,4 @@ impl AndroidStateProvider._state_from_data(combined_data: dict) -> UIState {
         model_screenshot_width=display_width,
         model_screenshot_height=display_height,
     );
-}
-
-impl AndroidStateProvider.__repr__ -> str {
-    return (getattr(builtins.super(AndroidStateProvider, self), "__repr__") as any)();
-}
-
-impl AndroidStateProvider.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl AndroidStateProvider.__hash__ -> int {
-    return id(self);
 }

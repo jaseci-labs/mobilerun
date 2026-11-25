@@ -17,16 +17,10 @@ import platformdirs;
 import yaml;
 
 """Raised when user config is missing _version field."""
-obj OutdatedConfigError(Exception) {
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
-}
+class OutdatedConfigError(Exception) {}
 
 """Unified config loading with user config support."""
-obj ConfigLoader {
+class ConfigLoader {
     static has APP_NAME: any = "droidrun";
 
     static has CONFIG_FILE: any = "config.yaml";
@@ -57,10 +51,4 @@ obj ConfigLoader {
 
     """Save config dict to path."""
     class def _save_dict(config_dict: Dict[str, Any], path: Path) -> Path;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }

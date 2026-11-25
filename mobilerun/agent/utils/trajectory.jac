@@ -27,7 +27,7 @@ with entry {
     logger = logging.getLogger("mobilerun");
 }
 
-obj Trajectory {
+class Trajectory {
     has events: any,
         screenshot_count: any,
         screenshot_queue: any,
@@ -116,12 +116,6 @@ obj Trajectory {
             trajectory_data: The trajectory data dictionary
         """
     def print_trajectory_summary(trajectory_data: Dict[builtins.str, Any]) -> None;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }
 
 """

@@ -13,7 +13,7 @@ import from __future__ { annotations }
 import from typing { Any, Dict, List, Optional, Tuple }
 
 """Holds parsed UI elements for a single device state snapshot."""
-obj UIState {
+class UIState {
     has elements: any,
         formatted_text: any,
         focused_text: any,
@@ -73,10 +73,4 @@ obj UIState {
     static def _collect_indices(elements: List[Dict[str, Any]]) -> List[int];
 
     static def _collect_all(elements: List[Dict[str, Any]]) -> List[Dict[str, Any]];
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }

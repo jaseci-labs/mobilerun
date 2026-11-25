@@ -11,7 +11,7 @@ import from __future__ { annotations }
 import from typing { TYPE_CHECKING, Optional }
 
 """Everything an action function needs to interact with the device."""
-obj ActionContext {
+class ActionContext {
     has driver: any,
         ui: any,
         shared_state: any,
@@ -31,10 +31,4 @@ obj ActionContext {
         streaming: bool = False,
         macro_recorder: "Optional[MacroRecorder]" = None,
     );
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }

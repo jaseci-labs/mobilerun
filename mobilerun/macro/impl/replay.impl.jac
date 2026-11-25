@@ -289,8 +289,8 @@ impl MacroPlayer.replay_macro(
         state_matched: any;
         current_state: any;
         match_result: any;
-        (state_matched, current_state, match_result) = (await 
-            self.wait_for_pre_state(action.get("pre_state"), i)
+        (state_matched, current_state, match_result) = (
+            await self.wait_for_pre_state(action.get("pre_state"), i)
         ) as any;
         if not state_matched {
             self.last_divergence = {
@@ -301,8 +301,8 @@ impl MacroPlayer.replay_macro(
             };
             if self.on_mismatch == "agent" {
                 logger.warning("🤖 Handing off to agent after macro divergence");
-                return (await 
-                    self.handoff_runner(
+                return (
+                    await self.handoff_runner(
                         goal=description,
                         device_serial=self.device_serial,
                         provider=self.provider,
@@ -341,18 +341,6 @@ impl MacroPlayer.replay_macro(
     }
 
     return operator.eq(failed_count, 0);
-}
-
-impl MacroPlayer.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl MacroPlayer.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl MacroPlayer.__hash__ -> int {
-    return id(self);
 }
 
 impl replay_macro_file(

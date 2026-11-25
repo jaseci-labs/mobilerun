@@ -9,13 +9,7 @@ import from async_adbutils { adb }
 import from mobilerun_core_local.driver.android { AndroidPortalHttpDriver }
 
 """No single Android device could be selected."""
-obj AndroidDeviceSelectionError(ValueError) {
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
-}
+class AndroidDeviceSelectionError(ValueError) {}
 
 """True when ``device`` is a Portal HTTP base URL rather than an ADB serial."""
 def is_portal_http_url(device: builtins.str | None) -> builtins.bool;

@@ -152,18 +152,6 @@ impl IOSStateProvider.get_state -> UIState {
     );
 }
 
-impl IOSStateProvider.__repr__ -> str {
-    return (getattr(builtins.super(IOSStateProvider, self), "__repr__") as any)();
-}
-
-impl IOSStateProvider.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl IOSStateProvider.__hash__ -> int {
-    return id(self);
-}
-
 impl _parse_a11y_tree(a11y_text: str) -> List[Dict[str, Any]] {
     elements: List[Dict[str, Any]] = [];
     element_index: any = 0;

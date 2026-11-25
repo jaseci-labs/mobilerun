@@ -1,15 +1,3 @@
-impl OutdatedConfigError.__repr__ -> str {
-    return (getattr(builtins.super(OutdatedConfigError, self), "__repr__") as any)();
-}
-
-impl OutdatedConfigError.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl OutdatedConfigError.__hash__ -> int {
-    return id(self);
-}
-
 impl ConfigLoader.get_user_config_dir -> Path {
     return Path(platformdirs.user_config_dir(cls.APP_NAME));
 }
@@ -100,16 +88,4 @@ impl ConfigLoader._save_dict(config_dict: Dict[str, Any], path: Path) -> Path {
         }
     }
     return path;
-}
-
-impl ConfigLoader.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl ConfigLoader.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl ConfigLoader.__hash__ -> int {
-    return id(self);
 }

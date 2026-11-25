@@ -208,15 +208,3 @@ impl UIState._collect_all(elements: List[Dict[str, Any]]) -> List[Dict[str, Any]
     }
     return result;
 }
-
-impl UIState.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl UIState.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl UIState.__hash__ -> int {
-    return id(self);
-}

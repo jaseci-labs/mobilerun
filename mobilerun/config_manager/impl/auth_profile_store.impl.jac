@@ -1,15 +1,3 @@
-impl AuthProfileFormatError.__repr__ -> str {
-    return (getattr(builtins.super(AuthProfileFormatError, self), "__repr__") as any)();
-}
-
-impl AuthProfileFormatError.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl AuthProfileFormatError.__hash__ -> int {
-    return id(self);
-}
-
 impl AuthProfileTransaction.init(
     store: "AuthProfileStore",
     *,
@@ -185,16 +173,4 @@ impl AuthProfileStore._write_unlocked(
             } except FileNotFoundError {}
         }
     }
-}
-
-impl AuthProfileStore.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl AuthProfileStore.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl AuthProfileStore.__hash__ -> int {
-    return id(self);
 }

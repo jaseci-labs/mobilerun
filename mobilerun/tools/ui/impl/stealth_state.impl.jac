@@ -79,15 +79,3 @@ impl StealthUIState.get_clear_point(index: int) -> Tuple[int, int] {
 
     return (x, y);
 }
-
-impl StealthUIState.__repr__ -> str {
-    return (getattr(builtins.super(StealthUIState, self), "__repr__") as any)();
-}
-
-impl StealthUIState.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl StealthUIState.__hash__ -> int {
-    return id(self);
-}

@@ -56,15 +56,3 @@ impl VisionResizePolicy.effective_dims(width: int, height: int) -> tuple[int, in
     }
     return (w, h);
 }
-
-impl VisionResizePolicy.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl VisionResizePolicy.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl VisionResizePolicy.__hash__ -> int {
-    return id(self);
-}

@@ -4,18 +4,6 @@ impl DeviceAuthError.init(code: str, description: str = "") {
     super.init(f"{code}: {description}" if description else code);
 }
 
-impl DeviceAuthError.__repr__ -> str {
-    return (getattr(builtins.super(DeviceAuthError, self), "__repr__") as any)();
-}
-
-impl DeviceAuthError.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl DeviceAuthError.__hash__ -> int {
-    return id(self);
-}
-
 impl _endpoint(auth_url: str, path: str) -> str {
     return auth_url.rstrip("/") + path;
 }

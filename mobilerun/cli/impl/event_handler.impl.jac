@@ -93,15 +93,3 @@ impl EventHandler.handle(event) -> None {
         logger.debug(f"🔄 {event.__class__.__name__}");
     }
 }
-
-impl EventHandler.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl EventHandler.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl EventHandler.__hash__ -> int {
-    return id(self);
-}

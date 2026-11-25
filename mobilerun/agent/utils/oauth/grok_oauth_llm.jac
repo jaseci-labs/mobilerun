@@ -160,22 +160,10 @@ def _is_headless_environment -> bool;
 def _parse_callback_query(query: str) -> dict[str, str | None];
 
 """A safe OAuth failure that never includes a token response body."""
-obj GrokOAuthError(RuntimeError) {
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
-}
+class GrokOAuthError(RuntimeError) {}
 
 """The refresh grant is permanently invalid and login must be repeated."""
-obj GrokOAuthReloginRequired(GrokOAuthError) {
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
-}
+class GrokOAuthReloginRequired(GrokOAuthError) {}
 
 def _safe_error_code(value: object) -> str | None;
 
@@ -218,7 +206,7 @@ with entry {
     path_default_ = DEFAULT_GROK_OAUTH_CREDENTIAL_PATH;
 }
 
-obj GrokOAuthCredentialStore {
+class GrokOAuthCredentialStore {
     has path: any,
         profile_store: any;
 
@@ -229,16 +217,10 @@ obj GrokOAuthCredentialStore {
     def save(
         credentials: GrokOAuthCredentials, *, deadline: OAuthLoginDeadline | None = None
     ) -> None;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }
 
 """Validate xAI ID tokens using its pinned ES256 JWKS endpoint."""
-obj GrokIDTokenValidator {
+class GrokIDTokenValidator {
     has _jwks_client: any,
         _jwks_lock: any;
 
@@ -247,12 +229,6 @@ obj GrokIDTokenValidator {
     def validate(
         token: str, *, nonce: str | None, deadline: OAuthLoginDeadline | None = None
     ) -> dict[str, Any];
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }
 
 glob refresh_skew_seconds_default_: any;
@@ -268,7 +244,7 @@ with entry {
 }
 
 """Load, exchange, and cross-process-refresh Mobilerun's xAI session."""
-obj GrokOAuthSessionManager {
+class GrokOAuthSessionManager {
     has credential_store: any,
         http_client: any,
         id_token_validator: any,
@@ -340,12 +316,6 @@ obj GrokOAuthSessionManager {
     def get_valid_credentials(
         *, force_refresh: bool = False, rejected_access_token: str | None = None
     ) -> GrokOAuthCredentials;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }
 
 """Inject a fresh bearer token and retry one rejected request once."""

@@ -54,13 +54,7 @@ class ManagerResponseValidation {
 }
 
 """Raised when the manager cannot produce a valid response after retries."""
-obj ManagerResponseValidationError(RuntimeError) {
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
-}
+class ManagerResponseValidationError(RuntimeError) {}
 
 def _find_tag_matches(
     response: builtins.str, tag: builtins.str

@@ -24,13 +24,7 @@ import from typing { Any, Callable, TypeVar }
 import from filelock { FileLock }
 
 """Raised when an existing auth-profiles file is not a JSON object."""
-obj AuthProfileFormatError(ValueError) {
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
-}
+class AuthProfileFormatError(ValueError) {}
 
 glob _T: any;
 
@@ -69,7 +63,7 @@ class AuthProfileTransaction(AbstractContextManager) {
 }
 
 """Cross-process-safe JSON object store used by all auth providers."""
-obj AuthProfileStore {
+class AuthProfileStore {
     has path: any,
         lock_path: any;
 
@@ -98,10 +92,4 @@ obj AuthProfileStore {
     def _write_unlocked(
         profile: dict[str, Any], *, before_commit: Callable[[], None] | None = None
     ) -> None;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }

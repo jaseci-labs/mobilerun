@@ -36,7 +36,7 @@ with entry {
     This player can execute recorded UI actions (taps, swipes, text input, key presses)
     on Android devices using AndroidDriver.
     """
-obj MacroPlayer {
+class MacroPlayer {
     has device_serial: any,
         delay_between_actions: any,
         on_mismatch: any,
@@ -135,12 +135,6 @@ obj MacroPlayer {
         start_from_step: builtins.int = 0,
         max_steps: Optional[builtins.int] = None,
     ) -> builtins.bool;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }
 
 """

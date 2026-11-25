@@ -32,15 +32,3 @@ impl PathResolver.resolve(
     }
     return cwd_path;
 }
-
-impl PathResolver.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl PathResolver.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl PathResolver.__hash__ -> int {
-    return id(self);
-}

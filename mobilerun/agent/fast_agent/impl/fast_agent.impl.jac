@@ -114,8 +114,8 @@ impl FastAgent._build_system_prompt -> ChatMessage {
     if custom_system_prompt {
         system_text: any = PromptLoader.render_template(custom_system_prompt, template_context);
     } else {
-        system_text = (await 
-            PromptLoader.load_prompt(
+        system_text = (
+            await PromptLoader.load_prompt(
                 self.agent_config.get_fast_agent_system_prompt_path(), template_context
             )
         );
@@ -134,8 +134,8 @@ impl FastAgent._build_user_prompt(goal: builtins.str) -> ChatMessage {
             },
         );
     } else {
-        user_text = (await 
-            PromptLoader.load_prompt(
+        user_text = (
+            await PromptLoader.load_prompt(
                 self.agent_config.get_fast_agent_user_prompt_path(),
                 {
                     "goal": goal,
@@ -265,9 +265,7 @@ impl FastAgent.handle_llm_input(ctx: Context, ev: FastAgentInputEvent) -> FastAg
             );
         }
         if self.vision and screenshot {
-            screenshot = (await 
-                resize_model_screenshot_async(self.state_provider, screenshot)
-            );
+            screenshot = (await resize_model_screenshot_async(self.state_provider, screenshot));
             messages_to_send[last_user_idx].blocks.append(ImageBlock(image=screenshot));
         }
         if len(user_indices) >= 2 {
@@ -287,8 +285,8 @@ impl FastAgent.handle_llm_input(ctx: Context, ev: FastAgentInputEvent) -> FastAg
     if self.native_tools {
         chat_kwargs = native_tool_kwargs(self.llm, self.tool_specs, self.config.parallel_tools);
     }
-    response: any = (await 
-        acall_with_retries(
+    response: any = (
+        await acall_with_retries(
             self.llm, messages_to_send, stream=self.agent_config.streaming, **chat_kwargs
         )
     );
@@ -442,8 +440,10 @@ impl FastAgent.execute_code(ctx: Context, ev: FastAgentToolCallEvent) -> FastAge
                 success=False, summary=f"Invalid arguments for {call.name}: {call.error}"
             );
         } else {
-            action_result = (await 
-                self.registry.execute(call.name, call.parameters, self.action_ctx, workflow_ctx=ctx)
+            action_result = (
+                await self.registry.execute(
+                    call.name, call.parameters, self.action_ctx, workflow_ctx=ctx
+                )
             );
         }
         results.append(
@@ -512,9 +512,7 @@ impl FastAgent._store_native_results(
     ctx: Context, tool_calls: builtins.list, results: builtins.list[ToolResult]
 ) -> None {
     if self.native_tools {
-        (await 
-            ctx.store.set("native_tool_results", tool_result_messages(tool_calls, results))
-        );
+        (await ctx.store.set("native_tool_results", tool_result_messages(tool_calls, results)));
     }
 }
 
@@ -523,9 +521,7 @@ impl FastAgent.handle_execution_result(
 ) -> FastAgentInputEvent {
     output: any = ev.output or "Tool executed, but produced no output.";
     if self.native_tools {
-        self.shared_state.message_history.extend(
-            (await ctx.store.get("native_tool_results", []))
-        );
+        self.shared_state.message_history.extend((await ctx.store.get("native_tool_results", [])));
         (await ctx.store.set("native_tool_results", []));
         output = _NATIVE_CONTINUE;
     }

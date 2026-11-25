@@ -174,15 +174,3 @@ impl MCPClientManager.disconnect_all -> None {
     self._shutdown_events.clear();
     self._connection_tasks.clear();
 }
-
-impl MCPClientManager.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl MCPClientManager.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl MCPClientManager.__hash__ -> int {
-    return id(self);
-}

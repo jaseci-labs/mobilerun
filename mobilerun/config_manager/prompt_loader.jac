@@ -24,7 +24,7 @@ import aiofiles;
 import from jinja2.sandbox { ImmutableSandboxedEnvironment }
 
 """Jinja2 template renderer - loads from absolute file paths using aiofiles."""
-obj PromptLoader {
+class PromptLoader {
     static has _env: any = None;
 
     """Get or create cached sandboxed Jinja2 environment."""
@@ -72,10 +72,4 @@ obj PromptLoader {
     static def render_template(
         template_string: builtins.str, variables: Dict[builtins.str, Any] = None
     ) -> builtins.str;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }

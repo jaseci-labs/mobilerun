@@ -17,15 +17,3 @@ impl ActionContext.init(
     self.streaming = streaming;
     self.macro_recorder = macro_recorder;
 }
-
-impl ActionContext.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl ActionContext.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl ActionContext.__hash__ -> int {
-    return id(self);
-}

@@ -27,7 +27,7 @@ def get_element_center(`node: Dict[builtins.str, Any]) -> Tuple[builtins.int, bu
 def sort_by_position(nodes: List[Dict[builtins.str, Any]]) -> List[Dict[builtins.str, Any]];
 
 """Composable filters for element search."""
-obj Filters {
+class Filters {
     """
         Match elements by text content in text, contentDescription, or hint fields.
         Supports exact match, regex, and newline normalization.
@@ -98,10 +98,4 @@ obj Filters {
 
     """Find the deepest (most specific) matching elements in the tree."""
     static def deepest_matching(base_filter: ElementFilter) -> ElementFilter;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }

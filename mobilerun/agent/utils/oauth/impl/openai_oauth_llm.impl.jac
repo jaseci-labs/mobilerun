@@ -283,18 +283,6 @@ impl OpenAIOAuthCredentialStore.save(
     );
 }
 
-impl OpenAIOAuthCredentialStore.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl OpenAIOAuthCredentialStore.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl OpenAIOAuthCredentialStore.__hash__ -> int {
-    return id(self);
-}
-
 impl OpenAIOAuthSessionManager.init(
     *,
     issuer: str = issuer_default_,
@@ -539,18 +527,6 @@ impl OpenAIOAuthSessionManager.exchange_authorization_code(
     );
     self.set_initial_credentials(credentials, deadline=deadline);
     return credentials;
-}
-
-impl OpenAIOAuthSessionManager.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl OpenAIOAuthSessionManager.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl OpenAIOAuthSessionManager.__hash__ -> int {
-    return id(self);
 }
 
 impl OpenAIOAuth.class_name -> str {

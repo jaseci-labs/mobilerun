@@ -36,30 +36,6 @@ impl _parse_callback_query(query: str) -> dict[str, str | None] {
     };
 }
 
-impl GrokOAuthError.__repr__ -> str {
-    return (getattr(builtins.super(GrokOAuthError, self), "__repr__") as any)();
-}
-
-impl GrokOAuthError.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl GrokOAuthError.__hash__ -> int {
-    return id(self);
-}
-
-impl GrokOAuthReloginRequired.__repr__ -> str {
-    return (getattr(builtins.super(GrokOAuthReloginRequired, self), "__repr__") as any)();
-}
-
-impl GrokOAuthReloginRequired.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl GrokOAuthReloginRequired.__hash__ -> int {
-    return id(self);
-}
-
 impl _safe_error_code(value: object) -> str | None {
     return value if isinstance(value, `str) and _OAUTH_ERROR_CODE.fullmatch(value) else None;
 }
@@ -169,18 +145,6 @@ impl GrokOAuthCredentialStore.save(
     );
 }
 
-impl GrokOAuthCredentialStore.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl GrokOAuthCredentialStore.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl GrokOAuthCredentialStore.__hash__ -> int {
-    return id(self);
-}
-
 impl GrokIDTokenValidator.init(jwks_client: Any | None = None) {
     self._jwks_client = jwks_client or jwt.PyJWKClient(DEFAULT_GROK_OAUTH_JWKS_URL);
     self._jwks_lock = threading.Lock();
@@ -274,18 +238,6 @@ impl GrokIDTokenValidator.validate(
         deadline.check();
     }
     return claims;
-}
-
-impl GrokIDTokenValidator.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl GrokIDTokenValidator.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl GrokIDTokenValidator.__hash__ -> int {
-    return id(self);
 }
 
 impl GrokOAuthSessionManager.init(
@@ -580,18 +532,6 @@ impl GrokOAuthSessionManager.get_valid_credentials(
             return refreshed;
         }
     }
-}
-
-impl GrokOAuthSessionManager.__repr__ -> str {
-    return (getattr(builtins.object, "__repr__") as any)(self);
-}
-
-impl GrokOAuthSessionManager.__eq__(other: any) -> bool {
-    return self is other;
-}
-
-impl GrokOAuthSessionManager.__hash__ -> int {
-    return id(self);
 }
 
 impl GrokOAuthAuth.init(manager: GrokOAuthSessionManager, *, model: str) {

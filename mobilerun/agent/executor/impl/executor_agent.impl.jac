@@ -63,16 +63,18 @@ impl ExecutorAgent.prepare_context(ctx: Context, ev: StartEvent) -> ExecutorCont
     if custom_prompt {
         prompt_text: any = PromptLoader.render_template(custom_prompt, variables);
     } else {
-        prompt_text = (await 
-            PromptLoader.load_prompt(self.agent_config.get_executor_system_prompt_path(), variables)
+        prompt_text = (
+            await PromptLoader.load_prompt(
+                self.agent_config.get_executor_system_prompt_path(), variables
+            )
         );
     }
     messages: any = [ChatMessage(role="user", blocks=[TextBlock(text=prompt_text)])];
     if self.vision {
         screenshot: any = self.shared_state.screenshot;
         if screenshot is not None {
-            screenshot = (await 
-                resize_model_screenshot_async(self.action_ctx.state_provider, screenshot)
+            screenshot = (
+                await resize_model_screenshot_async(self.action_ctx.state_provider, screenshot)
             );
             messages[0].blocks.append(ImageBlock(image=screenshot));
             logger.debug("📸 Using screenshot for Executor");
@@ -92,8 +94,8 @@ impl ExecutorAgent.get_response(ctx: Context, ev: ExecutorContextEvent) -> Execu
 
     try {
         logger.info("Executor response:", extra={"color": "green"});
-        response: any = (await 
-            acall_with_retries(self.llm, messages, stream=self.agent_config.streaming)
+        response: any = (
+            await acall_with_retries(self.llm, messages, stream=self.agent_config.streaming)
         );
         response_text: any = `str(response);
     } except ValueError as e {
@@ -169,8 +171,8 @@ impl ExecutorAgent.execute(ctx: Context, ev: ExecutorActionEvent) -> ExecutorAct
     action_type: any = action_dict.get("action", "unknown");
     action_args: any = {k: v for (k, v) in action_dict.items() if k != "action"};
 
-    result: any = (await 
-        self.registry.execute(action_type, action_args, self.action_ctx, workflow_ctx=ctx)
+    result: any = (
+        await self.registry.execute(action_type, action_args, self.action_ctx, workflow_ctx=ctx)
     );
 
     (await asyncio.sleep(self.agent_config.after_sleep_action));

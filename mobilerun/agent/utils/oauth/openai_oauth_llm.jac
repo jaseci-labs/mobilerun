@@ -195,7 +195,7 @@ with entry {
     path_default_ = DEFAULT_OPENAI_OAUTH_CREDENTIAL_PATH;
 }
 
-obj OpenAIOAuthCredentialStore {
+class OpenAIOAuthCredentialStore {
     has path: any,
         _store: any;
 
@@ -208,12 +208,6 @@ obj OpenAIOAuthCredentialStore {
     def save(
         credentials: OpenAIOAuthCredentials, *, deadline: OAuthLoginDeadline | None = None
     ) -> None;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }
 
 glob issuer_default_: any;
@@ -225,7 +219,7 @@ with entry {
     client_id_default_ = DEFAULT_OPENAI_OAUTH_CLIENT_ID;
 }
 
-obj OpenAIOAuthSessionManager {
+class OpenAIOAuthSessionManager {
     has issuer: any,
         client_id: any,
         request_timeout: any,
@@ -266,12 +260,6 @@ obj OpenAIOAuthSessionManager {
         code_verifier: str,
         deadline: OAuthLoginDeadline | None = None,
     ) -> OpenAIOAuthCredentials;
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }
 
 glob scope_default_: any;

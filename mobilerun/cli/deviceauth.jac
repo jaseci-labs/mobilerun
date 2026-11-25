@@ -38,17 +38,11 @@ glob _MIN_POLL_INTERVAL: any = 5.0;
 glob _SLOW_DOWN_BUMP: any = 5.0;
 
 """An OAuth 2.0 error response from the token endpoint."""
-obj DeviceAuthError(Exception) {
+class DeviceAuthError(Exception) {
     has code: any,
         description: any;
 
     def init(code: str, description: str = "");
-
-    def __repr__ -> str;
-
-    def __eq__(other: any) -> bool;
-
-    def __hash__ -> int;
 }
 
 @dataclass
