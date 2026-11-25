@@ -2,9 +2,17 @@ import builtins;
 
 import operator;
 
-import from __future__ { annotations }
 
 import from typing { Any, Dict, List, Optional, Tuple }
+
+type _Box = tuple[int, int, int, int];
+
+"""A "left,top,right,bottom" bounds string as a typed box, so the geometry
+helpers run on typed tuples (no per-read `held` or per-call `convert`)."""
+def _parse_box(bounds_str: str) -> _Box {
+    v = [`int(p) for p in bounds_str.split(",")];
+    return (v[0], v[1], v[2], v[3]);
+}
 
 """Holds parsed UI elements for a single device state snapshot."""
 class UIState {
@@ -94,26 +102,18 @@ class UIState {
     }
 
     def _avoid_tap_blockers(element: Dict[str, Any], point: Tuple[int, int]) -> Tuple[int, int] {
-        blockers: any = [
-            `tuple(map(int, bounds.split(",")))
-            for bounds in element.get("tapBlockers", [])
-        ];
+        blockers: list[_Box] = [_parse_box(bounds) for bounds in element.get("tapBlockers", [])];
         (x, y) = point as any;
-        if not `any(
-            operator.le(left, x)
-                and operator.lt(x, right)
-                and (operator.le(top, y) and operator.lt(y, bottom))
-            for (left, top, right, bottom) in blockers,
-        ) {
+        if not `any(left <= x < right and top <= y < bottom for (left, top, right, bottom) in blockers) {
             return point;
         }
-        (left, top, right, bottom) = map(int, element["bounds"].split(",")) as any;
+        (left, top, right, bottom) = _parse_box(element["bounds"]) as any;
         if self.screen_width and self.screen_height {
             (left, top) = (max(0, left), max(0, top));
             right = min(self.screen_width, right);
             bottom = min(self.screen_height, bottom);
         }
-        clear: any = find_uncovered_point((left, top, right, bottom), blockers);
+        clear = find_uncovered_point((left, top, right, bottom), blockers);
         if clear is None {
             raise ValueError("No clear tap point for element " + format(element.get("index"), ""));
         }
@@ -154,15 +154,14 @@ class UIState {
             raise ValueError(f"Element {index} has no bounds");
         }
 
-        target_bounds: any = `tuple(map(int, bounds_str.split(",")));
+        target_bounds = _parse_box(bounds_str);
 
-        all_elements: any = self._collect_all(self.elements);
-        blockers: any = [];
-        for el in all_elements {
+        blockers: list[_Box] = [];
+        for el in self._collect_all(self.elements) {
             el_idx: any = el.get("index");
             el_bounds_str: any = el.get("bounds");
             if el_idx is not None and el_idx > index and el_bounds_str {
-                el_bounds: any = `tuple(map(int, el_bounds_str.split(",")));
+                el_bounds = _parse_box(el_bounds_str);
                 if rects_overlap(target_bounds, el_bounds) {
                     blockers.append(el_bounds);
                 }

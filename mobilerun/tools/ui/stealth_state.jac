@@ -1,6 +1,5 @@
 import builtins;
 
-import from __future__ { annotations }
 
 import random;
 
