@@ -14,4 +14,16 @@ async def run_agent_handoff(
     divergence: Dict[str, Any],
     current_state: Dict[str, Any],
     remaining_actions: List[Dict[str, Any]],
-) -> bool;
+) -> bool {
+    run_command: any = importlib.import_module("mobilerun.cli.main").run_command;
+
+    _: any = (divergence, current_state, remaining_actions);
+    return await run_command(
+        goal,
+        config_path=config_path,
+        device=device_serial,
+        provider=provider,
+        model=model,
+        save_trajectory="none",
+    );
+}

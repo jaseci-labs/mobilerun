@@ -10,9 +10,9 @@ class TreeFilter(ABC) {
     @abstractmethod
     def filter(
         a11y_tree: Dict[builtins.str, Any], device_context: Dict[builtins.str, Any]
-    ) -> Optional[Dict[builtins.str, Any]];
+    ) -> Optional[Dict[builtins.str, Any]] {}
 
     """Return filter name."""
     @abstractmethod
-    def get_name -> builtins.str;
+    def get_name -> builtins.str {}
 }

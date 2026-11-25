@@ -81,11 +81,23 @@ glob ANTHROPIC_HIGHRES_MODELS: any = frozenset({
 
 glob _stream_usage: ContextVar[StreamUsage | None];
 
-def anthropic_model_context_window(model: object) -> int | None;
+def anthropic_model_context_window(model: object) -> int | None {
+    return ANTHROPIC_MODEL_CONTEXT_WINDOWS.get(`str(model or "").strip());
+}
 
-def anthropic_model_omits_sampling_params(model: object) -> bool;
+def anthropic_model_omits_sampling_params(model: object) -> bool {
+    return `str(model or "").strip() in ANTHROPIC_MODELS_WITHOUT_SAMPLING_PARAMS;
+}
 
-def strip_anthropic_sampling_params(payload: MutableMapping[str, Any]) -> MutableMapping[str, Any];
+def strip_anthropic_sampling_params(payload: MutableMapping[str, Any]) -> MutableMapping[str, Any] {
+    model: any = payload.get("model");
+    if anthropic_model_omits_sampling_params(model) {
+        for param in ANTHROPIC_UNSUPPORTED_SAMPLING_PARAMS {
+            payload.pop(param, None);
+        }
+    }
+    return payload;
+}
 
 """Usage of one Anthropic stream, attached to its latest chunk.
 
@@ -98,13 +110,44 @@ class StreamUsage {
     has usage: any,
         _chunk: any;
 
-    def init;
+    def init {
+        self.usage = {};
+        self._chunk = None;
+    }
 
-    def track(chunks: Any) -> Generator[any, any, any];
+    def track(chunks: Any) -> Generator[any, any, any] {
+        for chunk in chunks {
+            self._chunk = chunk;
+            yield chunk;
+        }
+    }
 
-    async def atrack(chunks: Any) -> AsyncIterator[any];
+    async def atrack(chunks: Any) -> AsyncIterator[any] {
+        async for chunk in (chunks) {
+            self._chunk = chunk;
+            yield chunk;
+        }
+    }
 
-    def record(event: Any) -> None;
+    def record(event: Any) -> None {
+        kind: any = getattr(event, "type", None);
+        if kind == "message_start" {
+            usage: any = getattr(getattr(event, "message", None), "usage", None);
+        } elif kind == "message_delta" {
+            usage = getattr(event, "usage", None);
+        } else {
+            return;
+        }
+        if usage is None {
+            return;
+        }
+        fields: any = usage.model_dump() if hasattr(usage, "model_dump") else `dict(usage);
+        self.usage.update({k: v for (k, v) in fields.items() if v is not None});
+        if self._chunk is not None {
+            raw: any = self._chunk.raw if isinstance(self._chunk.raw, `dict) else {};
+            self._chunk.raw = {**raw, "usage": `dict(self.usage)};
+        }
+    }
 }
 
 with entry {
@@ -113,23 +156,68 @@ with entry {
 
 """Record the usage of Anthropic streams opened in this block."""
 @contextmanager
-def collect_stream_usage(usage: StreamUsage) -> Generator[any, any, any];
+def collect_stream_usage(usage: StreamUsage) -> Generator[any, any, any] {
+    token: any = _stream_usage.set(usage);
+    try {
+        yield;
+    } finally {
+        _stream_usage.reset(token);
+    }
+}
 
-def _wrap_stream(stream: Any, usage: StreamUsage | None, kwargs: dict[str, any]) -> Any;
+def _wrap_stream(stream: Any, usage: StreamUsage | None, kwargs: dict[str, any]) -> Any {
+    if usage is None or not kwargs.get("stream") {
+        return stream;
+    }
+    return _UsageRecordingStream(stream, usage);
+}
 
-async def _acreate(create: Any, *args_: Any, **kwargs: Any) -> Any;
+async def _acreate(create: Any, *args_: Any, **kwargs: Any) -> Any {
+    args: any = tuple(args_);
+    usage: any = _stream_usage.get();
+    return _wrap_stream(await create(*args, **kwargs), usage, kwargs);
+}
 
-def record_stream_usage(messages: Any, *, is_async: bool = False) -> None;
+def record_stream_usage(messages: Any, *, is_async: bool = False) -> None {
+    create = messages.create;
+
+    if is_async {
+        messages.create = wraps(create)(partial(_acreate, create));
+    } else {
+        @wraps(create)
+        def screate(*args__: Any, **kwargs: Any) -> Any {
+            args: any = tuple(args__);
+            return _wrap_stream(create(*args, **kwargs), _stream_usage.get(), kwargs);
+        }
+
+        messages.create = screate;
+    }
+}
 
 class _UsageRecordingStream {
     has _stream: any,
         _usage: any;
 
-    def init(stream: Any, usage: StreamUsage);
+    def init(stream: Any, usage: StreamUsage) {
+        self._stream = stream;
+        self._usage = usage;
+    }
 
-    def __getattr__(name: str) -> Any;
+    def __getattr__(name: str) -> Any {
+        return getattr(self._stream, name);
+    }
 
-    def __iter__ -> Generator[any, any, any];
+    def __iter__ -> Generator[any, any, any] {
+        for event in self._stream {
+            self._usage.record(event);
+            yield event;
+        }
+    }
 
-    async def __aiter__ -> AsyncIterator[any];
+    async def __aiter__ -> AsyncIterator[any] {
+        async for event in (self._stream) {
+            self._usage.record(event);
+            yield event;
+        }
+    }
 }

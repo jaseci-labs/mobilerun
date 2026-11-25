@@ -8,6 +8,7 @@ native device pixels. Element-index taps keep using native bounds.
 """
 
 import asyncio
+import re
 from io import BytesIO
 from types import SimpleNamespace
 from unittest.mock import AsyncMock
@@ -308,5 +309,5 @@ def test_convert_action_point_unchanged_without_contract():
 
 def test_validation_helper_is_wired_into_convert():
     source = module_source("mobilerun.agent.utils.actions")
-    body = source.split("_convert_action_point(", 2)[-1].split("\nimpl ", 1)[0]
+    body = re.split(r"\n(?:impl|def|async def) ", source.split("def _convert_action_point(", 1)[1], 1)[0]
     assert "_validate_model_space_point" in body

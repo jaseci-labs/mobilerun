@@ -341,3 +341,7 @@ Requires-Dist = [
     "llama-index-instrumentation; extra == 'langfuse'",
     "openinference-instrumentation-llama-index>=3.0.0; extra == 'langfuse'",
 ]
+
+[check.lint]
+select = ["clean"]
+ignore = ["separate-impls", "impls-in-annex"]

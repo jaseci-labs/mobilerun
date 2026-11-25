@@ -22,7 +22,7 @@ class CredentialManager(ABC) {
             CredentialNotFoundError: If key doesn't exist
         """
     @abstractmethod
-    async def resolve_key(key: builtins.str) -> builtins.str;
+    async def resolve_key(key: builtins.str) -> builtins.str {}
 
     """
         Get all available credential keys.
@@ -31,5 +31,5 @@ class CredentialManager(ABC) {
             List of credential identifiers
         """
     @abstractmethod
-    async def get_keys -> List[builtins.str];
+    async def get_keys -> List[builtins.str] {}
 }

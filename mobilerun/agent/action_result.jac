@@ -9,5 +9,7 @@ class ActionResult {
 
     has summary: str;
 
-    def __str__ -> str;
+    def __str__ -> str {
+        return self.summary;
+    }
 }

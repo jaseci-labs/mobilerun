@@ -20,7 +20,7 @@ class AppCardProvider(ABC) {
         package_name: builtins.str,
         instruction: builtins.str = "",
         platform: builtins.str | None = None,
-    ) -> builtins.str;
+    ) -> builtins.str {}
 }
 
 """The provider used when app cards are disabled: every card is empty."""
@@ -29,5 +29,7 @@ class DisabledAppCardProvider(AppCardProvider) {
         package_name: builtins.str,
         instruction: builtins.str = "",
         platform: builtins.str | None = None,
-    ) -> builtins.str;
+    ) -> builtins.str {
+        return "";
+    }
 }
