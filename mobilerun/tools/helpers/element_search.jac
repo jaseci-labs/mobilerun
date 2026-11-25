@@ -38,6 +38,10 @@ def sort_by_position(nodes: List[Dict[builtins.str, Any]]) -> List[Dict[builtins
     return sorted(nodes, key=get_sort_key);
 }
 
+glob _TEXT_FIELDS: tuple[str, str, str] = ("text", "contentDescription", "hint");
+
+glob _TEXT_DEFAULTS: tuple[str, str, str] = ("", "", "");
+
 """Composable filters for element search."""
 class Filters {
     static def text_matches(pattern: builtins.str | re.Pattern) -> ElementFilter {
@@ -59,11 +63,8 @@ class Filters {
             results = [];
 
             for `node in all_nodes {
-                text: any = `node.get("text", "");
-                content_desc: any = `node.get("contentDescription", "");
-                hint: any = `node.get("hint", "");
-
-                for field_value in [text, content_desc, hint] {
+                # One dynamic read of node.get, not three.
+                for field_value in map(`node.get, _TEXT_FIELDS, _TEXT_DEFAULTS) {
                     if not field_value {
                         continue;
                     }
@@ -520,7 +521,7 @@ class Filters {
             return [
                 `node
                 for `node in all_nodes
-                if `node.get("text") or `node.get("contentDescription") or `node.get("hint")
+                if `any(map(`node.get, _TEXT_FIELDS))
             ];
         }
 
