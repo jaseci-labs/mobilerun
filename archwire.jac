@@ -3,420 +3,6 @@ graph layers {
 }
 
 graph import {
-    mobilerun.log_handlers --> mobilerun { CLILogHandler }
-    mobilerun.agent --> mobilerun { ResultEvent }
-    mobilerun.agent.droid --> mobilerun { MobileAgent, MobileAgentState }
-    mobilerun.agent.utils.errors --> mobilerun { HtmlErrorPageFilter }
-    mobilerun.agent.utils.llm_picker --> mobilerun { load_llm }
-    mobilerun.config_manager --> mobilerun {
-        AgentConfig,
-        AppCardConfig,
-        CredentialsConfig,
-        DeviceConfig,
-        ExecutorConfig,
-        FastAgentConfig,
-        LLMProfile,
-        LoggingConfig,
-        ManagerConfig,
-        MobileConfig,
-        TelemetryConfig,
-        ToolsConfig,
-        TracingConfig,
-    }
-    mobilerun.tools --> mobilerun { AndroidDriver, DeviceDriver, RecordingDriver }
-    mobilerun.agent.droid.droid_agent --> mobilerun.agent.droid { MobileAgent }
-    mobilerun.agent.droid.state --> mobilerun.agent.droid { MobileAgentState }
-    mobilerun.agent.action_context --> mobilerun.agent.droid.droid_agent { ActionContext }
-    mobilerun.agent.common.events --> mobilerun.agent.droid.droid_agent {
-        RecordUIStateEvent,
-        ScreenshotEvent,
-    }
-    mobilerun.agent.droid.events --> mobilerun.agent.droid.droid_agent {
-        ExecutorInputEvent,
-        ExecutorResultEvent,
-        ExternalUserMessageDroppedEvent,
-        FastAgentExecuteEvent,
-        FastAgentResultEvent,
-        FinalizeEvent,
-        ManagerInputEvent,
-        ManagerPlanEvent,
-        ResultEvent,
-    }
-    mobilerun.agent.droid.state --> mobilerun.agent.droid.droid_agent {
-        MobileAgentState,
-        QueuedUserMessage,
-    }
-    mobilerun.agent.executor --> mobilerun.agent.droid.droid_agent { ExecutorAgent }
-    mobilerun.agent.external --> mobilerun.agent.droid.droid_agent { load_agent }
-    mobilerun.agent.fast_agent --> mobilerun.agent.droid.droid_agent { FastAgent }
-    mobilerun.agent.fast_agent.events --> mobilerun.agent.droid.droid_agent { FastAgentOutputEvent }
-    mobilerun.agent.manager --> mobilerun.agent.droid.droid_agent {
-        ManagerAgent,
-        StatelessManagerAgent,
-    }
-    mobilerun.agent.manager.prompts --> mobilerun.agent.droid.droid_agent {
-        ManagerResponseValidationError,
-    }
-    mobilerun.agent.oneflows.structured_output_agent --> mobilerun.agent.droid.droid_agent {
-        StructuredOutputAgent,
-    }
-    mobilerun.agent.trajectory --> mobilerun.agent.droid.droid_agent { TrajectoryWriter }
-    mobilerun.agent.utils.android_device --> mobilerun.agent.droid.droid_agent {
-        create_android_portal_http_driver,
-        is_portal_http_url,
-        resolve_android_serial,
-    }
-    mobilerun.agent.utils.errors --> mobilerun.agent.droid.droid_agent { describe_error }
-    mobilerun.agent.utils.llm_loader --> mobilerun.agent.droid.droid_agent {
-        load_agent_llms,
-        merge_llms_with_config,
-    }
-    mobilerun.agent.utils.portal_setup --> mobilerun.agent.droid.droid_agent {
-        portal_version_kwargs,
-    }
-    mobilerun.agent.utils.prompt_resolver --> mobilerun.agent.droid.droid_agent { PromptResolver }
-    mobilerun.agent.utils.signatures --> mobilerun.agent.droid.droid_agent { build_tool_registry }
-    mobilerun.agent.utils.tracing_setup --> mobilerun.agent.droid.droid_agent {
-        record_langfuse_screenshot,
-        session_context,
-        setup_tracing,
-    }
-    mobilerun.agent.utils.trajectory --> mobilerun.agent.droid.droid_agent { Trajectory }
-    mobilerun.agent.utils.vision_sizing --> mobilerun.agent.droid.droid_agent {
-        VisionResizePolicy,
-        model_uses_normalized_coordinates,
-    }
-    mobilerun.config_manager.config_manager --> mobilerun.agent.droid.droid_agent {
-        AgentConfig,
-        CredentialsConfig,
-        DEFAULT_DISABLED_TOOLS,
-        DeviceConfig,
-        LoggingConfig,
-        MobileConfig,
-        TelemetryConfig,
-        ToolsConfig,
-        TracingConfig,
-    }
-    mobilerun.credential_manager --> mobilerun.agent.droid.droid_agent {
-        CredentialManager,
-        FileCredentialManager,
-    }
-    mobilerun.log_handlers --> mobilerun.agent.droid.droid_agent {
-        CLILogHandler,
-        configure_logging,
-    }
-    mobilerun.macro.recorder --> mobilerun.agent.droid.droid_agent { MacroRecorder }
-    mobilerun.mcp.adapter --> mobilerun.agent.droid.droid_agent { mcp_to_mobilerun_tools }
-    mobilerun.mcp.client --> mobilerun.agent.droid.droid_agent { MCPClientManager }
-    mobilerun.mcp.config --> mobilerun.agent.droid.droid_agent { MCPConfig }
-    mobilerun.telemetry --> mobilerun.agent.droid.droid_agent {
-        MobileAgentFinalizeEvent,
-        MobileAgentInitEvent,
-        capture,
-        flush,
-    }
-    mobilerun.telemetry.phoenix --> mobilerun.agent.droid.droid_agent { clean_span }
-    mobilerun.tools.filters --> mobilerun.agent.droid.droid_agent { ConciseFilter, DetailedFilter }
-    mobilerun.tools.formatters --> mobilerun.agent.droid.droid_agent { IndexedFormatter }
-    mobilerun.tools.ui.ios_provider --> mobilerun.agent.droid.droid_agent { IOSStateProvider }
-    mobilerun.tools.ui.provider --> mobilerun.agent.droid.droid_agent {
-        AndroidStateProvider,
-        StateProvider,
-    }
-    mobilerun.tools.ui.screenshot_provider --> mobilerun.agent.droid.droid_agent {
-        ScreenshotOnlyStateProvider,
-    }
-    mobilerun.agent.droid.events --> mobilerun.agent.executor {
-        ExecutorInputEvent,
-        ExecutorResultEvent,
-    }
-    mobilerun.agent.executor.events --> mobilerun.agent.executor {
-        ExecutorActionEvent,
-        ExecutorActionResultEvent,
-        ExecutorContextEvent,
-        ExecutorResponseEvent,
-    }
-    mobilerun.agent.executor.executor_agent --> mobilerun.agent.executor { ExecutorAgent }
-    mobilerun.agent.executor.events --> mobilerun.agent.executor.executor_agent {
-        ExecutorActionEvent,
-        ExecutorActionResultEvent,
-        ExecutorContextEvent,
-        ExecutorResponseEvent,
-    }
-    mobilerun.agent.executor.prompts --> mobilerun.agent.executor.executor_agent {
-        parse_executor_response,
-    }
-    mobilerun.agent.usage --> mobilerun.agent.executor.executor_agent { get_usage_from_response }
-    mobilerun.agent.utils.errors --> mobilerun.agent.executor.executor_agent { describe_error }
-    mobilerun.agent.utils.inference --> mobilerun.agent.executor.executor_agent {
-        acall_with_retries,
-    }
-    mobilerun.agent.utils.prompt_resolver --> mobilerun.agent.executor.executor_agent {
-        PromptResolver,
-    }
-    mobilerun.config_manager.config_manager --> mobilerun.agent.executor.executor_agent {
-        AgentConfig,
-    }
-    mobilerun.config_manager.prompt_loader --> mobilerun.agent.executor.executor_agent {
-        PromptLoader,
-    }
-    mobilerun.tools.ui.provider --> mobilerun.agent.executor.executor_agent {
-        resize_model_screenshot_async,
-    }
-    mobilerun.agent.action_context --> mobilerun.agent.executor.executor_agent { ActionContext }
-    mobilerun.agent.droid --> mobilerun.agent.executor.executor_agent { MobileAgentState }
-    mobilerun.agent.tool_registry --> mobilerun.agent.executor.executor_agent { ToolRegistry }
-    mobilerun.agent.fast_agent.fast_agent --> mobilerun.agent.fast_agent { FastAgent }
-    mobilerun.agent.action_result --> mobilerun.agent.fast_agent.fast_agent { ActionResult }
-    mobilerun.agent.common.constants --> mobilerun.agent.fast_agent.fast_agent { LLM_HISTORY_LIMIT }
-    mobilerun.agent.common.events --> mobilerun.agent.fast_agent.fast_agent {
-        RecordUIStateEvent,
-        ScreenshotEvent,
-    }
-    mobilerun.agent.droid.events --> mobilerun.agent.fast_agent.fast_agent {
-        ExternalUserMessageAppliedEvent,
-        ExternalUserMessageDroppedEvent,
-    }
-    mobilerun.agent.fast_agent.events --> mobilerun.agent.fast_agent.fast_agent {
-        FastAgentEndEvent,
-        FastAgentInputEvent,
-        FastAgentOutputEvent,
-        FastAgentResponseEvent,
-        FastAgentToolCallEvent,
-    }
-    mobilerun.agent.fast_agent.native_tools --> mobilerun.agent.fast_agent.fast_agent {
-        native_tool_kwargs,
-        parse_native_tool_calls,
-        tool_result_messages,
-    }
-    mobilerun.agent.fast_agent.xml_parser --> mobilerun.agent.fast_agent.fast_agent {
-        ToolCallParseStatus,
-        ToolResult,
-        extract_add_memory,
-        format_tool_calls,
-        format_tool_results,
-        parse_tool_calls_detailed,
-    }
-    mobilerun.agent.usage --> mobilerun.agent.fast_agent.fast_agent { get_usage_from_response }
-    mobilerun.agent.utils.chat_utils --> mobilerun.agent.fast_agent.fast_agent { limit_history }
-    mobilerun.agent.utils.inference --> mobilerun.agent.fast_agent.fast_agent { acall_with_retries }
-    mobilerun.agent.utils.prompt_resolver --> mobilerun.agent.fast_agent.fast_agent {
-        PromptResolver,
-    }
-    mobilerun.agent.utils.tracing_setup --> mobilerun.agent.fast_agent.fast_agent {
-        record_langfuse_screenshot,
-    }
-    mobilerun.config_manager.config_manager --> mobilerun.agent.fast_agent.fast_agent {
-        AgentConfig,
-        TracingConfig,
-    }
-    mobilerun.config_manager.prompt_loader --> mobilerun.agent.fast_agent.fast_agent {
-        PromptLoader,
-    }
-    mobilerun.tools.ui.provider --> mobilerun.agent.fast_agent.fast_agent {
-        StateProvider,
-        resize_model_screenshot_async,
-    }
-    mobilerun.agent.action_context --> mobilerun.agent.fast_agent.fast_agent { ActionContext }
-    mobilerun.agent.droid --> mobilerun.agent.fast_agent.fast_agent { MobileAgentState }
-    mobilerun.agent.tool_registry --> mobilerun.agent.fast_agent.fast_agent { ToolRegistry }
-    mobilerun.config_manager.config_manager --> mobilerun.agent.utils.tracing_setup {
-        TracingConfig,
-    }
-    mobilerun --> mobilerun.telemetry.langfuse_processor { MobileAgent, __version__ }
-    mobilerun.agent.droid.events --> mobilerun.agent.manager { ManagerInputEvent, ManagerPlanEvent }
-    mobilerun.agent.manager.events --> mobilerun.agent.manager {
-        ManagerContextEvent,
-        ManagerPlanDetailsEvent,
-        ManagerResponseEvent,
-    }
-    mobilerun.agent.manager.manager_agent --> mobilerun.agent.manager { ManagerAgent }
-    mobilerun.agent.manager.prompts --> mobilerun.agent.manager { parse_manager_response }
-    mobilerun.agent.manager.stateless_manager_agent --> mobilerun.agent.manager {
-        StatelessManagerAgent,
-    }
-    mobilerun.agent.common.events --> mobilerun.agent.manager.manager_agent {
-        RecordUIStateEvent,
-        ScreenshotEvent,
-    }
-    mobilerun.agent.droid.events --> mobilerun.agent.manager.manager_agent {
-        ExternalUserMessageAppliedEvent,
-    }
-    mobilerun.agent.manager.events --> mobilerun.agent.manager.manager_agent {
-        ManagerContextEvent,
-        ManagerPlanDetailsEvent,
-        ManagerResponseEvent,
-    }
-    mobilerun.agent.manager.prompts --> mobilerun.agent.manager.manager_agent {
-        ManagerResponseValidationError,
-        parse_manager_response,
-        validate_manager_response,
-    }
-    mobilerun.agent.usage --> mobilerun.agent.manager.manager_agent { get_usage_from_response }
-    mobilerun.agent.utils.chat_utils --> mobilerun.agent.manager.manager_agent {
-        filter_empty_messages,
-    }
-    mobilerun.agent.utils.errors --> mobilerun.agent.manager.manager_agent { describe_error }
-    mobilerun.agent.utils.inference --> mobilerun.agent.manager.manager_agent { acall_with_retries }
-    mobilerun.agent.utils.prompt_resolver --> mobilerun.agent.manager.manager_agent {
-        PromptResolver,
-    }
-    mobilerun.agent.utils.tracing_setup --> mobilerun.agent.manager.manager_agent {
-        record_langfuse_screenshot,
-    }
-    mobilerun.app_cards.app_card_provider --> mobilerun.agent.manager.manager_agent {
-        AppCardProvider,
-        DisabledAppCardProvider,
-    }
-    mobilerun.app_cards.providers --> mobilerun.agent.manager.manager_agent {
-        CompositeAppCardProvider,
-        LocalAppCardProvider,
-        ServerAppCardProvider,
-    }
-    mobilerun.config_manager.prompt_loader --> mobilerun.agent.manager.manager_agent {
-        PromptLoader,
-    }
-    mobilerun.tools.ui.provider --> mobilerun.agent.manager.manager_agent {
-        StateProvider,
-        resize_model_screenshot_async,
-    }
-    mobilerun.agent.action_context --> mobilerun.agent.manager.manager_agent { ActionContext }
-    mobilerun.agent.droid --> mobilerun.agent.manager.manager_agent { MobileAgentState }
-    mobilerun.agent.tool_registry --> mobilerun.agent.manager.manager_agent { ToolRegistry }
-    mobilerun.config_manager.config_manager --> mobilerun.agent.manager.manager_agent {
-        AgentConfig,
-        TracingConfig,
-    }
-    mobilerun.agent.common.events --> mobilerun.agent.manager.stateless_manager_agent {
-        RecordUIStateEvent,
-        ScreenshotEvent,
-    }
-    mobilerun.agent.manager.events --> mobilerun.agent.manager.stateless_manager_agent {
-        ManagerContextEvent,
-        ManagerPlanDetailsEvent,
-        ManagerResponseEvent,
-    }
-    mobilerun.agent.manager.prompts --> mobilerun.agent.manager.stateless_manager_agent {
-        ManagerResponseValidationError,
-        parse_manager_response,
-        validate_manager_response,
-    }
-    mobilerun.agent.usage --> mobilerun.agent.manager.stateless_manager_agent {
-        get_usage_from_response,
-    }
-    mobilerun.agent.utils.chat_utils --> mobilerun.agent.manager.stateless_manager_agent {
-        to_chat_messages,
-    }
-    mobilerun.agent.utils.errors --> mobilerun.agent.manager.stateless_manager_agent {
-        describe_error,
-    }
-    mobilerun.agent.utils.inference --> mobilerun.agent.manager.stateless_manager_agent {
-        acall_with_retries,
-    }
-    mobilerun.agent.utils.prompt_resolver --> mobilerun.agent.manager.stateless_manager_agent {
-        PromptResolver,
-    }
-    mobilerun.agent.utils.tracing_setup --> mobilerun.agent.manager.stateless_manager_agent {
-        record_langfuse_screenshot,
-    }
-    mobilerun.config_manager.prompt_loader --> mobilerun.agent.manager.stateless_manager_agent {
-        PromptLoader,
-    }
-    mobilerun.tools.ui.provider --> mobilerun.agent.manager.stateless_manager_agent {
-        StateProvider,
-        resize_model_screenshot_async,
-    }
-    mobilerun.agent.action_context --> mobilerun.agent.manager.stateless_manager_agent {
-        ActionContext,
-    }
-    mobilerun.agent.droid --> mobilerun.agent.manager.stateless_manager_agent { MobileAgentState }
-    mobilerun.agent.tool_registry --> mobilerun.agent.manager.stateless_manager_agent {
-        ToolRegistry,
-    }
-    mobilerun.config_manager.config_manager --> mobilerun.agent.manager.stateless_manager_agent {
-        AgentConfig,
-        TracingConfig,
-    }
-    mobilerun --> mobilerun.agent.utils.portal_setup { __version__ }
-    mobilerun.agent.utils.trajectory --> mobilerun.macro.replay { Trajectory }
-    mobilerun.macro.handoff --> mobilerun.macro.replay { run_agent_handoff }
-    mobilerun.macro.matcher --> mobilerun.macro.replay { StateMatchResult, compare_states }
-    mobilerun.macro.state --> mobilerun.macro.replay {
-        MACRO_SCHEMA_VERSION,
-        UNSUPPORTED_SCHEMA_MESSAGE,
-        normalize_ui_state,
-    }
-    mobilerun.tools.filters --> mobilerun.macro.replay { DetailedFilter }
-    mobilerun.tools.formatters --> mobilerun.macro.replay { IndexedFormatter }
-    mobilerun.tools.ui.provider --> mobilerun.macro.replay { AndroidStateProvider }
-    mobilerun --> mobilerun.cli.main { MobileAgent, ResultEvent }
-    mobilerun.agent.external --> mobilerun.cli.main { list_agents }
-    mobilerun.agent.utils.android_device --> mobilerun.cli.main {
-        AndroidDeviceSelectionError,
-        create_android_portal_http_driver,
-        is_portal_http_url,
-        resolve_android_serial,
-    }
-    mobilerun.agent.utils.errors --> mobilerun.cli.main { describe_error }
-    mobilerun.agent.utils.llm_picker --> mobilerun.cli.main { load_llm }
-    mobilerun.agent.utils.oauth.openai_oauth_llm --> mobilerun.cli.main {
-        DEFAULT_OPENAI_OAUTH_CALLBACK_HOST,
-        DEFAULT_OPENAI_OAUTH_CALLBACK_PATH,
-        DEFAULT_OPENAI_OAUTH_CALLBACK_PORT,
-        DEFAULT_OPENAI_OAUTH_CREDENTIAL_PATH,
-    }
-    mobilerun.agent.utils.portal_setup --> mobilerun.cli.main { portal_version_kwargs }
-    mobilerun.cli.configure_wizard --> mobilerun.cli.main {
-        ConfigureWizardCallbacks,
-        run_configure_wizard,
-    }
-    mobilerun.cli.device_commands --> mobilerun.cli.main {
-        CLOUD_API_KEY_ENV,
-        DEFAULT_CLOUD_BASE_URL,
-        device_cli,
-        resolve_cloud_api_key,
-    }
-    mobilerun.cli.event_handler --> mobilerun.cli.main { EventHandler }
-    mobilerun.cli.oauth_actions --> mobilerun.cli.main {
-        run_anthropic_setup_token_oauth,
-        run_gemini_oauth_login,
-        run_grok_oauth_login,
-        run_openai_oauth_login,
-        save_anthropic_setup_token,
-    }
-    mobilerun.config_manager --> mobilerun.cli.main { ConfigLoader, MobileConfig }
-    mobilerun.config_manager.credential_paths --> mobilerun.cli.main {
-        ANTHROPIC_OAUTH_CREDENTIAL_PATH,
-        GEMINI_OAUTH_CREDENTIAL_PATH,
-        GROK_OAUTH_CREDENTIAL_PATH,
-    }
-    mobilerun.log_handlers --> mobilerun.cli.main { CLILogHandler, configure_logging }
-    mobilerun.macro.cli --> mobilerun.cli.main { macro_cli }
-    mobilerun.telemetry --> mobilerun.cli.main { print_telemetry_message }
-    mobilerun.agent.utils.android_device --> mobilerun.cli.device_commands {
-        AndroidDeviceSelectionError,
-        create_android_portal_http_driver,
-        is_portal_http_url,
-        resolve_android_serial,
-    }
-    mobilerun.agent.utils.portal_setup --> mobilerun.cli.device_commands { portal_version_kwargs }
-    mobilerun.config_manager --> mobilerun.cli.device_commands { ConfigLoader }
-    mobilerun.log_handlers --> mobilerun.cli.device_commands { configure_logging }
-    mobilerun.tools.filters --> mobilerun.cli.device_commands { ConciseFilter }
-    mobilerun.tools.formatters --> mobilerun.cli.device_commands { IndexedFormatter }
-    mobilerun.tools.ui.ios_provider --> mobilerun.cli.device_commands { IOSStateProvider }
-    mobilerun.tools.ui.provider --> mobilerun.cli.device_commands { AndroidStateProvider }
-    mobilerun.agent.utils.android_device --> mobilerun.macro.cli {
-        AndroidDeviceSelectionError,
-        resolve_android_serial,
-    }
-    mobilerun.agent.utils.trajectory --> mobilerun.macro.cli { Trajectory }
-    mobilerun.config_manager.path_resolver --> mobilerun.macro.cli { PathResolver }
-    mobilerun.macro.replay --> mobilerun.macro.cli { MacroPlayer }
-    mobilerun --> mobilerun.cli.doctor { __version__ }
-    mobilerun.cli.main --> mobilerun.__main__ { cli }
-    mobilerun.cli.main --> mobilerun.cli { cli }
-    mobilerun.macro.cli --> mobilerun.macro.__main__ { macro_cli }
     mobilerun.agent.utils.actions --> tests.eval_coordinate_grounding { _convert_action_point }
     mobilerun.agent.utils.llm_picker --> tests.eval_coordinate_grounding { load_llm }
     mobilerun.agent.utils.vision_sizing --> tests.eval_coordinate_grounding { VisionResizePolicy }
@@ -1552,7 +1138,398 @@ graph import {
     tests.source_text --> tests.test_android_vision_coordinate_contract { module_source }
     tests.source_text --> tests.test_grok_oauth { module_source }
     tests.source_text --> tests.test_visual_remote_connection { module_source }
-    mobilerun.macro.replay --> mobilerun { MacroPlayer, replay_macro_file, replay_macro_folder }
+    mobilerun.agent.utils.trajectory ++> mobilerun.macro.replay { Trajectory }
+    mobilerun.macro.handoff ++> mobilerun.macro.replay { run_agent_handoff }
+    mobilerun.macro.matcher ++> mobilerun.macro.replay { StateMatchResult, compare_states }
+    mobilerun.macro.state ++> mobilerun.macro.replay {
+        MACRO_SCHEMA_VERSION,
+        UNSUPPORTED_SCHEMA_MESSAGE,
+        normalize_ui_state,
+    }
+    mobilerun.tools.filters ++> mobilerun.macro.replay { DetailedFilter }
+    mobilerun.tools.formatters ++> mobilerun.macro.replay { IndexedFormatter }
+    mobilerun.tools.ui.provider ++> mobilerun.macro.replay { AndroidStateProvider }
+    mobilerun.agent.utils.android_device ++> mobilerun.macro.cli {
+        AndroidDeviceSelectionError,
+        resolve_android_serial,
+    }
+    mobilerun.agent.utils.trajectory ++> mobilerun.macro.cli { Trajectory }
+    mobilerun.config_manager.path_resolver ++> mobilerun.macro.cli { PathResolver }
+    mobilerun.macro.replay ++> mobilerun.macro.cli { MacroPlayer }
+    mobilerun.macro.cli ++> mobilerun.macro.__main__ { macro_cli }
+    mobilerun.config_manager.config_manager ++> mobilerun.agent.utils.tracing_setup {
+        TracingConfig,
+    }
+    mobilerun.log_handlers ++> mobilerun { CLILogHandler }
+    include mobilerun.agent ++> mobilerun { ResultEvent }
+    include mobilerun.agent.droid ++> mobilerun { MobileAgent, MobileAgentState }
+    mobilerun.agent.utils.errors ++> mobilerun { HtmlErrorPageFilter }
+    include mobilerun.agent.utils.llm_picker ++> mobilerun { load_llm }
+    include mobilerun.config_manager ++> mobilerun {
+        AgentConfig,
+        AppCardConfig,
+        CredentialsConfig,
+        DeviceConfig,
+        ExecutorConfig,
+        FastAgentConfig,
+        LLMProfile,
+        LoggingConfig,
+        ManagerConfig,
+        MobileConfig,
+        TelemetryConfig,
+        ToolsConfig,
+        TracingConfig,
+    }
+    include mobilerun.macro.replay ++> mobilerun {
+        MacroPlayer,
+        replay_macro_file,
+        replay_macro_folder,
+    }
+    include mobilerun.tools ++> mobilerun { AndroidDriver, DeviceDriver, RecordingDriver }
+    include mobilerun.agent.droid.droid_agent ++> mobilerun.agent.droid { MobileAgent }
+    include mobilerun.agent.droid.state ++> mobilerun.agent.droid { MobileAgentState }
+    mobilerun.agent.action_context ++> mobilerun.agent.droid.droid_agent { ActionContext }
+    mobilerun.agent.common.events ++> mobilerun.agent.droid.droid_agent {
+        RecordUIStateEvent,
+        ScreenshotEvent,
+    }
+    mobilerun.agent.droid.events ++> mobilerun.agent.droid.droid_agent {
+        ExecutorInputEvent,
+        ExecutorResultEvent,
+        ExternalUserMessageDroppedEvent,
+        FastAgentExecuteEvent,
+        FastAgentResultEvent,
+        FinalizeEvent,
+        ManagerInputEvent,
+        ManagerPlanEvent,
+        ResultEvent,
+    }
+    mobilerun.agent.droid.state ++> mobilerun.agent.droid.droid_agent {
+        MobileAgentState,
+        QueuedUserMessage,
+    }
+    mobilerun.agent.executor ++> mobilerun.agent.droid.droid_agent { ExecutorAgent }
+    mobilerun.agent.external ++> mobilerun.agent.droid.droid_agent { load_agent }
+    mobilerun.agent.fast_agent ++> mobilerun.agent.droid.droid_agent { FastAgent }
+    mobilerun.agent.fast_agent.events ++> mobilerun.agent.droid.droid_agent { FastAgentOutputEvent }
+    mobilerun.agent.manager ++> mobilerun.agent.droid.droid_agent {
+        ManagerAgent,
+        StatelessManagerAgent,
+    }
+    mobilerun.agent.manager.prompts ++> mobilerun.agent.droid.droid_agent {
+        ManagerResponseValidationError,
+    }
+    mobilerun.agent.oneflows.structured_output_agent ++> mobilerun.agent.droid.droid_agent {
+        StructuredOutputAgent,
+    }
+    mobilerun.agent.trajectory ++> mobilerun.agent.droid.droid_agent { TrajectoryWriter }
+    mobilerun.agent.utils.android_device ++> mobilerun.agent.droid.droid_agent {
+        create_android_portal_http_driver,
+        is_portal_http_url,
+        resolve_android_serial,
+    }
+    mobilerun.agent.utils.errors ++> mobilerun.agent.droid.droid_agent { describe_error }
+    mobilerun.agent.utils.llm_loader ++> mobilerun.agent.droid.droid_agent {
+        load_agent_llms,
+        merge_llms_with_config,
+    }
+    mobilerun.agent.utils.portal_setup ++> mobilerun.agent.droid.droid_agent {
+        portal_version_kwargs,
+    }
+    mobilerun.agent.utils.prompt_resolver ++> mobilerun.agent.droid.droid_agent { PromptResolver }
+    mobilerun.agent.utils.signatures ++> mobilerun.agent.droid.droid_agent { build_tool_registry }
+    mobilerun.agent.utils.tracing_setup ++> mobilerun.agent.droid.droid_agent {
+        record_langfuse_screenshot,
+        session_context,
+        setup_tracing,
+    }
+    mobilerun.agent.utils.trajectory ++> mobilerun.agent.droid.droid_agent { Trajectory }
+    mobilerun.agent.utils.vision_sizing ++> mobilerun.agent.droid.droid_agent {
+        VisionResizePolicy,
+        model_uses_normalized_coordinates,
+    }
+    mobilerun.config_manager.config_manager ++> mobilerun.agent.droid.droid_agent {
+        DEFAULT_DISABLED_TOOLS,
+        AgentConfig,
+        CredentialsConfig,
+        DeviceConfig,
+        LoggingConfig,
+        MobileConfig,
+        TelemetryConfig,
+        ToolsConfig,
+        TracingConfig,
+    }
+    mobilerun.credential_manager ++> mobilerun.agent.droid.droid_agent {
+        CredentialManager,
+        FileCredentialManager,
+    }
+    mobilerun.log_handlers ++> mobilerun.agent.droid.droid_agent {
+        CLILogHandler,
+        configure_logging,
+    }
+    mobilerun.macro.recorder ++> mobilerun.agent.droid.droid_agent { MacroRecorder }
+    mobilerun.mcp.adapter ++> mobilerun.agent.droid.droid_agent { mcp_to_mobilerun_tools }
+    mobilerun.mcp.client ++> mobilerun.agent.droid.droid_agent { MCPClientManager }
+    mobilerun.mcp.config ++> mobilerun.agent.droid.droid_agent { MCPConfig }
+    mobilerun.telemetry ++> mobilerun.agent.droid.droid_agent {
+        MobileAgentFinalizeEvent,
+        MobileAgentInitEvent,
+        capture,
+        flush,
+    }
+    mobilerun.telemetry.phoenix ++> mobilerun.agent.droid.droid_agent { clean_span }
+    mobilerun.tools.filters ++> mobilerun.agent.droid.droid_agent { ConciseFilter, DetailedFilter }
+    mobilerun.tools.formatters ++> mobilerun.agent.droid.droid_agent { IndexedFormatter }
+    mobilerun.tools.ui.ios_provider ++> mobilerun.agent.droid.droid_agent { IOSStateProvider }
+    mobilerun.tools.ui.provider ++> mobilerun.agent.droid.droid_agent { AndroidStateProvider }
+    mobilerun.tools.ui.screenshot_provider ++> mobilerun.agent.droid.droid_agent {
+        ScreenshotOnlyStateProvider,
+    }
+    include mobilerun.agent.droid.events ++> mobilerun.agent.executor {
+        ExecutorInputEvent,
+        ExecutorResultEvent,
+    }
+    include mobilerun.agent.executor.events ++> mobilerun.agent.executor {
+        ExecutorActionEvent,
+        ExecutorActionResultEvent,
+        ExecutorContextEvent,
+        ExecutorResponseEvent,
+    }
+    include mobilerun.agent.executor.executor_agent ++> mobilerun.agent.executor { ExecutorAgent }
+    mobilerun.agent.executor.events ++> mobilerun.agent.executor.executor_agent {
+        ExecutorActionEvent,
+        ExecutorActionResultEvent,
+        ExecutorContextEvent,
+        ExecutorResponseEvent,
+    }
+    mobilerun.agent.executor.prompts ++> mobilerun.agent.executor.executor_agent {
+        parse_executor_response,
+    }
+    mobilerun.agent.usage ++> mobilerun.agent.executor.executor_agent { get_usage_from_response }
+    mobilerun.agent.utils.errors ++> mobilerun.agent.executor.executor_agent { describe_error }
+    mobilerun.agent.utils.inference ++> mobilerun.agent.executor.executor_agent {
+        acall_with_retries,
+    }
+    mobilerun.agent.utils.prompt_resolver ++> mobilerun.agent.executor.executor_agent {
+        PromptResolver,
+    }
+    mobilerun.config_manager.config_manager ++> mobilerun.agent.executor.executor_agent {
+        AgentConfig,
+    }
+    mobilerun.config_manager.prompt_loader ++> mobilerun.agent.executor.executor_agent {
+        PromptLoader,
+    }
+    mobilerun.tools.ui.provider ++> mobilerun.agent.executor.executor_agent {
+        resize_model_screenshot_async,
+    }
+    include mobilerun.agent.fast_agent.fast_agent ++> mobilerun.agent.fast_agent { FastAgent }
+    mobilerun.agent.action_result ++> mobilerun.agent.fast_agent.fast_agent { ActionResult }
+    mobilerun.agent.common.constants ++> mobilerun.agent.fast_agent.fast_agent { LLM_HISTORY_LIMIT }
+    mobilerun.agent.common.events ++> mobilerun.agent.fast_agent.fast_agent {
+        RecordUIStateEvent,
+        ScreenshotEvent,
+    }
+    mobilerun.agent.droid.events ++> mobilerun.agent.fast_agent.fast_agent {
+        ExternalUserMessageAppliedEvent,
+        ExternalUserMessageDroppedEvent,
+    }
+    mobilerun.agent.fast_agent.events ++> mobilerun.agent.fast_agent.fast_agent {
+        FastAgentEndEvent,
+        FastAgentInputEvent,
+        FastAgentOutputEvent,
+        FastAgentResponseEvent,
+        FastAgentToolCallEvent,
+    }
+    mobilerun.agent.fast_agent.native_tools ++> mobilerun.agent.fast_agent.fast_agent {
+        native_tool_kwargs,
+        parse_native_tool_calls,
+        tool_result_messages,
+    }
+    mobilerun.agent.fast_agent.xml_parser ++> mobilerun.agent.fast_agent.fast_agent {
+        ToolCallParseStatus,
+        ToolResult,
+        extract_add_memory,
+        format_tool_calls,
+        format_tool_results,
+        parse_tool_calls_detailed,
+    }
+    mobilerun.agent.usage ++> mobilerun.agent.fast_agent.fast_agent { get_usage_from_response }
+    mobilerun.agent.utils.chat_utils ++> mobilerun.agent.fast_agent.fast_agent { limit_history }
+    mobilerun.agent.utils.inference ++> mobilerun.agent.fast_agent.fast_agent { acall_with_retries }
+    mobilerun.agent.utils.prompt_resolver ++> mobilerun.agent.fast_agent.fast_agent {
+        PromptResolver,
+    }
+    mobilerun.agent.utils.tracing_setup ++> mobilerun.agent.fast_agent.fast_agent {
+        record_langfuse_screenshot,
+    }
+    mobilerun.config_manager.config_manager ++> mobilerun.agent.fast_agent.fast_agent {
+        AgentConfig,
+        TracingConfig,
+    }
+    mobilerun.config_manager.prompt_loader ++> mobilerun.agent.fast_agent.fast_agent {
+        PromptLoader,
+    }
+    mobilerun.tools.ui.provider ++> mobilerun.agent.fast_agent.fast_agent {
+        resize_model_screenshot_async,
+    }
+    include mobilerun.agent.droid.events ++> mobilerun.agent.manager {
+        ManagerInputEvent,
+        ManagerPlanEvent,
+    }
+    include mobilerun.agent.manager.events ++> mobilerun.agent.manager {
+        ManagerContextEvent,
+        ManagerPlanDetailsEvent,
+        ManagerResponseEvent,
+    }
+    include mobilerun.agent.manager.manager_agent ++> mobilerun.agent.manager { ManagerAgent }
+    include mobilerun.agent.manager.prompts ++> mobilerun.agent.manager { parse_manager_response }
+    include mobilerun.agent.manager.stateless_manager_agent ++> mobilerun.agent.manager {
+        StatelessManagerAgent,
+    }
+    mobilerun.agent.common.events ++> mobilerun.agent.manager.manager_agent {
+        RecordUIStateEvent,
+        ScreenshotEvent,
+    }
+    mobilerun.agent.droid.events ++> mobilerun.agent.manager.manager_agent {
+        ExternalUserMessageAppliedEvent,
+    }
+    mobilerun.agent.manager.events ++> mobilerun.agent.manager.manager_agent {
+        ManagerContextEvent,
+        ManagerPlanDetailsEvent,
+        ManagerResponseEvent,
+    }
+    mobilerun.agent.manager.prompts ++> mobilerun.agent.manager.manager_agent {
+        ManagerResponseValidationError,
+        parse_manager_response,
+        validate_manager_response,
+    }
+    mobilerun.agent.usage ++> mobilerun.agent.manager.manager_agent { get_usage_from_response }
+    mobilerun.agent.utils.chat_utils ++> mobilerun.agent.manager.manager_agent {
+        filter_empty_messages,
+    }
+    mobilerun.agent.utils.errors ++> mobilerun.agent.manager.manager_agent { describe_error }
+    mobilerun.agent.utils.inference ++> mobilerun.agent.manager.manager_agent { acall_with_retries }
+    mobilerun.agent.utils.prompt_resolver ++> mobilerun.agent.manager.manager_agent {
+        PromptResolver,
+    }
+    mobilerun.agent.utils.tracing_setup ++> mobilerun.agent.manager.manager_agent {
+        record_langfuse_screenshot,
+    }
+    mobilerun.app_cards.app_card_provider ++> mobilerun.agent.manager.manager_agent {
+        AppCardProvider,
+        DisabledAppCardProvider,
+    }
+    mobilerun.app_cards.providers ++> mobilerun.agent.manager.manager_agent {
+        CompositeAppCardProvider,
+        LocalAppCardProvider,
+        ServerAppCardProvider,
+    }
+    mobilerun.config_manager.prompt_loader ++> mobilerun.agent.manager.manager_agent {
+        PromptLoader,
+    }
+    mobilerun.tools.ui.provider ++> mobilerun.agent.manager.manager_agent {
+        resize_model_screenshot_async,
+    }
+    mobilerun.agent.common.events ++> mobilerun.agent.manager.stateless_manager_agent {
+        RecordUIStateEvent,
+        ScreenshotEvent,
+    }
+    mobilerun.agent.manager.events ++> mobilerun.agent.manager.stateless_manager_agent {
+        ManagerContextEvent,
+        ManagerPlanDetailsEvent,
+        ManagerResponseEvent,
+    }
+    mobilerun.agent.manager.prompts ++> mobilerun.agent.manager.stateless_manager_agent {
+        ManagerResponseValidationError,
+        parse_manager_response,
+        validate_manager_response,
+    }
+    mobilerun.agent.usage ++> mobilerun.agent.manager.stateless_manager_agent {
+        get_usage_from_response,
+    }
+    mobilerun.agent.utils.chat_utils ++> mobilerun.agent.manager.stateless_manager_agent {
+        to_chat_messages,
+    }
+    mobilerun.agent.utils.errors ++> mobilerun.agent.manager.stateless_manager_agent {
+        describe_error,
+    }
+    mobilerun.agent.utils.inference ++> mobilerun.agent.manager.stateless_manager_agent {
+        acall_with_retries,
+    }
+    mobilerun.agent.utils.prompt_resolver ++> mobilerun.agent.manager.stateless_manager_agent {
+        PromptResolver,
+    }
+    mobilerun.agent.utils.tracing_setup ++> mobilerun.agent.manager.stateless_manager_agent {
+        record_langfuse_screenshot,
+    }
+    mobilerun.config_manager.prompt_loader ++> mobilerun.agent.manager.stateless_manager_agent {
+        PromptLoader,
+    }
+    mobilerun.tools.ui.provider ++> mobilerun.agent.manager.stateless_manager_agent {
+        resize_model_screenshot_async,
+    }
+    mobilerun ++> mobilerun.agent.utils.portal_setup { __version__ }
+    mobilerun.agent.utils.android_device ++> mobilerun.cli.device_commands {
+        AndroidDeviceSelectionError,
+        create_android_portal_http_driver,
+        is_portal_http_url,
+        resolve_android_serial,
+    }
+    mobilerun.agent.utils.portal_setup ++> mobilerun.cli.device_commands { portal_version_kwargs }
+    mobilerun.config_manager ++> mobilerun.cli.device_commands { ConfigLoader }
+    mobilerun.log_handlers ++> mobilerun.cli.device_commands { configure_logging }
+    mobilerun.tools.filters ++> mobilerun.cli.device_commands { ConciseFilter }
+    mobilerun.tools.formatters ++> mobilerun.cli.device_commands { IndexedFormatter }
+    mobilerun.tools.ui.ios_provider ++> mobilerun.cli.device_commands { IOSStateProvider }
+    mobilerun.tools.ui.provider ++> mobilerun.cli.device_commands { AndroidStateProvider }
+    mobilerun ++> mobilerun.cli.doctor { __version__ as _PACKAGE_VERSION }
+    mobilerun ++> mobilerun.telemetry.langfuse_processor { __version__ }
+    mobilerun ++> mobilerun.cli.main { MobileAgent, ResultEvent }
+    mobilerun.agent.external ++> mobilerun.cli.main { list_agents }
+    mobilerun.agent.utils.android_device ++> mobilerun.cli.main {
+        AndroidDeviceSelectionError,
+        create_android_portal_http_driver,
+        is_portal_http_url,
+        resolve_android_serial,
+    }
+    mobilerun.agent.utils.errors ++> mobilerun.cli.main { describe_error }
+    mobilerun.agent.utils.llm_picker ++> mobilerun.cli.main { load_llm }
+    mobilerun.agent.utils.oauth.openai_oauth_llm ++> mobilerun.cli.main {
+        DEFAULT_OPENAI_OAUTH_CALLBACK_HOST,
+        DEFAULT_OPENAI_OAUTH_CALLBACK_PATH,
+        DEFAULT_OPENAI_OAUTH_CALLBACK_PORT,
+        DEFAULT_OPENAI_OAUTH_CREDENTIAL_PATH,
+    }
+    mobilerun.agent.utils.portal_setup ++> mobilerun.cli.main { portal_version_kwargs }
+    mobilerun.cli.configure_wizard ++> mobilerun.cli.main {
+        ConfigureWizardCallbacks,
+        run_configure_wizard,
+    }
+    mobilerun.cli.device_commands ++> mobilerun.cli.main {
+        CLOUD_API_KEY_ENV,
+        DEFAULT_CLOUD_BASE_URL,
+        device_cli,
+        resolve_cloud_api_key,
+    }
+    mobilerun.cli.event_handler ++> mobilerun.cli.main { EventHandler }
+    mobilerun.cli.oauth_actions ++> mobilerun.cli.main {
+        run_anthropic_setup_token_oauth,
+        run_gemini_oauth_login,
+        run_grok_oauth_login,
+        run_openai_oauth_login,
+        save_anthropic_setup_token,
+    }
+    mobilerun.config_manager ++> mobilerun.cli.main { ConfigLoader, MobileConfig }
+    mobilerun.config_manager.credential_paths ++> mobilerun.cli.main {
+        ANTHROPIC_OAUTH_CREDENTIAL_PATH,
+        GEMINI_OAUTH_CREDENTIAL_PATH,
+        GROK_OAUTH_CREDENTIAL_PATH,
+    }
+    mobilerun.log_handlers ++> mobilerun.cli.main { CLILogHandler, configure_logging }
+    mobilerun.macro.cli ++> mobilerun.cli.main { macro_cli }
+    mobilerun.telemetry ++> mobilerun.cli.main { print_telemetry_message }
+    mobilerun.cli.main ++> mobilerun.__main__ { cli }
+    include mobilerun.cli.main ++> mobilerun.cli { cli }
 }
 
 graph spaces {

@@ -13,7 +13,7 @@ import threading
 from collections.abc import Iterator
 from contextlib import contextmanager
 from contextvars import Token
-from typing import Optional
+from typing import Any, Optional, cast
 from uuid import uuid4
 
 import llama_index.core
@@ -271,7 +271,7 @@ def _setup_langfuse_tracing(
             "    To enable Langfuse integration, install with:\n"
             "    • If installed via tool: `uv tool install mobilerun[langfuse]`\n"
             "    • If installed via pip: `uv pip install mobilerun[langfuse]`\n"
-            f"    Missing: {getattr(e, 'name') if hasattr(e, 'name') else str(e)}\n"
+            f"    Missing: {cast(Any, e).name if hasattr(e, 'name') else str(e)}\n"
         )
         return False
     except Exception as error:
