@@ -384,7 +384,7 @@ class MobileAgent(Workflow):
         self.action_ctx = None
         self.state_provider = None
 
-        Workflow.__init__(self, *args, timeout=timeout, **kwargs)
+        getattr(Workflow, "__init__")(self, *args, timeout=timeout, **kwargs)
 
         self._tracing_session_id = self.config.tracing.langfuse_session_id
         self._tracing_user_id = self.config.tracing.langfuse_user_id

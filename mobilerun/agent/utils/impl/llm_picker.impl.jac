@@ -115,7 +115,7 @@ impl _load_openai_responses(*, grok: builtins.bool = False, **kwargs: Any) -> LL
     import from llama_index.llms.openai.responses { OpenAIResponses }
     _patch_responses_output_parser(OpenAIResponses);
 
-    import mobilerun.agent.utils.llm_openai_responses as adapters;
+    adapters: any = importlib.import_module("mobilerun.agent.utils.llm_openai_responses");
 
     if grok {
         kwargs = `dict(sanitize_grok_responses_kwargs(kwargs));
@@ -134,7 +134,9 @@ impl _load_openai_responses(*, grok: builtins.bool = False, **kwargs: Any) -> LL
 }
 
 impl _load_google_genai(**kwargs: Any) -> LLM {
-    import from mobilerun.agent.utils.llm_google_genai { MobilerunGoogleGenAI }
+    MobilerunGoogleGenAI: any = importlib.import_module(
+        "mobilerun.agent.utils.llm_google_genai"
+    ).MobilerunGoogleGenAI;
 
     filtered_kwargs: any = {k: v for (k, v) in kwargs.items() if v is not None};
     logger.debug(f"Initializing MobilerunGoogleGenAI with kwargs: {`list(filtered_kwargs.keys())}");
@@ -142,7 +144,9 @@ impl _load_google_genai(**kwargs: Any) -> LLM {
 }
 
 impl _load_anthropic(**kwargs: Any) -> LLM {
-    import from mobilerun.agent.utils.llm_anthropic { MobilerunAnthropic }
+    MobilerunAnthropic: any = importlib.import_module(
+        "mobilerun.agent.utils.llm_anthropic"
+    ).MobilerunAnthropic;
     if kwargs.get("max_tokens") is None {
         kwargs["max_tokens"] = 2048;
     }
@@ -156,7 +160,9 @@ impl _load_anthropic(**kwargs: Any) -> LLM {
 }
 
 impl _load_deepseek(**kwargs: Any) -> LLM {
-    import from mobilerun.agent.utils.llm_deepseek { MobilerunDeepSeek }
+    MobilerunDeepSeek: any = importlib.import_module(
+        "mobilerun.agent.utils.llm_deepseek"
+    ).MobilerunDeepSeek;
 
     filtered_kwargs: any = {k: v for (k, v) in kwargs.items() if v is not None};
     logger.debug(f"Initializing MobilerunDeepSeek with kwargs: {`list(filtered_kwargs.keys())}");
@@ -185,20 +191,24 @@ impl load_llm(
         kwargs["model"] = model;
     }
     if provider_name == "openai_oauth" {
-        import from mobilerun.agent.utils.oauth.openai_oauth_llm { OpenAIOAuth }
+        OpenAIOAuth: any = importlib.import_module(
+            "mobilerun.agent.utils.oauth.openai_oauth_llm"
+        ).OpenAIOAuth;
 
         _validate_openai_oauth_model(kwargs.get("model"));
         return OpenAIOAuth(**{k: v for (k, v) in kwargs.items() if v is not None});
     }
     if provider_name == "anthropic_oauth" {
-        import from mobilerun.agent.utils.oauth.anthropic_oauth_llm { AnthropicOAuthLLM }
+        AnthropicOAuthLLM: any = importlib.import_module(
+            "mobilerun.agent.utils.oauth.anthropic_oauth_llm"
+        ).AnthropicOAuthLLM;
 
         return AnthropicOAuthLLM(**{k: v for (k, v) in kwargs.items() if v is not None});
     }
     if provider_name == "gemini_oauth_code_assist" {
-        import from mobilerun.agent.utils.oauth.gemini_oauth_code_assist_llm {
-            GeminiOAuthCodeAssistLLM,
-        }
+        GeminiOAuthCodeAssistLLM: any = importlib.import_module(
+            "mobilerun.agent.utils.oauth.gemini_oauth_code_assist_llm"
+        ).GeminiOAuthCodeAssistLLM;
 
         _validate_gemini_oauth_model(kwargs.get("model"));
         kwargs.pop("consumer_mode", None);
@@ -207,7 +217,9 @@ impl load_llm(
         return GeminiOAuthCodeAssistLLM(**{k: v for (k, v) in kwargs.items() if v is not None});
     }
     if provider_name == "xai_oauth" {
-        import from mobilerun.agent.utils.oauth.grok_oauth_llm { GrokOAuth }
+        GrokOAuth: any = importlib.import_module(
+            "mobilerun.agent.utils.oauth.grok_oauth_llm"
+        ).GrokOAuth;
 
         return GrokOAuth(**{k: v for (k, v) in kwargs.items() if v is not None});
     }

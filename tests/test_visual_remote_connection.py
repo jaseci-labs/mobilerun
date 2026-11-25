@@ -20,6 +20,7 @@ from mobilerun.tools.helpers.images import (
 )
 from mobilerun.tools.ui.screenshot_provider import ScreenshotOnlyStateProvider
 from mobilerun.tools.ui.state import UIState
+from tests.source_text import module_source
 
 
 def _png(width: int = 1320, height: int = 2868) -> bytes:
@@ -327,16 +328,13 @@ class ScreenshotOnlyStateProviderTest(unittest.TestCase):
         self.assertIn("Duration is in seconds", registry.tools["swipe"].description)
 
     def test_screenshot_only_agent_sources_resize_screenshots(self):
-        repo = Path(__import__("mobilerun").__file__).resolve().parents[1]
-        agent_files = [
-            repo / "mobilerun/agent/fast_agent/fast_agent.py",
-            repo / "mobilerun/agent/manager/manager_agent.py",
-            repo / "mobilerun/agent/manager/stateless_manager_agent.py",
-            repo / "mobilerun/agent/executor/executor_agent.py",
-        ]
-
-        for path in agent_files:
-            self.assertIn("resize_model_screenshot_async", path.read_text())
+        for module_name in (
+            "mobilerun.agent.fast_agent.fast_agent",
+            "mobilerun.agent.manager.manager_agent",
+            "mobilerun.agent.manager.stateless_manager_agent",
+            "mobilerun.agent.executor.executor_agent",
+        ):
+            self.assertIn("resize_model_screenshot_async", module_source(module_name))
 
     def test_visual_remote_exact_app_launch_tool_needs_only_start_app(self):
         async def run():

@@ -5,6 +5,8 @@ code, poll the better-auth token endpoint until the user approves, and return
 the session access token. Transport + storage only — callers handle UI.
 """
 
+import importlib;
+
 import builtins;
 
 import from jaclang.comptime { target }

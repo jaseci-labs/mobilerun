@@ -10,7 +10,9 @@ impl FileCredentialManager.init(credentials: Any) {
 }
 
 impl FileCredentialManager._load(credentials: Any) -> Dict[builtins.str, builtins.str] {
-    import from mobilerun.config_manager.config_manager { CredentialsConfig }
+    CredentialsConfig: any = importlib.import_module(
+        "mobilerun.config_manager.config_manager"
+    ).CredentialsConfig;
     if isinstance(credentials, `dict) {
         return self._load_from_dict(credentials);
     }

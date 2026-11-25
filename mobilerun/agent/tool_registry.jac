@@ -3,6 +3,8 @@
 Central registry for agent-callable tools.
 """
 
+import importlib;
+
 import builtins;
 
 import from __future__ { annotations }

@@ -32,7 +32,7 @@ class AppStarter(Workflow):
             stream: If True, stream LLM response to console in real-time
             **kwargs: Additional arguments passed to Workflow
         """
-        Workflow.__init__(self, timeout=timeout, **kwargs)
+        getattr(Workflow, "__init__")(self, timeout=timeout, **kwargs)
         self.driver = driver
         self.llm = llm
         self.stream = stream

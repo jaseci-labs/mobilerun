@@ -110,7 +110,10 @@ impl MobileConfig.to_dict -> Dict[str, Any] {
 impl MobileConfig.from_dict(data: Dict[str, Any]) -> "MobileConfig" {
     import copy as _copy;
 
-    import from mobilerun.config_manager.migrations { CURRENT_VERSION, migrate }
+    CURRENT_VERSION: any = importlib.import_module(
+        "mobilerun.config_manager.migrations"
+    ).CURRENT_VERSION;
+    migrate: any = importlib.import_module("mobilerun.config_manager.migrations").migrate;
 
     if "_version" in data and data["_version"] < CURRENT_VERSION {
         data = migrate(_copy.deepcopy(data));

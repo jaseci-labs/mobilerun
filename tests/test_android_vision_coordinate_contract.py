@@ -8,7 +8,6 @@ native device pixels. Element-index taps keep using native bounds.
 """
 
 import asyncio
-import inspect
 from io import BytesIO
 from types import SimpleNamespace
 from unittest.mock import AsyncMock
@@ -29,6 +28,7 @@ from mobilerun.tools.ui.provider import (
     should_resize_model_screenshot,
 )
 from mobilerun.tools.ui.screenshot_provider import ScreenshotOnlyStateProvider
+from tests.source_text import module_source
 
 NATIVE_W, NATIVE_H = 1080, 2400
 
@@ -188,7 +188,7 @@ def test_resize_flags_pair_providers_with_agent_gating():
     import mobilerun.agent.manager.stateless_manager_agent as stateless_manager_agent
 
     for module in (fast_agent, executor_agent, manager_agent, stateless_manager_agent):
-        source = inspect.getsource(module)
+        source = module_source(module.__name__)
         assert "resize_model_screenshot_async" in source, module.__name__
 
 
@@ -307,5 +307,6 @@ def test_convert_action_point_unchanged_without_contract():
 
 
 def test_validation_helper_is_wired_into_convert():
-    source = inspect.getsource(actions_module._convert_action_point)
-    assert "_validate_model_space_point" in source
+    source = module_source("mobilerun.agent.utils.actions")
+    body = source.split("_convert_action_point(", 2)[-1].split("\nimpl ", 1)[0]
+    assert "_validate_model_space_point" in body

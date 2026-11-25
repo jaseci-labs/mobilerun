@@ -118,7 +118,9 @@ impl ToolRegistry._emit_event(
     if workflow_ctx is None {
         return;
     }
-    import from mobilerun.agent.common.events { ToolExecutionEvent }
+    ToolExecutionEvent: any = importlib.import_module(
+        "mobilerun.agent.common.events"
+    ).ToolExecutionEvent;
 
     workflow_ctx.write_event_to_stream(
         ToolExecutionEvent(

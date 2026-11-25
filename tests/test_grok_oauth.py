@@ -50,6 +50,7 @@ from mobilerun.config_manager.auth_profile_store import (
     AuthProfileFormatError,
     AuthProfileStore,
 )
+from tests.source_text import module_source
 
 
 class _AcceptingIDTokenValidator:
@@ -1665,12 +1666,7 @@ def test_async_structured_predict_sanitizes_runtime_kwargs(monkeypatch, tmp_path
 
 
 def test_grok_integration_source_does_not_bridge_to_external_credentials():
-    root = next(d for d in Path(__file__).resolve().parents if (d / "jac.toml").exists())
-    oauth = root / "mobilerun/agent/utils/oauth"
-    source = "".join(
-        path.read_text(encoding="utf-8")
-        for path in (oauth / "grok_oauth_llm.jac", oauth / "impl/grok_oauth_llm.impl.jac")
-    )
+    source = module_source("mobilerun.agent.utils.oauth.grok_oauth_llm")
     forbidden = (
         "." + "grok" + "/" + "auth.json",
         "GROK" + "_HOME",

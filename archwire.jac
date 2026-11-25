@@ -350,35 +350,6 @@ graph import {
         TracingConfig,
     }
     mobilerun --> mobilerun.agent.utils.portal_setup { __version__ }
-    mobilerun.agent.tool_registry --> mobilerun.agent.utils.signatures { ToolRegistry }
-    mobilerun.agent.utils.actions --> mobilerun.agent.utils.signatures {
-        click,
-        click_area,
-        click_at,
-        complete,
-        long_press,
-        long_press_at,
-        open_app,
-        open_bundle_id,
-        swipe,
-        system_button,
-        type_secret,
-        type_text,
-        type_text_direct,
-        wait,
-    }
-    mobilerun.agent.action_context --> mobilerun.agent.utils.actions { ActionContext }
-    mobilerun.agent.action_result --> mobilerun.agent.utils.actions { ActionResult }
-    mobilerun.agent.oneflows.app_starter_workflow --> mobilerun.agent.utils.actions { AppStarter }
-    mobilerun.agent.utils.errors --> mobilerun.agent.utils.actions { describe_error }
-    mobilerun.tools.helpers.coordinate --> mobilerun.agent.utils.actions {
-        NORMALIZED_MAX,
-        to_normalized,
-    }
-    mobilerun.agent.utils.inference --> mobilerun.agent.oneflows.app_starter_workflow {
-        acomplete_with_retries,
-    }
-    mobilerun.agent.utils.llm_picker --> mobilerun.agent.oneflows.app_starter_workflow { load_llm }
     mobilerun.macro.replay --> mobilerun.macro;
     mobilerun.agent.utils.trajectory --> mobilerun.macro.replay { Trajectory }
     mobilerun.macro.handoff --> mobilerun.macro.replay { run_agent_handoff }
@@ -468,15 +439,6 @@ graph import {
     mobilerun.config_manager.loader --> mobilerun.cli.doctor { OutdatedConfigError }
     mobilerun.cli.main --> mobilerun.cli.doctor { _setup_portal }
     mobilerun.cli.main --> mobilerun.__main__ { cli }
-    mobilerun.agent.utils.chat_utils --> mobilerun.agent.utils {
-        filter_empty_messages,
-        has_content,
-        limit_history,
-        to_chat_messages,
-    }
-    mobilerun.agent.utils.prompt_resolver --> mobilerun.agent.utils { PromptResolver }
-    mobilerun.agent.utils.signatures --> mobilerun.agent.utils { build_tool_registry }
-    mobilerun.agent.utils.trajectory --> mobilerun.agent.utils { Trajectory }
     mobilerun.cli.main --> mobilerun.cli { cli }
     mobilerun.macro.cli --> mobilerun.macro.__main__ { macro_cli }
     mobilerun.agent.utils.actions --> tests.eval_coordinate_grounding { _convert_action_point }
@@ -1187,7 +1149,6 @@ graph import {
         http_status_code as _http_status_code,
     }
     mobilerun.macro.state ++> mobilerun.agent.trajectory.writer { MACRO_SCHEMA_VERSION }
-    mobilerun.config_manager.credential_paths ++> mobilerun.cli.deviceauth { OAUTH_CREDENTIAL_DIR }
     mobilerun.agent.providers.anthropic ++> mobilerun.agent.providers.registry {
         ANTHROPIC_API_DEFAULT_MODEL,
         ANTHROPIC_API_MODELS,
@@ -1286,10 +1247,6 @@ graph import {
         PathResolver,
     }
     mobilerun.mcp.config ++> mobilerun.config_manager.config_manager { MCPConfig, MCPServerConfig }
-    mobilerun.config_manager.migrations ++> mobilerun.config_manager.config_manager {
-        CURRENT_VERSION,
-        migrate,
-    }
     mobilerun.app_cards.app_card_provider ++> mobilerun.app_cards.providers.composite_provider {
         AppCardProvider,
     }
@@ -1361,9 +1318,6 @@ graph import {
     mobilerun.credential_manager.credential_manager ++> mobilerun.credential_manager.file_credential_manager {
         CredentialManager,
         CredentialNotFoundError,
-    }
-    mobilerun.config_manager.config_manager ++> mobilerun.credential_manager.file_credential_manager {
-        CredentialsConfig,
     }
     include mobilerun.app_cards.providers.composite_provider ++> mobilerun.app_cards.providers {
         CompositeAppCardProvider,
@@ -1482,7 +1436,6 @@ graph import {
     mobilerun.config_manager.auth_profile_store ++> mobilerun.cli.oauth_actions { AuthProfileStore }
     mobilerun.agent.action_result ++> mobilerun.agent.tool_registry { ActionResult }
     mobilerun.agent.utils.errors ++> mobilerun.agent.tool_registry { describe_error }
-    mobilerun.agent.common.events ++> mobilerun.agent.tool_registry { ToolExecutionEvent }
     mobilerun.agent.providers.minimax ++> mobilerun.cli.configure_wizard {
         MINIMAX_CHINA_BASE_URL,
         MINIMAX_GLOBAL_BASE_URL,
@@ -1579,27 +1532,50 @@ graph import {
         normalize_model_id_for_variant,
     }
     mobilerun.agent.usage ++> mobilerun.agent.utils.llm_picker { track_usage }
-    mobilerun.agent.utils.llm_openai_responses as adapters ++> mobilerun.agent.utils.llm_picker;
-    mobilerun.agent.utils.llm_google_genai ++> mobilerun.agent.utils.llm_picker {
-        MobilerunGoogleGenAI,
-    }
-    mobilerun.agent.utils.llm_anthropic ++> mobilerun.agent.utils.llm_picker { MobilerunAnthropic }
-    mobilerun.agent.utils.llm_deepseek ++> mobilerun.agent.utils.llm_picker { MobilerunDeepSeek }
-    mobilerun.agent.utils.oauth.openai_oauth_llm ++> mobilerun.agent.utils.llm_picker {
-        OpenAIOAuth,
-    }
-    mobilerun.agent.utils.oauth.anthropic_oauth_llm ++> mobilerun.agent.utils.llm_picker {
-        AnthropicOAuthLLM,
-    }
-    mobilerun.agent.utils.oauth.gemini_oauth_code_assist_llm ++> mobilerun.agent.utils.llm_picker {
-        GeminiOAuthCodeAssistLLM,
-    }
-    mobilerun.agent.utils.oauth.grok_oauth_llm ++> mobilerun.agent.utils.llm_picker { GrokOAuth }
     mobilerun.agent.utils.llm_picker ++> mobilerun.agent.utils.llm_loader {
         load_llm,
         load_llms_from_profiles,
     }
     mobilerun.config_manager.config_manager ++> mobilerun.agent.utils.llm_loader { MobileConfig }
+    mobilerun.agent.utils.inference ++> mobilerun.agent.oneflows.app_starter_workflow {
+        acomplete_with_retries,
+    }
+    mobilerun.agent.action_result ++> mobilerun.agent.utils.actions { ActionResult }
+    mobilerun.agent.oneflows.app_starter_workflow ++> mobilerun.agent.utils.actions { AppStarter }
+    mobilerun.agent.utils.errors ++> mobilerun.agent.utils.actions { describe_error }
+    mobilerun.tools.helpers.coordinate ++> mobilerun.agent.utils.actions {
+        NORMALIZED_MAX,
+        to_normalized,
+    }
+    mobilerun.agent.tool_registry ++> mobilerun.agent.utils.signatures { ToolRegistry }
+    mobilerun.agent.utils.actions ++> mobilerun.agent.utils.signatures {
+        click,
+        click_area,
+        click_at,
+        complete,
+        long_press,
+        long_press_at,
+        open_app,
+        open_bundle_id,
+        swipe,
+        system_button,
+        type_secret,
+        type_text,
+        type_text_direct,
+        `wait,
+    }
+    include mobilerun.agent.utils.chat_utils ++> mobilerun.agent.utils {
+        filter_empty_messages,
+        has_content,
+        limit_history,
+        to_chat_messages,
+    }
+    include mobilerun.agent.utils.prompt_resolver ++> mobilerun.agent.utils { PromptResolver }
+    include mobilerun.agent.utils.signatures ++> mobilerun.agent.utils { build_tool_registry }
+    include mobilerun.agent.utils.trajectory ++> mobilerun.agent.utils { Trajectory }
+    tests.source_text --> tests.test_android_vision_coordinate_contract { module_source }
+    tests.source_text --> tests.test_grok_oauth { module_source }
+    tests.source_text --> tests.test_visual_remote_connection { module_source }
 }
 
 graph spaces {

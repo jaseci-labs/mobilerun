@@ -107,7 +107,9 @@ impl fetch_session(auth_url: str, token: str) -> Optional[dict] {
 }
 
 impl credential_path -> Path {
-    import from mobilerun.config_manager.credential_paths { OAUTH_CREDENTIAL_DIR }
+    OAUTH_CREDENTIAL_DIR: any = importlib.import_module(
+        "mobilerun.config_manager.credential_paths"
+    ).OAUTH_CREDENTIAL_DIR;
 
     return OAUTH_CREDENTIAL_DIR / "mobilerun-cloud.json";
 }

@@ -184,8 +184,8 @@ impl MobilerunOpenAIResponses.astructured_predict(
         message_dicts: any = to_openai_message_dicts(
             messages, model=self.model, is_responses_api=True
         );
-        response: any = (await 
-            self._aclient.responses.parse(
+        response: any = (
+            await self._aclient.responses.parse(
                 model=self._responses_model,
                 input=message_dicts,
                 text_format=output_cls,
@@ -198,8 +198,8 @@ impl MobilerunOpenAIResponses.astructured_predict(
         }
         raise ValueError("Failed to produce a structured response from the model.");
     }
-    return (await 
-        super.astructured_predict(
+    return (
+        await super.astructured_predict(
             output_cls,
             prompt,
             llm_kwargs=self._sanitize_structured_call_kwargs(`dict(llm_kwargs or {})),

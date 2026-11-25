@@ -147,7 +147,7 @@ class FastAgent(Workflow):
         **kwargs,
     ):
         assert llm, "llm must be provided."
-        Workflow.__init__(self, *args, **kwargs)
+        getattr(Workflow, "__init__")(self, *args, **kwargs)
 
         self.llm = llm
         self.agent_config = agent_config
