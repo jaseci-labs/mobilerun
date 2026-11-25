@@ -206,8 +206,8 @@ class UIState {
         return indices;
     }
 
-    static def _collect_all(elements: List[Dict[str, Any]]) -> List[Dict[str, Any]] {
-        result: List[Dict[str, Any]] = [];
+    static def _collect_all(elements: List[Dict[str, Any]]) -> list[any] {
+        result: list[any] = [];
         for item in elements {
             result.append(item);
             result.extend(UIState._collect_all(item.get("children") or []));

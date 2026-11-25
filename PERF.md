@@ -143,6 +143,10 @@ The changes, in commit order:
   came after the frozen `jac after` snapshot, so the table doesn't include it. Five alternating
   runs afterwards gave `search` 465–690 ms against the original's 260–307 ms, with the same digest.
 
+- **`UIState._collect_all`** returns a `list[any]` built in a `list[any]`, so its append and
+  extend are no longer `held` calls (they were typed `typing.List`). Seven alternating runs at
+  load 12 gave `ui` 279 → 264 ms median, against the original's 202 ms, with the same digest.
+
 What is left of the gap is `held` on reads of the JSON nodes themselves. An accessibility node
 is a dict whose values are of mixed types, so it is `any` by nature. Typing it means converting
 it, which costs more than the `held`s it saves (see blocker 2).
