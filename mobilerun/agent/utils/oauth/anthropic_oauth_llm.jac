@@ -28,8 +28,6 @@ import weakref;
 
 import webbrowser;
 
-import from http.server { BaseHTTPRequestHandler }
-
 import from http.server { ThreadingHTTPServer as HTTPServer }
 
 import from pathlib { Path }

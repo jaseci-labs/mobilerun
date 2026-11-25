@@ -28,8 +28,6 @@ import webbrowser;
 
 import from collections.abc { Mapping }
 
-import from http.server { BaseHTTPRequestHandler }
-
 import from http.server { ThreadingHTTPServer as HTTPServer }
 
 import from pathlib { Path }

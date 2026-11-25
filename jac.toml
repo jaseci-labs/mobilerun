@@ -198,6 +198,7 @@ files = [
     "mobilerun/agent/utils/oauth/gemini_oauth_code_assist_llm.jac",
     "mobilerun/agent/utils/oauth/grok_oauth_llm.jac",
     "mobilerun/agent/utils/oauth/login_timeout.jac",
+    "mobilerun/agent/utils/oauth/loopback.jac",
     "mobilerun/agent/utils/oauth/openai_oauth_llm.jac",
     "mobilerun/agent/utils/portal_setup.jac",
     "mobilerun/agent/utils/prompt_resolver.jac",

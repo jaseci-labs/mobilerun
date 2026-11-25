@@ -26,15 +26,13 @@ import webbrowser;
 
 import from dataclasses { dataclass }
 
-import from http.server { BaseHTTPRequestHandler }
-
 import from http.server { ThreadingHTTPServer as HTTPServer }
 
 import from pathlib { Path }
 
 import from typing { Any, ClassVar, Dict, Literal, Optional }
 
-import from urllib.parse { parse_qs, urlencode, urlparse }
+import from urllib.parse { urlencode }
 
 import httpx;
 

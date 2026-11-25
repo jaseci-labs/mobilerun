@@ -1530,6 +1530,15 @@ graph import {
     mobilerun.telemetry ++> mobilerun.cli.main { print_telemetry_message }
     mobilerun.cli.main ++> mobilerun.__main__ { cli }
     include mobilerun.cli.main ++> mobilerun.cli { cli }
+    mobilerun.agent.utils.oauth.loopback ++> mobilerun.agent.utils.oauth.anthropic_oauth_llm {
+        LoopbackCallback,
+    }
+    mobilerun.agent.utils.oauth.loopback ++> mobilerun.agent.utils.oauth.gemini_oauth_code_assist_llm {
+        LoopbackCallback,
+    }
+    mobilerun.agent.utils.oauth.loopback ++> mobilerun.agent.utils.oauth.openai_oauth_llm {
+        LoopbackCallback,
+    }
 }
 
 graph spaces {

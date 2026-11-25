@@ -400,7 +400,6 @@ impl AnthropicOAuthLLM.login(
     expires_in: Optional[builtins.int] = None,
     deadline: OAuthLoginDeadline | None = None,
 ) -> builtins.str {
-    result: Dict[builtins.str, Optional[builtins.str]];
     active_deadline: any = deadline or OAuthLoginDeadline(timeout_seconds);
     active_deadline.check();
     use_headless: any = _is_headless_environment()
@@ -418,9 +417,6 @@ impl AnthropicOAuthLLM.login(
             deadline=active_deadline,
         );
     }
-    result = {"code": None, "state": None, "error": None};
-    done = threading.Event();
-    callback_lock = threading.Lock();
 
     (code_verifier, code_challenge) = _pkce_pair() as any;
     state: any = _b64_no_pad(secrets.token_bytes(32));
@@ -430,50 +426,8 @@ impl AnthropicOAuthLLM.login(
         self.authorize_url = DEFAULT_MODERN_AUTHORIZE_URL;
     }
 
-    class _OAuthHandler(BaseHTTPRequestHandler) {
-        def do_GET -> None {
-            parsed: any = urlparse(self.path);
-            if parsed.path != callback_path {
-                self.send_response(404);
-                self.end_headers();
-                return;
-            }
-
-            with callback_lock {
-                if done.is_set() {
-                    self.send_response(409);
-                    self.end_headers();
-                    return;
-                }
-                params: any = parse_qs(parsed.query);
-                result["code"] = params.get("code", [None])[0];
-                result["state"] = params.get("state", [None])[0];
-                result["error"] = params.get("error", [None])[0];
-                ok: any = result["code"] is not None and result["error"] is None;
-                done.set();
-            }
-            self.send_response(200 if ok else 400);
-            self.send_header("Content-Type", "text/html; charset=utf-8");
-            self.end_headers();
-            if ok {
-                self.wfile.write(
-                    b"<html><body><h3>Login complete. You can close this tab.</h3></body></html>"
-                );
-            } else {
-                self.wfile.write(
-                    b"<html><body><h3>Login failed. Return to your terminal.</h3></body></html>"
-                );
-            }
-        }
-
-        def log_message(format: builtins.str, *args_: Any) -> None {
-            args: any = tuple(args_);
-            return;
-        }
-    }
-
     try {
-        httpd: any = HTTPServer((callback_host, callback_port), _OAuthHandler);
+        callback: any = LoopbackCallback(callback_host, callback_port, callback_path, HTTPServer);
     } except OSError as exc {
         self.authorize_url = original_authorize_url;
         print(
@@ -488,15 +442,12 @@ impl AnthropicOAuthLLM.login(
     }
 
     active_deadline.check();
-    actual_port: any = httpd.server_address[1];
-    redirect_uri: any = f"http://localhost:{actual_port}{callback_path}";
+    redirect_uri: any = f"http://localhost:{callback.port()}{callback_path}";
     auth_url: any = self._build_auth_url(
         redirect_uri=redirect_uri, code_challenge=code_challenge, state=state
     );
 
-    server_thread: any = threading.Thread(target=httpd.serve_forever, daemon=True);
-    httpd.daemon_threads = True;
-    server_thread.start();
+    callback.serve();
 
     try {
         print(f"Open this URL to login:\n{auth_url}\n");
@@ -504,23 +455,12 @@ impl AnthropicOAuthLLM.login(
             open_browser_async(auth_url, webbrowser.open);
         }
 
-        if not done.wait(timeout=active_deadline.remaining()) {
-            raise TimeoutError("OAuth login timed out before callback was received.");
-        }
-        active_deadline.check();
-
-        if result["error"] {
-            raise RuntimeError("OAuth callback returned error: " + format(result["error"], ""));
-        }
-        if result["state"] != state {
-            raise RuntimeError("OAuth callback state mismatch.");
-        }
-        if not result["code"] {
-            raise RuntimeError("OAuth callback did not include an authorization code.");
-        }
+        code: any = callback.code(
+            active_deadline, state, "OAuth login timed out before callback was received."
+        );
 
         access_token: any = self._exchange_authorization_code(
-            code=result["code"],
+            code=code,
             redirect_uri=redirect_uri,
             code_verifier=code_verifier,
             state=state,
@@ -529,8 +469,7 @@ impl AnthropicOAuthLLM.login(
         );
     } finally {
         self.authorize_url = original_authorize_url;
-        httpd.shutdown();
-        httpd.server_close();
+        callback.close();
     }
     return access_token;
 }
