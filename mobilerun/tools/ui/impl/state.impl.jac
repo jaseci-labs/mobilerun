@@ -31,6 +31,11 @@ impl UIState.get_element(index: int) -> Optional[Dict[str, Any]] {
 }
 
 impl UIState.get_element_coords(index: int) -> Tuple[int, int] {
+    (element, left, top, right, bottom) = self._tappable_bounds(index);
+    return self._avoid_tap_blockers(element, ((left + right) // 2, (top + bottom) // 2));
+}
+
+impl UIState._tappable_bounds(index: int) -> tuple[any, int, int, int, int] {
     element: any = self._find_by_index(self.elements, index);
 
     if element is None {
@@ -60,7 +65,7 @@ impl UIState.get_element_coords(index: int) -> Tuple[int, int] {
         ) from e;
     }
 
-    return self._avoid_tap_blockers(element, ((left + right) // 2, (top + bottom) // 2));
+    return (element, left, top, right, bottom);
 }
 
 impl UIState._avoid_tap_blockers(

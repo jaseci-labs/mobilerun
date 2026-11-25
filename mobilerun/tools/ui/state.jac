@@ -40,6 +40,8 @@ class UIState {
 
     def get_element_coords(index: int) -> Tuple[int, int];
 
+    def _tappable_bounds(index: int) -> tuple[any, int, int, int, int];
+
     def _avoid_tap_blockers(element: Dict[str, Any], point: Tuple[int, int]) -> Tuple[int, int];
 
     def get_element_info(index: int) -> Dict[str, Any];

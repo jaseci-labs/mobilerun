@@ -1,32 +1,5 @@
 impl StealthUIState.get_element_coords(index: int) -> Tuple[int, int] {
-    element: any = self._find_by_index(self.elements, index);
-
-    if element is None {
-        indices: any = sorted(self._collect_indices(self.elements));
-        indices_str: any = ", ".join(`str(i) for i in indices[:20]);
-        if len(indices) > 20 {
-            indices_str += f"... and {len(indices) - 20} more";
-        }
-        raise ValueError(f"No element found with index {index}. Available indices: {indices_str}");
-    }
-
-    bounds_str: any = element.get("bounds");
-    if not bounds_str {
-        text: any = element.get("text", "No text");
-        cls: any = element.get("className", "Unknown class");
-        etype: any = element.get("type", "unknown");
-        raise ValueError(
-            f"Element with index {index} ('{text}', {cls}, type: {etype}) has no bounds and cannot be tapped",
-        );
-    }
-
-    try {
-        (left, top, right, bottom) = map(int, bounds_str.split(",")) as any;
-    } except ValueError as e {
-        raise ValueError(
-            f"Invalid bounds format for element with index {index}: {bounds_str}"
-        ) from e;
-    }
+    (element, left, top, right, bottom) = self._tappable_bounds(index);
 
     center_x: any = (left + right) // 2;
     center_y: any = (top + bottom) // 2;
