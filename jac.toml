@@ -1,0 +1,338 @@
+[pypi."."]
+[pypi.".".project]
+name = "mobilerun"
+version = "0.7.4"
+description = "A framework for controlling mobile devices through LLM agents"
+authors = [{ name = "Niels Schmidt", email = "niels@droidrun.ai" }]
+dependencies = [
+    "async_adbutils",
+    "llama-index==0.14.23",
+    "posthog>=6.7.6",
+    "pydantic>=2.11.10",
+    "rich>=14.1.0",
+    "InquirerPy>=0.3.4",
+    "opentelemetry-exporter-otlp-proto-http>=1.40.0",
+    "opentelemetry-sdk>=1.40.0",
+    "httpx>=0.27.0",
+    "filelock>=3.20.0",
+    "PyJWT[crypto]>=2.14.0",
+    "llama-index-callbacks-arize-phoenix>=0.6.1",
+    "llama-index-workflows>=2.16.0,<3.0.0",
+    "aiofiles>=25.1.0",
+    "mcp>=1.28.1,<2.0.0",
+    "llama-index-llms-openai==0.7.10",
+    "llama-index-llms-openai-like==0.7.2",
+    "llama-index-llms-google-genai>=0.8.5",
+    "llama-index-llms-ollama>=0.7.2",
+    "llama-index-llms-openrouter>=0.4.2",
+    "mobilerun-sdk>=3.2.0",
+    "mobilerun-core-local[cloud]>=0.6.3",
+    # Security floors also protect installations from the published wheel.
+    "aiohttp>=3.14.4",
+    "anyio>=4.14.2",
+    "certifi>=2026.10.19",
+    "fsspec>=2026.6.0",
+    "Pillow>=13.0.0",
+    "urllib3>=2.8.0",
+]
+requires-python = ">=3.11,<3.14"
+readme = "README.md"
+license = { text = "MIT" }
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Communications :: Chat",
+    "Topic :: Software Development :: Testing :: Acceptance",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: System :: Emulators",
+    "Topic :: Utilities",
+]
+
+[pypi.".".project.urls]
+Homepage = "https://github.com/droidrun/mobilerun"
+"Bug Tracker" = "https://github.com/droidrun/mobilerun/issues"
+Documentation = "https://docs.mobilerun.ai/"
+
+[pypi.".".project.optional-dependencies]
+anthropic = [
+    "anthropic>=0.67.0,<2",
+    "llama-index-llms-anthropic>=0.8.6,<0.9.0",
+]
+deepseek = []
+dev = [
+    "black==26.10.1",
+    "ruff>=0.13.0",
+    "mypy>=1.0.0",
+    "pytest>=8.0.0",
+    "bandit>=1.8.6",
+    "safety>=3.2.11",
+    "mobilerun[langfuse]",
+]
+langfuse = [
+    "langfuse==4.15.1",
+    "openinference-instrumentation-llama-index>=3.0.0",
+    "llama-index-instrumentation"
+]
+
+[pypi.".".build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[pypi.".".tool.hatch.metadata]
+allow-direct-references = true
+
+[pypi.".".tool.hatch.build.targets.wheel]
+packages = ["mobilerun"]
+
+[pypi.".".project.scripts]
+mobilerun = "mobilerun.cli.main:cli"
+
+[pypi.".".tool.uv]
+override-dependencies = ["filelock>=4.2.1"]
+
+[pypi.".".tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[pypi.".".tool.pytest.ini_options]
+pythonpath = ["."]
+
+[pypi.".".tool.ruff.lint]
+select = [
+    "E", # pycodestyle errors
+    "W", # pycodestyle warnings
+    "F", # pyflakes
+    "I", # isort
+    "B", # flake8-bugbear
+]
+ignore = ["E501"]
+
+[pypi.".".dependency-groups]
+dev = [
+    "anthropic>=0.67.0,<2",
+    "bandit>=1.8.6",
+    "llama-index-callbacks-arize-phoenix>=0.6.1",
+    "llama-index-llms-anthropic>=0.8.6,<0.9.0",
+    "pytest>=8.0.0",
+    "ruff>=0.13.0",
+    "safety>=3.2.11",
+]
+
+[test.pypi."."]
+command = ["pytest", "--import-mode=append"]
+groups = ["dev"]
+
+[install.pypi."."]
+groups = ["dev"]
+
+[project]
+exclude = ["compat"]
+
+[wheel."."]
+files = [
+    "mobilerun/__init__.py",
+    "mobilerun/__main__.py",
+    "mobilerun/agent/__init__.py",
+    "mobilerun/agent/action_context.py",
+    "mobilerun/agent/action_result.py",
+    "mobilerun/agent/common/__init__.py",
+    "mobilerun/agent/common/constants.py",
+    "mobilerun/agent/common/events.py",
+    "mobilerun/agent/droid/__init__.py",
+    "mobilerun/agent/droid/droid_agent.py",
+    "mobilerun/agent/droid/events.py",
+    "mobilerun/agent/droid/state.py",
+    "mobilerun/agent/executor/__init__.py",
+    "mobilerun/agent/executor/events.py",
+    "mobilerun/agent/executor/executor_agent.py",
+    "mobilerun/agent/executor/prompts.py",
+    "mobilerun/agent/external/README.md",
+    "mobilerun/agent/external/__init__.py",
+    "mobilerun/agent/fast_agent/__init__.py",
+    "mobilerun/agent/fast_agent/events.py",
+    "mobilerun/agent/fast_agent/fast_agent.py",
+    "mobilerun/agent/fast_agent/native_tools.py",
+    "mobilerun/agent/fast_agent/xml_parser.py",
+    "mobilerun/agent/manager/__init__.py",
+    "mobilerun/agent/manager/events.py",
+    "mobilerun/agent/manager/manager_agent.py",
+    "mobilerun/agent/manager/prompts.py",
+    "mobilerun/agent/manager/stateless_manager_agent.py",
+    "mobilerun/agent/oneflows/__init__.py",
+    "mobilerun/agent/oneflows/app_starter_workflow.py",
+    "mobilerun/agent/oneflows/structured_output_agent.py",
+    "mobilerun/agent/providers/__init__.py",
+    "mobilerun/agent/providers/anthropic.py",
+    "mobilerun/agent/providers/grok.py",
+    "mobilerun/agent/providers/minimax.py",
+    "mobilerun/agent/providers/registry.py",
+    "mobilerun/agent/providers/setup_service.py",
+    "mobilerun/agent/providers/types.py",
+    "mobilerun/agent/tool_registry.py",
+    "mobilerun/agent/trajectory/__init__.py",
+    "mobilerun/agent/trajectory/writer.py",
+    "mobilerun/agent/usage.py",
+    "mobilerun/agent/utils/__init__.py",
+    "mobilerun/agent/utils/actions.py",
+    "mobilerun/agent/utils/android_device.py",
+    "mobilerun/agent/utils/chat_utils.py",
+    "mobilerun/agent/utils/errors.py",
+    "mobilerun/agent/utils/inference.py",
+    "mobilerun/agent/utils/llm_loader.py",
+    "mobilerun/agent/utils/llm_picker.py",
+    "mobilerun/agent/utils/oauth/anthropic_oauth_llm.py",
+    "mobilerun/agent/utils/oauth/gemini_oauth_code_assist_llm.py",
+    "mobilerun/agent/utils/oauth/grok_oauth_llm.py",
+    "mobilerun/agent/utils/oauth/login_timeout.py",
+    "mobilerun/agent/utils/oauth/openai_oauth_llm.py",
+    "mobilerun/agent/utils/portal_setup.py",
+    "mobilerun/agent/utils/prompt_resolver.py",
+    "mobilerun/agent/utils/signatures.py",
+    "mobilerun/agent/utils/tracing_setup.py",
+    "mobilerun/agent/utils/trajectory.py",
+    "mobilerun/agent/utils/vision_sizing.py",
+    "mobilerun/app_cards/__init__.py",
+    "mobilerun/app_cards/app_card_provider.py",
+    "mobilerun/app_cards/providers/__init__.py",
+    "mobilerun/app_cards/providers/composite_provider.py",
+    "mobilerun/app_cards/providers/local_provider.py",
+    "mobilerun/app_cards/providers/server_provider.py",
+    "mobilerun/cli/__init__.py",
+    "mobilerun/cli/configure_prompts.py",
+    "mobilerun/cli/configure_wizard.py",
+    "mobilerun/cli/device_commands.py",
+    "mobilerun/cli/deviceauth.py",
+    "mobilerun/cli/doctor.py",
+    "mobilerun/cli/event_handler.py",
+    "mobilerun/cli/logs.py",
+    "mobilerun/cli/main.py",
+    "mobilerun/cli/oauth_actions.py",
+    "mobilerun/config/app_cards/README.md",
+    "mobilerun/config/app_cards/android/app_cards.json",
+    "mobilerun/config/app_cards/android/gmail.md",
+    "mobilerun/config/app_cards/ios/app_cards.json",
+    "mobilerun/config/credentials_example.yaml",
+    "mobilerun/config/prompts/executor/rev1.jinja2",
+    "mobilerun/config/prompts/executor/system.jinja2",
+    "mobilerun/config/prompts/fast_agent/system.jinja2",
+    "mobilerun/config/prompts/fast_agent/user.jinja2",
+    "mobilerun/config/prompts/manager/rev1.jinja2",
+    "mobilerun/config/prompts/manager/stateless.jinja2",
+    "mobilerun/config/prompts/manager/system.jinja2",
+    "mobilerun/config/prompts/manager/trained.jinja2",
+    "mobilerun/config_example.yaml",
+    "mobilerun/config_manager/__init__.py",
+    "mobilerun/config_manager/auth_profile_store.py",
+    "mobilerun/config_manager/config_manager.py",
+    "mobilerun/config_manager/credential_paths.py",
+    "mobilerun/config_manager/env_keys.py",
+    "mobilerun/config_manager/loader.py",
+    "mobilerun/config_manager/migrations/__init__.py",
+    "mobilerun/config_manager/migrations/v002_add_code_exec.py",
+    "mobilerun/config_manager/migrations/v003_add_auto_setup.py",
+    "mobilerun/config_manager/migrations/v004_remove_deprecated_agents.py",
+    "mobilerun/config_manager/migrations/v005_remove_external_agents.py",
+    "mobilerun/config_manager/migrations/v006_disabled_tools_default_sentinel.py",
+    "mobilerun/config_manager/migrations/v007_manager_prompt_auto.py",
+    "mobilerun/config_manager/path_resolver.py",
+    "mobilerun/config_manager/prompt_loader.py",
+    "mobilerun/credential_manager/__init__.py",
+    "mobilerun/credential_manager/credential_manager.py",
+    "mobilerun/credential_manager/file_credential_manager.py",
+    "mobilerun/log_handlers.py",
+    "mobilerun/macro/__init__.py",
+    "mobilerun/macro/__main__.py",
+    "mobilerun/macro/cli.py",
+    "mobilerun/macro/handoff.py",
+    "mobilerun/macro/matcher.py",
+    "mobilerun/macro/recorder.py",
+    "mobilerun/macro/replay.py",
+    "mobilerun/macro/state.py",
+    "mobilerun/mcp/__init__.py",
+    "mobilerun/mcp/adapter.py",
+    "mobilerun/mcp/client.py",
+    "mobilerun/mcp/config.py",
+    "mobilerun/telemetry/__init__.py",
+    "mobilerun/telemetry/events.py",
+    "mobilerun/telemetry/langfuse_processor.py",
+    "mobilerun/telemetry/phoenix.py",
+    "mobilerun/telemetry/tracker.py",
+    "mobilerun/tools/__init__.py",
+    "mobilerun/tools/driver/__init__.py",
+    "mobilerun/tools/filters/__init__.py",
+    "mobilerun/tools/filters/base.py",
+    "mobilerun/tools/filters/concise_filter.py",
+    "mobilerun/tools/filters/detailed_filter.py",
+    "mobilerun/tools/formatters/__init__.py",
+    "mobilerun/tools/formatters/base.py",
+    "mobilerun/tools/formatters/indexed_formatter.py",
+    "mobilerun/tools/helpers/__init__.py",
+    "mobilerun/tools/helpers/coordinate.py",
+    "mobilerun/tools/helpers/element_search.py",
+    "mobilerun/tools/helpers/geometry.py",
+    "mobilerun/tools/helpers/images.py",
+    "mobilerun/tools/ios/__init__.py",
+    "mobilerun/tools/ui/__init__.py",
+    "mobilerun/tools/ui/ios_provider.py",
+    "mobilerun/tools/ui/provider.py",
+    "mobilerun/tools/ui/screenshot_provider.py",
+    "mobilerun/tools/ui/state.py",
+    "mobilerun/tools/ui/stealth_state.py",
+]
+
+[wheel.".".metadata]
+License-File = "LICENSE"
+Requires-Dist = [
+    "aiofiles>=25.1.0",
+    "aiohttp>=3.14.4",
+    "anyio>=4.14.2",
+    "async-adbutils",
+    "certifi>=2026.10.19",
+    "filelock>=3.20.0",
+    "fsspec>=2026.6.0",
+    "httpx>=0.27.0",
+    "inquirerpy>=0.3.4",
+    "llama-index-callbacks-arize-phoenix>=0.6.1",
+    "llama-index-llms-google-genai>=0.8.5",
+    "llama-index-llms-ollama>=0.7.2",
+    "llama-index-llms-openai-like==0.7.2",
+    "llama-index-llms-openai==0.7.10",
+    "llama-index-llms-openrouter>=0.4.2",
+    "llama-index-workflows<3.0.0,>=2.16.0",
+    "llama-index==0.14.23",
+    "mcp<2.0.0,>=1.28.1",
+    "mobilerun-core-local[cloud]>=0.6.3",
+    "mobilerun-sdk>=3.2.0",
+    "opentelemetry-exporter-otlp-proto-http>=1.40.0",
+    "opentelemetry-sdk>=1.40.0",
+    "pillow>=13.0.0",
+    "posthog>=6.7.6",
+    "pydantic>=2.11.10",
+    "pyjwt[crypto]>=2.14.0",
+    "rich>=14.1.0",
+    "urllib3>=2.8.0",
+    "anthropic<2,>=0.67.0; extra == 'anthropic'",
+    "llama-index-llms-anthropic<0.9.0,>=0.8.6; extra == 'anthropic'",
+    "bandit>=1.8.6; extra == 'dev'",
+    "black==26.10.1; extra == 'dev'",
+    "langfuse==4.15.1; extra == 'dev'",
+    "llama-index-instrumentation; extra == 'dev'",
+    "mypy>=1.0.0; extra == 'dev'",
+    "openinference-instrumentation-llama-index>=3.0.0; extra == 'dev'",
+    "pytest>=8.0.0; extra == 'dev'",
+    "ruff>=0.13.0; extra == 'dev'",
+    "safety>=3.2.11; extra == 'dev'",
+    "langfuse==4.15.1; extra == 'langfuse'",
+    "llama-index-instrumentation; extra == 'langfuse'",
+    "openinference-instrumentation-llama-index>=3.0.0; extra == 'langfuse'",
+]
