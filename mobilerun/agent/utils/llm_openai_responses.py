@@ -10,13 +10,28 @@ from mobilerun.agent.providers.registry import OPENAI_REASONING_EFFORTS
 from mobilerun.agent.providers.grok import sanitize_grok_responses_kwargs
 from llama_index.llms.openai.responses import OpenAIResponses
 from llama_index.llms.openai.utils import to_openai_message_dicts
-from mobilerun.agent.utils.llm_picker import (
-    OPENAI_ASTRA_MODEL,
-    OPENAI_GPT6_UNSUPPORTED_INCLUDE,
-    OPENAI_GPT6_UNSUPPORTED_PARAMS,
-    OPENAI_RESPONSES_UNSUPPORTED_SAMPLING_PARAMS,
-    _openai_responses_model_omits_sampling_params,
-)
+
+
+OPENAI_RESPONSES_MODELS_WITHOUT_SAMPLING_PARAMS = {
+    "gpt-6-astra",
+    "gpt-6.1-sol",
+    "gpt-6-sol",
+    "gpt-6-luna",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "gpt-5.4",
+    "gpt-5.4-mini",
+    "gpt-5.4-nano",
+}
+OPENAI_RESPONSES_UNSUPPORTED_SAMPLING_PARAMS = {"temperature", "top_p"}
+OPENAI_ASTRA_MODEL = "gpt-6-astra"
+OPENAI_GPT6_UNSUPPORTED_PARAMS = {"logprobs", "top_logprobs"}
+OPENAI_GPT6_UNSUPPORTED_INCLUDE = "message.output_text.logprobs"
+
+
+def _openai_responses_model_omits_sampling_params(model: object) -> bool:
+    return str(model or "").strip() in OPENAI_RESPONSES_MODELS_WITHOUT_SAMPLING_PARAMS
 
 
 class MobilerunOpenAIResponses(OpenAIResponses):

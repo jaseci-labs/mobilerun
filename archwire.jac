@@ -1500,13 +1500,6 @@ graph import {
     mobilerun.agent.providers.grok --> mobilerun.agent.utils.llm_openai_responses {
         sanitize_grok_responses_kwargs,
     }
-    mobilerun.agent.utils.llm_picker --> mobilerun.agent.utils.llm_openai_responses {
-        OPENAI_ASTRA_MODEL,
-        OPENAI_GPT6_UNSUPPORTED_INCLUDE,
-        OPENAI_GPT6_UNSUPPORTED_PARAMS,
-        OPENAI_RESPONSES_UNSUPPORTED_SAMPLING_PARAMS,
-        _openai_responses_model_omits_sampling_params,
-    }
     mobilerun.tools.helpers.coordinate ++> mobilerun.tools.ui.provider { NORMALIZED_STATE_NOTE }
     mobilerun.tools.helpers.images ++> mobilerun.tools.ui.provider {
         fit_dimensions_to_max_side,

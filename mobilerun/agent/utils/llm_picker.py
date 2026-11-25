@@ -99,22 +99,6 @@ GEMINI_OAUTH_UNSUPPORTED_MODELS = {
     "gemini-3-flash-preview",
     "gemini-3.1-pro-preview",
 }
-OPENAI_RESPONSES_MODELS_WITHOUT_SAMPLING_PARAMS = {
-    "gpt-6-astra",
-    "gpt-6.1-sol",
-    "gpt-6-sol",
-    "gpt-6-luna",
-    "gpt-5.6-sol",
-    "gpt-5.6-terra",
-    "gpt-5.6-luna",
-    "gpt-5.4",
-    "gpt-5.4-mini",
-    "gpt-5.4-nano",
-}
-OPENAI_RESPONSES_UNSUPPORTED_SAMPLING_PARAMS = {"temperature", "top_p"}
-OPENAI_ASTRA_MODEL = "gpt-6-astra"
-OPENAI_GPT6_UNSUPPORTED_PARAMS = {"logprobs", "top_logprobs"}
-OPENAI_GPT6_UNSUPPORTED_INCLUDE = "message.output_text.logprobs"
 DEEPSEEK_DEFAULT_MODEL = "deepseek-flash"
 DEEPSEEK_CONTEXT_WINDOW = 1_048_576
 DEEPSEEK_FUNCTION_CALLING_MODELS = {"deepseek-flash", "deepseek-v4-pro"}
@@ -125,10 +109,6 @@ def normalize_provider_name(provider_name: str) -> str:
     stripped = provider_name.strip()
     key = stripped.lower()
     return PROVIDER_ALIASES.get(key, stripped)
-
-
-def _openai_responses_model_omits_sampling_params(model: object) -> bool:
-    return str(model or "").strip() in OPENAI_RESPONSES_MODELS_WITHOUT_SAMPLING_PARAMS
 
 
 def _validate_openai_oauth_model(model: object) -> None:
