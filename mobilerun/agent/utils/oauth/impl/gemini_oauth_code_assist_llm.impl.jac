@@ -496,7 +496,6 @@ impl GeminiOAuthCodeAssistLLM.login_headless(
     deadline: OAuthLoginDeadline | None = None,
     persist_credentials: builtins.bool = True,
 ) -> builtins.str {
-    input_queue: queue.Queue[Optional[builtins.str]];
     active_deadline: any = deadline or OAuthLoginDeadline(timeout_seconds);
     active_deadline.check();
 
@@ -518,78 +517,14 @@ impl GeminiOAuthCodeAssistLLM.login_headless(
         open_browser_async(auth_url, webbrowser.open);
     }
 
-    input_queue = queue.Queue();
-    stop = threading.Event();
-    need_more = threading.Event();
-
-    def _reader -> None {
-        for _ in range(_MAX_CODE_ATTEMPTS) {
-            need_more.wait();
-            need_more.clear();
-            if stop.is_set() {
-                return;
-            }
-            try {
-                input_queue.put(`str(input_fn("Enter the authorization code: ")));
-            } except (EOFError, OSError) {
-                input_queue.put(None);
-                return;
-            }
-        }
-    }
-
-    threading.Thread(target=_reader, daemon=True).start();
-
-    try {
-        for attempt in range(_MAX_CODE_ATTEMPTS) {
-            need_more.set();
-
-            try {
-                raw: any = input_queue.get(timeout=active_deadline.remaining());
-            } except queue.Empty {
-                raise TimeoutError("OAuth login timed out.") from None;
-            }
-            active_deadline.check();
-
-            if raw is None {
-                raise RuntimeError("Login failed — stdin closed.");
-            }
-            if not raw.strip() {
-                if attempt == 0 {
-                    print("No code entered. Try again.");
-                    continue;
-                }
-                raise RuntimeError("Login failed.") from None;
-            }
-            try {
-                code: any = _normalize_manual_code(raw, expected_state);
-            } except Exception {
-                if attempt == 0 {
-                    print("Invalid code. Try again.");
-                    continue;
-                }
-                raise RuntimeError("Login failed.") from None;
-            }
-            if code {
-                return self._exchange_authorization_code(
-                    code,
-                    redirect_uri,
-                    code_verifier=code_verifier,
-                    deadline=active_deadline,
-                    persist_credentials=persist_credentials,
-                );
-            }
-            if attempt == 0 {
-                print("Invalid code. Try again.");
-                continue;
-            }
-            raise RuntimeError("Login failed.");
-        }
-        raise RuntimeError("Login failed.");
-    } finally {
-        stop.set();
-        need_more.set();
-    }
+    code: any = read_manual_code(input_fn, expected_state, active_deadline, _MAX_CODE_ATTEMPTS);
+    return self._exchange_authorization_code(
+        code,
+        redirect_uri,
+        code_verifier=code_verifier,
+        deadline=active_deadline,
+        persist_credentials=persist_credentials,
+    );
 }
 
 impl GeminiOAuthCodeAssistLLM._resolve_access_token -> builtins.str {

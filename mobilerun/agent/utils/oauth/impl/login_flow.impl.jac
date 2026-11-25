@@ -121,3 +121,72 @@ impl _CallbackHandler.do_GET -> None {
 }
 
 impl _CallbackHandler.log_message(format: builtins.str, *args: Any) -> None {}
+
+impl read_manual_code(input_fn: Any, state: str, deadline: Any, max_attempts: int) -> str {
+    input_queue: Any = queue.Queue();
+    stop = threading.Event();
+    need_more = threading.Event();
+
+    def _reader -> None {
+        for _ in range(max_attempts) {
+            need_more.wait();
+            need_more.clear();
+            if stop.is_set() {
+                return;
+            }
+            try {
+                input_queue.put(`str(input_fn("Enter the authorization code: ")));
+            } except (EOFError, OSError) {
+                input_queue.put(None);
+                return;
+            }
+        }
+    }
+
+    threading.Thread(target=_reader, daemon=True).start();
+
+    try {
+        for attempt in range(max_attempts) {
+            need_more.set();
+
+            try {
+                raw: any = input_queue.get(timeout=deadline.remaining());
+            } except queue.Empty {
+                raise TimeoutError("OAuth login timed out.") from None;
+            }
+            deadline.check();
+
+            if raw is None {
+                raise RuntimeError("Login failed — stdin closed.");
+            }
+            if not raw.strip() {
+                if attempt == 0 {
+                    print("No code entered. Try again.");
+                    continue;
+                }
+                raise RuntimeError("Login failed.") from None;
+            }
+            try {
+                code: any = normalize_manual_code(raw, state);
+            } except Exception {
+                if attempt == 0 {
+                    print("Invalid code. Try again.");
+                    continue;
+                }
+                raise RuntimeError("Login failed.") from None;
+            }
+            if code {
+                return code;
+            }
+            if attempt == 0 {
+                print("Invalid code. Try again.");
+                continue;
+            }
+            raise RuntimeError("Login failed.");
+        }
+        raise RuntimeError("Login failed.");
+    } finally {
+        stop.set();
+        need_more.set();
+    }
+}

@@ -1,5 +1,7 @@
 import base64;
 
+import queue;
+
 import builtins;
 
 import hashlib;
@@ -19,6 +21,9 @@ def b64_no_pad(raw: bytes) -> str;
 def pkce_pair -> tuple[str, str];
 
 def normalize_manual_code(raw: str, expected_state: str) -> str;
+
+"""Read an authorization code from the user, allowing one retry, within the deadline."""
+def read_manual_code(input_fn: Any, state: str, deadline: Any, max_attempts: int) -> str;
 
 """One OAuth redirect, received by a loopback HTTP server on its own thread."""
 class LoopbackCallback {
