@@ -6,6 +6,12 @@ import from typing { Any, Callable, Dict, List, Tuple }
 
 glob ElementFilter: any = Callable[[List[Dict[str, Any]]], List[Dict[str, Any]]];
 
+glob _EDGES: tuple[str, str, str, str] = ("left", "top", "right", "bottom");
+
+glob _TOP_LEFT: tuple[str, str] = ("top", "left");
+
+glob _ZEROS: tuple[int, int, int, int] = (0, 0, 0, 0);
+
 def flatten_tree(`root: Dict[builtins.str, Any]) -> list[any] {
     results: list[any] = [`root];
     for child in `root.get("children") or [] {
@@ -15,11 +21,8 @@ def flatten_tree(`root: Dict[builtins.str, Any]) -> list[any] {
 }
 
 def get_element_center(`node: Dict[builtins.str, Any]) -> Tuple[builtins.int, builtins.int] {
-    bounds: any = `node.get("boundsInScreen", {});
-    left: any = bounds.get("left", 0);
-    top: any = bounds.get("top", 0);
-    right: any = bounds.get("right", 0);
-    bottom: any = bounds.get("bottom", 0);
+    # One dynamic read of bounds.get, not four.
+    (left, top, right, bottom) = map(`node.get("boundsInScreen", {}).get, _EDGES, _ZEROS) as any;
 
     center_x: any = (left + right) // 2;
     center_y: any = (top + bottom) // 2;
@@ -29,10 +32,7 @@ def get_element_center(`node: Dict[builtins.str, Any]) -> Tuple[builtins.int, bu
 
 def sort_by_position(nodes: List[Dict[builtins.str, Any]]) -> List[Dict[builtins.str, Any]] {
     def get_sort_key(`node: Dict) -> Tuple[builtins.int, builtins.int] {
-        bounds: any = `node.get("boundsInScreen", {});
-        top: any = bounds.get("top", 0);
-        left: any = bounds.get("left", 0);
-        return (top, left);
+        return `tuple(map(`node.get("boundsInScreen", {}).get, _TOP_LEFT, _ZEROS));
     }
 
     return sorted(nodes, key=get_sort_key);

@@ -147,6 +147,11 @@ The changes, in commit order:
   extend are no longer `held` calls (they were typed `typing.List`). Seven alternating runs at
   load 12 gave `ui` 279 → 264 ms median, against the original's 202 ms, with the same digest.
 
+- **`get_element_center` / `sort_by_position`** read the bounds edges with
+  `map(bounds.get, EDGES, ZEROS)`: one `held` instead of five (or three). Seven alternating
+  runs, with these and the `text_matches` change, gave `search` 481 → 404 ms median against
+  the original's 287 ms. Load rose from 11 during the last two rounds; the digest was the same.
+
 What is left of the gap is `held` on reads of the JSON nodes themselves. An accessibility node
 is a dict whose values are of mixed types, so it is `any` by nature. Typing it means converting
 it, which costs more than the `held`s it saves (see blocker 2).
