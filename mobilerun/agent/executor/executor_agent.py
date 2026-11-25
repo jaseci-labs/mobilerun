@@ -9,6 +9,7 @@ This agent is responsible for:
 
 from __future__ import annotations
 
+import builtins
 import asyncio
 import json
 import logging
@@ -90,7 +91,7 @@ class ExecutorAgent(Workflow):
             n = min(5, len(self.shared_state.action_history))
             action_history = [
                 {"action": act, "summary": summ, "outcome": outcome, "error": err}
-                for act, summ, outcome, err in zip(
+                for act, summ, outcome, err in builtins.zip(
                     self.shared_state.action_history[-n:],
                     self.shared_state.summary_history[-n:],
                     self.shared_state.action_outcomes[-n:],

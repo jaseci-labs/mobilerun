@@ -7,6 +7,7 @@ Architecture:
 - When reasoning=True: Uses Manager (planning) + Executor (action) workflows
 """
 
+import functools
 import asyncio
 import logging
 import os
@@ -140,6 +141,15 @@ def _reap_abandoned_finalize_task(task: asyncio.Task[Any]) -> None:
         pass
 
 
+async def _capped_finalize_stage(name: str, awaitable: Awaitable[Any], cap: float) -> Any:
+    try:
+        async with asyncio.timeout(cap):
+            return await awaitable
+    except TimeoutError:
+        logger.warning("Final %s background cleanup timed out", name)
+        raise
+
+
 async def _run_finalize_stage(
     name: str,
     awaitable: Awaitable[Any],
@@ -150,15 +160,11 @@ async def _run_finalize_stage(
 ) -> tuple[bool, Any]:
     """Run one best-effort epilog stage without letting cancellation linger."""
 
-    async def background_operation() -> Any:
-        try:
-            async with asyncio.timeout(cap):
-                return await awaitable
-        except TimeoutError:
-            logger.warning("Final %s background cleanup timed out", name)
-            raise
-
-    operation = background_operation() if continue_in_background else awaitable
+    operation = (
+        _capped_finalize_stage(name, awaitable, cap)
+        if continue_in_background
+        else awaitable
+    )
     task = asyncio.create_task(operation, name=f"mobile-agent-finalize-{name}")
     try:
         remaining = min(cap, deadline - time.monotonic())
@@ -187,20 +193,20 @@ async def _run_finalize_stage(
             task.add_done_callback(_reap_abandoned_finalize_task)
 
 
+async def _extract_structured_output(
+    structured_agent: StructuredOutputAgent, ctx: Context
+) -> StopEvent:
+    return await structured_agent.extract_structured_output(ctx, StartEvent())
+
+
 def _structured_output_extraction(
     structured_agent: StructuredOutputAgent, ctx: Context
 ) -> Awaitable[StopEvent]:
     """Run direct extraction with the observations of the nested workflow path."""
-
-    @clean_span("StructuredOutputAgent.extract_structured_output")
-    async def extract() -> StopEvent:
-        return await structured_agent.extract_structured_output(ctx, StartEvent())
-
-    @clean_span("StructuredOutputAgent.run")
-    async def run() -> StopEvent:
-        return await extract()
-
-    return run()
+    extract = clean_span("StructuredOutputAgent.extract_structured_output")(
+        functools.partial(_extract_structured_output, structured_agent, ctx)
+    )
+    return clean_span("StructuredOutputAgent.run")(extract)()
 
 
 def _normalize_control_backend(control_backend: str | None) -> str | None:

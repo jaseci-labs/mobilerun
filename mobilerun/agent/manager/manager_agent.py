@@ -10,6 +10,7 @@ This agent is responsible for:
 
 from __future__ import annotations
 
+import builtins
 import copy
 import json
 import logging
@@ -200,7 +201,7 @@ class ManagerAgent(Workflow):
             k = self.shared_state.err_to_manager_thresh
             error_history = [
                 {"action": act, "summary": summ, "error": err_des}
-                for act, summ, err_des in zip(
+                for act, summ, err_des in builtins.zip(
                     self.shared_state.action_history[-k:],
                     self.shared_state.summary_history[-k:],
                     self.shared_state.error_descriptions[-k:],

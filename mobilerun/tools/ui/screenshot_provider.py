@@ -35,7 +35,7 @@ class ScreenshotOnlyStateProvider(StateProvider):
         vision_resize_policy: Any = None,
         use_normalized: bool = False,
     ) -> None:
-        super().__init__(driver)
+        StateProvider.__init__(self, driver)
         # Resolves the exact screenshot dims the active vision model grounds on
         # (duck-typed: needs ``effective_dims(w, h)``). None → legacy 2048 cap.
         self.vision_resize_policy = vision_resize_policy

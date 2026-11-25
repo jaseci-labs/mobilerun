@@ -1,3 +1,4 @@
+import builtins
 import inspect
 import logging
 from functools import wraps
@@ -247,238 +248,16 @@ def _patch_responses_output_parser(responses_cls: Any) -> None:
         return ChatResponse(message=message, additional_kwargs=additional_kwargs)
 
     parse_response_output._mobilerun_patched = True  # type: ignore[attr-defined]
-    responses_cls._parse_response_output = staticmethod(parse_response_output)
+    responses_cls._parse_response_output = builtins.staticmethod(parse_response_output)
 
 
 def _load_openai_responses(*, grok: bool = False, **kwargs: Any) -> LLM:
     from llama_index.llms.openai.responses import OpenAIResponses
-    from llama_index.llms.openai.utils import to_openai_message_dicts
 
     # Upstream calls the parser through the class, so patch it there.
     _patch_responses_output_parser(OpenAIResponses)
 
-    class MobilerunOpenAIResponses(OpenAIResponses):
-        supports_native_tool_calls: ClassVar[bool] = True
-
-        @staticmethod
-        def _validate_gpt6_reasoning(model: str, reasoning: object) -> None:
-            if reasoning is None:
-                return
-            if not isinstance(reasoning, dict):
-                raise ValueError(
-                    f"{model} reasoning must be a mapping with an optional "
-                    "'effort' value."
-                )
-            effort = reasoning.get("effort")
-            if effort is None:
-                return
-            supported_efforts = OPENAI_REASONING_EFFORTS[model]
-            if effort not in supported_efforts:
-                supported = ", ".join(sorted(supported_efforts))
-                raise ValueError(
-                    f"{model} does not support reasoning effort {effort!r}; "
-                    f"use one of: {supported}."
-                )
-
-        @classmethod
-        def _sanitize_gpt6_payload_fields(
-            cls,
-            model: str,
-            payload: dict[str, Any],
-            *,
-            drop_model: bool = False,
-        ) -> dict[str, Any]:
-            sanitized = dict(payload)
-            unsupported = (
-                OPENAI_RESPONSES_UNSUPPORTED_SAMPLING_PARAMS
-                | OPENAI_GPT6_UNSUPPORTED_PARAMS
-            )
-            for param in unsupported:
-                sanitized.pop(param, None)
-
-            include = sanitized.get("include")
-            if isinstance(include, (list, tuple)):
-                filtered_include = [
-                    value
-                    for value in include
-                    if value != OPENAI_GPT6_UNSUPPORTED_INCLUDE
-                ]
-                sanitized["include"] = filtered_include or None
-
-            cls._validate_gpt6_reasoning(model, sanitized.get("reasoning"))
-            if drop_model:
-                sanitized.pop("model", None)
-            return sanitized
-
-        def _gpt6_model(self, effective_model: object) -> str | None:
-            if self.model in OPENAI_GPT6_MODELS:
-                return self.model
-            if effective_model in OPENAI_GPT6_MODELS:
-                return str(effective_model)
-            return None
-
-        def _sanitize_call_kwargs(
-            self,
-            call_kwargs: dict[str, Any],
-            *,
-            omit_tool_choice: bool = False,
-        ) -> dict[str, Any]:
-            sanitized = dict(call_kwargs)
-            if grok:
-                sanitized = dict(
-                    sanitize_grok_responses_kwargs(
-                        sanitized,
-                        omit_tool_choice=omit_tool_choice,
-                    )
-                )
-                # Runtime and additional kwargs are merged after constructor
-                # defaults. Re-pin the canonical model after that final merge.
-                sanitized["model"] = self.model
-                return sanitized
-            effective_model = sanitized.get("model", self.model)
-            if _openai_responses_model_omits_sampling_params(effective_model):
-                for param in OPENAI_RESPONSES_UNSUPPORTED_SAMPLING_PARAMS:
-                    sanitized.pop(param, None)
-            gpt6_model = self._gpt6_model(effective_model)
-            if gpt6_model is not None:
-                sanitized = self._sanitize_gpt6_payload_fields(gpt6_model, sanitized)
-                if gpt6_model == OPENAI_ASTRA_MODEL:
-                    # Apply the default after configured and per-call overrides.
-                    sanitized.setdefault(
-                        "reasoning",
-                        {"effort": OPENAI_ASTRA_DEFAULT_REASONING_EFFORT},
-                    )
-                extra_body = sanitized.get("extra_body")
-                if isinstance(extra_body, dict):
-                    sanitized["extra_body"] = self._sanitize_gpt6_payload_fields(
-                        gpt6_model,
-                        extra_body,
-                        drop_model=True,
-                    )
-                if self.model in OPENAI_GPT6_MODELS:
-                    sanitized["model"] = self.model
-            return sanitized
-
-        def _get_model_kwargs(self, **kwargs: Any) -> dict[str, Any]:
-            model_kwargs = super()._get_model_kwargs(**kwargs)
-            effective_model = model_kwargs.get("model", self.model)
-            # llama-index forwards reasoning_options only for ids it knows.
-            if (
-                self._gpt6_model(effective_model) is not None
-                and "reasoning" not in model_kwargs
-                and self.reasoning_options is not None
-            ):
-                model_kwargs["reasoning"] = self.reasoning_options
-            return self._sanitize_call_kwargs(model_kwargs)
-
-        @property
-        def metadata(self) -> LLMMetadata:
-            if self.model not in OPENAI_GPT6_MODELS:
-                return super().metadata
-            return LLMMetadata(
-                context_window=self.context_window or OPENAI_GPT6_CONTEXT_WINDOW,
-                num_output=self.max_output_tokens or -1,
-                is_chat_model=True,
-                is_function_calling_model=True,
-                model_name=self.model,
-            )
-
-        def _sanitize_structured_call_kwargs(
-            self, call_kwargs: dict[str, Any]
-        ) -> dict[str, Any]:
-            merged = dict(call_kwargs)
-            if not grok and self.model in OPENAI_GPT6_MODELS:
-                configured: dict[str, Any] = {}
-                if self.include is not None:
-                    configured["include"] = self.include
-                if self.reasoning_options is not None:
-                    configured["reasoning"] = self.reasoning_options
-                configured.update(self.additional_kwargs or {})
-                configured.update(merged)
-                merged = configured
-
-            sanitized = self._sanitize_call_kwargs(merged, omit_tool_choice=grok)
-            if grok:
-                # The upstream structured adapter passes ``store=self.store``
-                # explicitly. The constructor already pins that field false.
-                # xAI also rejects tool_choice when no tools are supplied, so
-                # structured parsing must not allow either the upstream default
-                # or a generic caller override to restore it.
-                sanitized.pop("store", None)
-                sanitized.pop("model", None)
-                sanitized.pop("tool_choice", None)
-            elif self.model in OPENAI_GPT6_MODELS:
-                # The upstream structured adapter supplies these explicitly.
-                sanitized.pop("model", None)
-                sanitized.pop("store", None)
-                sanitized.pop("tool_choice", None)
-            return sanitized
-
-        def structured_predict(
-            self,
-            output_cls: Any,
-            prompt: Any,
-            llm_kwargs: dict[str, Any] | None = None,
-            **prompt_args: Any,
-        ) -> Any:
-            if grok:
-                messages = prompt.format_messages(**prompt_args)
-                message_dicts = to_openai_message_dicts(
-                    messages, model=self.model, is_responses_api=True
-                )
-                response = self._client.responses.parse(
-                    model=self._responses_model,
-                    input=message_dicts,
-                    text_format=output_cls,
-                    store=self.store,
-                    **self._sanitize_structured_call_kwargs(dict(llm_kwargs or {})),
-                )
-                if response.output_parsed is not None:
-                    return response.output_parsed
-                raise ValueError(
-                    "Failed to produce a structured response from the model."
-                )
-            return super().structured_predict(
-                output_cls,
-                prompt,
-                llm_kwargs=self._sanitize_structured_call_kwargs(
-                    dict(llm_kwargs or {})
-                ),
-                **prompt_args,
-            )
-
-        async def astructured_predict(
-            self,
-            output_cls: Any,
-            prompt: Any,
-            llm_kwargs: dict[str, Any] | None = None,
-            **prompt_args: Any,
-        ) -> Any:
-            if grok:
-                messages = prompt.format_messages(**prompt_args)
-                message_dicts = to_openai_message_dicts(
-                    messages, model=self.model, is_responses_api=True
-                )
-                response = await self._aclient.responses.parse(
-                    model=self._responses_model,
-                    input=message_dicts,
-                    text_format=output_cls,
-                    store=self.store,
-                    **self._sanitize_structured_call_kwargs(dict(llm_kwargs or {})),
-                )
-                if response.output_parsed is not None:
-                    return response.output_parsed
-                raise ValueError(
-                    "Failed to produce a structured response from the model."
-                )
-            return await super().astructured_predict(
-                output_cls,
-                prompt,
-                llm_kwargs=self._sanitize_structured_call_kwargs(
-                    dict(llm_kwargs or {})
-                ),
-                **prompt_args,
-            )
+    from mobilerun.agent.utils import llm_openai_responses as adapters
 
     if grok:
         kwargs = dict(sanitize_grok_responses_kwargs(kwargs))
@@ -494,127 +273,13 @@ def _load_openai_responses(*, grok: bool = False, **kwargs: Any) -> LLM:
         "Initializing MobilerunOpenAIResponses with kwargs: "
         f"{list(filtered_kwargs.keys())}"
     )
-    return MobilerunOpenAIResponses(**filtered_kwargs)
+    adapter = adapters.MobilerunGrokResponses if grok else adapters.MobilerunOpenAIResponses
+    return adapter(**filtered_kwargs)
 
 
 def _load_google_genai(**kwargs: Any) -> LLM:
-    from llama_index.llms.google_genai import GoogleGenAI
 
-    class MobilerunGoogleGenAI(GoogleGenAI):
-        def __init__(self, **init_kwargs: Any) -> None:
-            super().__init__(**init_kwargs)
-            if gemini_model_omits_sampling_params(self.model):
-                for param in GEMINI_UNSUPPORTED_SAMPLING_PARAMS:
-                    self._generation_config.pop(param, None)
-
-        def _sanitize_call_kwargs(self, call_kwargs: dict[str, Any]) -> dict[str, Any]:
-            if not gemini_model_omits_sampling_params(self.model):
-                return call_kwargs
-
-            sanitized = dict(call_kwargs)
-            for param in GEMINI_UNSUPPORTED_SAMPLING_PARAMS:
-                sanitized.pop(param, None)
-
-            generation_config = sanitized.get("generation_config")
-            if generation_config is not None:
-                if hasattr(generation_config, "model_dump"):
-                    generation_config = generation_config.model_dump()
-                elif isinstance(generation_config, dict):
-                    generation_config = dict(generation_config)
-                else:
-                    return sanitized
-                for param in GEMINI_UNSUPPORTED_SAMPLING_PARAMS:
-                    generation_config.pop(param, None)
-                sanitized["generation_config"] = generation_config
-            return sanitized
-
-        def _chat(self, messages: Any, **kwargs: Any) -> Any:
-            return super()._chat(messages, **self._sanitize_call_kwargs(dict(kwargs)))
-
-        async def _achat(self, messages: Any, **kwargs: Any) -> Any:
-            return await super()._achat(
-                messages, **self._sanitize_call_kwargs(dict(kwargs))
-            )
-
-        def _stream_chat(self, messages: Any, **kwargs: Any) -> Any:
-            return super()._stream_chat(
-                messages, **self._sanitize_call_kwargs(dict(kwargs))
-            )
-
-        async def _astream_chat(self, messages: Any, **kwargs: Any) -> Any:
-            return await super()._astream_chat(
-                messages, **self._sanitize_call_kwargs(dict(kwargs))
-            )
-
-        def structured_predict_without_function_calling(
-            self,
-            output_cls: Any,
-            prompt: Any,
-            llm_kwargs: dict[str, Any] | None = None,
-            **prompt_args: Any,
-        ) -> Any:
-            return super().structured_predict_without_function_calling(
-                output_cls,
-                prompt,
-                llm_kwargs=self._sanitize_call_kwargs(dict(llm_kwargs or {})),
-                **prompt_args,
-            )
-
-        def structured_predict(
-            self,
-            output_cls: Any,
-            prompt: Any,
-            llm_kwargs: dict[str, Any] | None = None,
-            **prompt_args: Any,
-        ) -> Any:
-            return super().structured_predict(
-                output_cls,
-                prompt,
-                llm_kwargs=self._sanitize_call_kwargs(dict(llm_kwargs or {})),
-                **prompt_args,
-            )
-
-        async def astructured_predict(
-            self,
-            output_cls: Any,
-            prompt: Any,
-            llm_kwargs: dict[str, Any] | None = None,
-            **prompt_args: Any,
-        ) -> Any:
-            return await super().astructured_predict(
-                output_cls,
-                prompt,
-                llm_kwargs=self._sanitize_call_kwargs(dict(llm_kwargs or {})),
-                **prompt_args,
-            )
-
-        def stream_structured_predict(
-            self,
-            output_cls: Any,
-            prompt: Any,
-            llm_kwargs: dict[str, Any] | None = None,
-            **prompt_args: Any,
-        ) -> Any:
-            return super().stream_structured_predict(
-                output_cls,
-                prompt,
-                llm_kwargs=self._sanitize_call_kwargs(dict(llm_kwargs or {})),
-                **prompt_args,
-            )
-
-        async def astream_structured_predict(
-            self,
-            output_cls: Any,
-            prompt: Any,
-            llm_kwargs: dict[str, Any] | None = None,
-            **prompt_args: Any,
-        ) -> Any:
-            return await super().astream_structured_predict(
-                output_cls,
-                prompt,
-                llm_kwargs=self._sanitize_call_kwargs(dict(llm_kwargs or {})),
-                **prompt_args,
-            )
+    from mobilerun.agent.utils.llm_google_genai import MobilerunGoogleGenAI
 
     filtered_kwargs = {k: v for k, v in kwargs.items() if v is not None}
     logger.debug(
@@ -625,95 +290,8 @@ def _load_google_genai(**kwargs: Any) -> LLM:
 
 
 def _load_anthropic(**kwargs: Any) -> LLM:
-    from llama_index.llms.anthropic import Anthropic
 
-    class MobilerunAnthropic(Anthropic):
-        def __init__(self, **kwargs: Any) -> None:
-            super().__init__(**kwargs)
-            record_stream_usage(self._client.messages)
-            record_stream_usage(self._aclient.messages, is_async=True)
-
-        def stream_chat(self, messages: Any, **kwargs: Any) -> Any:
-            usage = StreamUsage()
-            with collect_stream_usage(usage):
-                response = super().stream_chat(messages, **kwargs)
-            return usage.track(response)
-
-        async def astream_chat(self, messages: Any, **kwargs: Any) -> Any:
-            usage = StreamUsage()
-            with collect_stream_usage(usage):
-                response = await super().astream_chat(messages, **kwargs)
-            return usage.atrack(response)
-
-        @wraps(Anthropic._prepare_chat_with_tools)
-        def _prepare_chat_with_tools(self, *args: Any, **kwargs: Any) -> dict[str, Any]:
-            # FunctionCallingProgram passes None by default, overwriting the
-            # valid tool-choice object built by the upstream adapter.
-            if kwargs.get("tool_choice") is None:
-                kwargs.pop("tool_choice", None)
-            return super()._prepare_chat_with_tools(*args, **kwargs)
-
-        @property
-        def _model_kwargs(self) -> dict[str, Any]:
-            model_kwargs = super()._model_kwargs
-            if anthropic_model_omits_sampling_params(
-                model_kwargs.get("model", self.model)
-            ) and "temperature" not in (self.additional_kwargs or {}):
-                model_kwargs.pop("temperature", None)
-            return model_kwargs
-
-        def _get_all_kwargs(self, **kwargs: Any) -> dict[str, Any]:
-            model_kwargs = super()._get_all_kwargs(**kwargs)
-            # LlamaIndex's structured program supplies an OpenAI-style string
-            # after the Anthropic adapter has prepared its tool choice.
-            tool_choice = model_kwargs.get("tool_choice")
-            if isinstance(tool_choice, str) and tool_choice in {
-                "auto",
-                "required",
-                "none",
-            }:
-                model_kwargs["tool_choice"] = {
-                    "type": "any" if tool_choice == "required" else tool_choice
-                }
-            extra_body = dict(model_kwargs.get("extra_body") or {})
-            effective_model = extra_body.get(
-                "model", model_kwargs.get("model", self.model)
-            )
-            if anthropic_model_omits_sampling_params(effective_model):
-                for param in ANTHROPIC_UNSUPPORTED_SAMPLING_PARAMS:
-                    model_kwargs.pop(param, None)
-                    extra_body.pop(param, None)
-            else:
-                # Anthropic SDK 1.x removed named sampling arguments even for
-                # older models whose HTTP API still supports them. Preserve
-                # the SDK's extra_body precedence and older SDK signatures.
-                parameters = inspect.signature(self._client.messages.create).parameters
-                accepts_kwargs = any(
-                    p.kind == inspect.Parameter.VAR_KEYWORD for p in parameters.values()
-                )
-                for param in ANTHROPIC_UNSUPPORTED_SAMPLING_PARAMS:
-                    if (
-                        param in model_kwargs
-                        and param not in parameters
-                        and not accepts_kwargs
-                    ):
-                        extra_body.setdefault(param, model_kwargs.pop(param))
-            if extra_body or "extra_body" in model_kwargs:
-                model_kwargs["extra_body"] = extra_body
-            return model_kwargs
-
-        @property
-        def metadata(self) -> LLMMetadata:
-            context_window = anthropic_model_context_window(self.model)
-            if context_window is None:
-                return super().metadata
-            return LLMMetadata(
-                context_window=context_window,
-                num_output=self.max_tokens,
-                is_chat_model=True,
-                model_name=self.model,
-                is_function_calling_model=True,
-            )
+    from mobilerun.agent.utils.llm_anthropic import MobilerunAnthropic
 
     # The upstream adapter defaults to 512 output tokens, which is too small
     # for a manager response that includes a complete control result plus
@@ -737,11 +315,8 @@ def _load_anthropic(**kwargs: Any) -> LLM:
 
 
 def _load_deepseek(**kwargs: Any) -> LLM:
-    from llama_index.llms.openai_like import OpenAILike
 
-    class MobilerunDeepSeek(OpenAILike):
-        supports_native_tool_calls: ClassVar[bool] = True
-        native_tool_api: ClassVar[str] = "chat_completions"
+    from mobilerun.agent.utils.llm_deepseek import MobilerunDeepSeek
 
     filtered_kwargs = {k: v for k, v in kwargs.items() if v is not None}
     logger.debug(

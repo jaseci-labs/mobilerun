@@ -127,105 +127,6 @@ graph import {
     mobilerun.tools.ui.screenshot_provider --> mobilerun.agent.droid.droid_agent {
         ScreenshotOnlyStateProvider,
     }
-    mobilerun.agent.droid.state --> mobilerun.agent.action_context { MobileAgentState }
-    mobilerun.credential_manager --> mobilerun.agent.action_context { CredentialManager }
-    mobilerun.macro.recorder --> mobilerun.agent.action_context { MacroRecorder }
-    mobilerun.tools.ui.provider --> mobilerun.agent.action_context { StateProvider }
-    mobilerun.tools.ui.state --> mobilerun.agent.action_context { UIState }
-    mobilerun.telemetry --> mobilerun.agent.droid.state { PackageVisitEvent, capture }
-    mobilerun.credential_manager.credential_manager --> mobilerun.credential_manager {
-        CredentialManager,
-        CredentialNotFoundError,
-    }
-    mobilerun.credential_manager.file_credential_manager --> mobilerun.credential_manager {
-        FileCredentialManager,
-    }
-    mobilerun.config_manager.path_resolver --> mobilerun.credential_manager.file_credential_manager {
-        PathResolver,
-    }
-    mobilerun.credential_manager.credential_manager --> mobilerun.credential_manager.file_credential_manager {
-        CredentialManager,
-        CredentialNotFoundError,
-    }
-    mobilerun.config_manager.config_manager --> mobilerun.credential_manager.file_credential_manager {
-        CredentialsConfig,
-    }
-    mobilerun.agent.providers.minimax --> mobilerun.config_manager.config_manager {
-        warn_if_legacy_minimax_endpoint,
-    }
-    mobilerun.agent.providers.registry --> mobilerun.config_manager.config_manager {
-        GEMINI_API_DEFAULT_MODEL,
-        VARIANT_ENV_KEY_SLOT,
-    }
-    mobilerun.config_manager.env_keys --> mobilerun.config_manager.config_manager {
-        API_KEY_ENV_VARS,
-        load_env_key_sources,
-    }
-    mobilerun.config_manager.path_resolver --> mobilerun.config_manager.config_manager {
-        PathResolver,
-    }
-    mobilerun.mcp.config --> mobilerun.config_manager.config_manager { MCPConfig, MCPServerConfig }
-    mobilerun.config_manager.migrations --> mobilerun.config_manager.config_manager {
-        CURRENT_VERSION,
-        migrate,
-    }
-    mobilerun.agent.providers.anthropic --> mobilerun.agent.providers.registry {
-        ANTHROPIC_API_DEFAULT_MODEL,
-        ANTHROPIC_API_MODELS,
-        ANTHROPIC_OAUTH_DEFAULT_MODEL,
-        ANTHROPIC_OAUTH_MODELS,
-    }
-    mobilerun.agent.providers.grok --> mobilerun.agent.providers.registry {
-        GROK_API_DEFAULT_MODEL,
-        GROK_API_MODELS,
-        GROK_OAUTH_DEFAULT_MODEL,
-        GROK_OAUTH_LEGACY_MODELS,
-        GROK_OAUTH_MODELS,
-        XAI_API_BASE,
-        normalize_grok_model_id,
-    }
-    mobilerun.agent.providers.minimax --> mobilerun.agent.providers.registry {
-        MINIMAX_DEFAULT_MODEL,
-        MINIMAX_GLOBAL_BASE_URL,
-    }
-    mobilerun.agent.providers.types --> mobilerun.agent.providers.registry {
-        ProviderFamilySpec,
-        ProviderVariantSpec,
-    }
-    mobilerun.config_manager.credential_paths --> mobilerun.agent.providers.registry {
-        ANTHROPIC_OAUTH_CREDENTIAL_PATH,
-        GEMINI_OAUTH_CREDENTIAL_PATH,
-        GROK_OAUTH_CREDENTIAL_PATH,
-        OPENAI_OAUTH_CREDENTIAL_PATH,
-    }
-    mobilerun.config_manager.auth_profile_store --> mobilerun.config_manager.env_keys {
-        AuthProfileStore,
-    }
-    mobilerun.config_manager.credential_paths --> mobilerun.config_manager.env_keys {
-        AUTH_PROFILES_PATH,
-    }
-    mobilerun.tools.helpers.coordinate --> mobilerun.tools.ui.provider { NORMALIZED_STATE_NOTE }
-    mobilerun.tools.helpers.images --> mobilerun.tools.ui.provider {
-        fit_dimensions_to_max_side,
-        resize_image_to_dimensions_with_grid,
-        resize_image_to_max_side_with_grid,
-    }
-    mobilerun.tools.ui.state --> mobilerun.tools.ui.provider { UIState }
-    mobilerun.tools.ui.stealth_state --> mobilerun.tools.ui.provider { StealthUIState }
-    mobilerun.tools.filters --> mobilerun.tools.ui.provider { TreeFilter }
-    mobilerun.tools.formatters --> mobilerun.tools.ui.provider { TreeFormatter }
-    mobilerun.tools.ui.state --> mobilerun.tools.ui.stealth_state { UIState }
-    mobilerun.tools.formatters.base --> mobilerun.tools.formatters { TreeFormatter }
-    mobilerun.tools.formatters.indexed_formatter --> mobilerun.tools.formatters { IndexedFormatter }
-    mobilerun.tools.helpers.coordinate --> mobilerun.tools.formatters.indexed_formatter {
-        bounds_to_normalized,
-    }
-    mobilerun.tools.helpers.geometry --> mobilerun.tools.formatters.indexed_formatter {
-        rects_overlap,
-    }
-    mobilerun.tools.formatters.base --> mobilerun.tools.formatters.indexed_formatter {
-        TreeFormatter,
-    }
     mobilerun.agent.droid.events --> mobilerun.agent.executor {
         ExecutorInputEvent,
         ExecutorResultEvent,
@@ -266,14 +167,6 @@ graph import {
     mobilerun.agent.action_context --> mobilerun.agent.executor.executor_agent { ActionContext }
     mobilerun.agent.droid --> mobilerun.agent.executor.executor_agent { MobileAgentState }
     mobilerun.agent.tool_registry --> mobilerun.agent.executor.executor_agent { ToolRegistry }
-    mobilerun.agent.utils.errors --> mobilerun.agent.utils.inference {
-        describe_error,
-        http_status_code,
-    }
-    mobilerun.agent.action_result --> mobilerun.agent.tool_registry { ActionResult }
-    mobilerun.agent.utils.errors --> mobilerun.agent.tool_registry { describe_error }
-    mobilerun.agent.action_context --> mobilerun.agent.tool_registry { ActionContext }
-    mobilerun.agent.common.events --> mobilerun.agent.tool_registry { ToolExecutionEvent }
     mobilerun.agent.fast_agent.fast_agent --> mobilerun.agent.fast_agent { FastAgent }
     mobilerun.agent.action_result --> mobilerun.agent.fast_agent.fast_agent { ActionResult }
     mobilerun.agent.common.constants --> mobilerun.agent.fast_agent.fast_agent { LLM_HISTORY_LIMIT }
@@ -406,33 +299,6 @@ graph import {
         AgentConfig,
         TracingConfig,
     }
-    mobilerun.app_cards.providers.composite_provider --> mobilerun.app_cards.providers {
-        CompositeAppCardProvider,
-    }
-    mobilerun.app_cards.providers.local_provider --> mobilerun.app_cards.providers {
-        LocalAppCardProvider,
-    }
-    mobilerun.app_cards.providers.server_provider --> mobilerun.app_cards.providers {
-        ServerAppCardProvider,
-    }
-    mobilerun.app_cards.app_card_provider --> mobilerun.app_cards.providers.composite_provider {
-        AppCardProvider,
-    }
-    mobilerun.app_cards.providers.local_provider --> mobilerun.app_cards.providers.composite_provider {
-        LocalAppCardProvider,
-    }
-    mobilerun.app_cards.providers.server_provider --> mobilerun.app_cards.providers.composite_provider {
-        ServerAppCardProvider,
-    }
-    mobilerun.app_cards.app_card_provider --> mobilerun.app_cards.providers.local_provider {
-        AppCardProvider,
-    }
-    mobilerun.config_manager.path_resolver --> mobilerun.app_cards.providers.local_provider {
-        PathResolver,
-    }
-    mobilerun.app_cards.app_card_provider --> mobilerun.app_cards.providers.server_provider {
-        AppCardProvider,
-    }
     mobilerun.agent.common.events --> mobilerun.agent.manager.stateless_manager_agent {
         RecordUIStateEvent,
         ScreenshotEvent,
@@ -483,17 +349,6 @@ graph import {
         AgentConfig,
         TracingConfig,
     }
-    mobilerun.agent.utils.errors --> mobilerun.agent.oneflows.structured_output_agent {
-        describe_error,
-    }
-    mobilerun.agent.utils.inference --> mobilerun.agent.oneflows.structured_output_agent {
-        astructured_predict_with_retries,
-    }
-    mobilerun.agent.trajectory.writer --> mobilerun.agent.trajectory {
-        TrajectoryWriter,
-        make_serializable,
-    }
-    mobilerun.macro.state --> mobilerun.agent.trajectory.writer { MACRO_SCHEMA_VERSION }
     mobilerun.agent.utils.llm_picker --> mobilerun.agent.utils.llm_loader {
         load_llm,
         load_llms_from_profiles,
@@ -548,73 +403,6 @@ graph import {
         GeminiOAuthCodeAssistLLM,
     }
     mobilerun.agent.utils.oauth.grok_oauth_llm --> mobilerun.agent.utils.llm_picker { GrokOAuth }
-    mobilerun.agent.providers.registry --> mobilerun.agent.utils.oauth.openai_oauth_llm {
-        OPENAI_ASTRA_DEFAULT_REASONING_EFFORT,
-        OPENAI_GPT6_MODELS,
-        OPENAI_OAUTH_DEFAULT_MODEL,
-        OPENAI_OAUTH_UNSUPPORTED_MODELS,
-        OPENAI_REASONING_EFFORTS,
-        normalize_model_id_for_variant,
-    }
-    mobilerun.agent.utils.oauth.login_timeout --> mobilerun.agent.utils.oauth.openai_oauth_llm {
-        OAuthLoginDeadline,
-        open_browser_async,
-    }
-    mobilerun.config_manager.auth_profile_store --> mobilerun.agent.utils.oauth.openai_oauth_llm {
-        AuthProfileStore,
-    }
-    mobilerun.config_manager.credential_paths --> mobilerun.agent.utils.oauth.openai_oauth_llm {
-        OPENAI_OAUTH_CREDENTIAL_PATH,
-    }
-    mobilerun.agent.providers.anthropic --> mobilerun.agent.utils.oauth.anthropic_oauth_llm {
-        ANTHROPIC_OAUTH_DEFAULT_MODEL,
-        anthropic_model_context_window,
-        anthropic_model_omits_sampling_params,
-        strip_anthropic_sampling_params,
-    }
-    mobilerun.agent.utils.oauth.login_timeout --> mobilerun.agent.utils.oauth.anthropic_oauth_llm {
-        OAuthLoginDeadline,
-        open_browser_async,
-    }
-    mobilerun.config_manager.auth_profile_store --> mobilerun.agent.utils.oauth.anthropic_oauth_llm {
-        AuthProfileStore,
-    }
-    mobilerun.config_manager.credential_paths --> mobilerun.agent.utils.oauth.anthropic_oauth_llm {
-        ANTHROPIC_OAUTH_CREDENTIAL_PATH,
-    }
-    mobilerun.agent.providers.registry --> mobilerun.agent.utils.oauth.gemini_oauth_code_assist_llm {
-        GEMINI_OAUTH_DEFAULT_MODEL,
-        GEMINI_OAUTH_RETIRED_MODELS,
-        gemini_model_omits_sampling_params,
-        model_display_name_for_variant,
-    }
-    mobilerun.agent.utils.oauth.login_timeout --> mobilerun.agent.utils.oauth.gemini_oauth_code_assist_llm {
-        OAuthLoginDeadline,
-        open_browser_async,
-    }
-    mobilerun.config_manager.auth_profile_store --> mobilerun.agent.utils.oauth.gemini_oauth_code_assist_llm {
-        AuthProfileStore,
-    }
-    mobilerun.config_manager.credential_paths --> mobilerun.agent.utils.oauth.gemini_oauth_code_assist_llm {
-        GEMINI_OAUTH_CREDENTIAL_PATH,
-    }
-    mobilerun.agent.providers.grok --> mobilerun.agent.utils.oauth.grok_oauth_llm {
-        GROK_OAUTH_DEFAULT_MODEL,
-        GROK_OAUTH_LEGACY_MODELS,
-        GROK_OAUTH_MODELS,
-        normalize_grok_model_id,
-        sanitize_grok_responses_kwargs,
-    }
-    mobilerun.agent.utils.oauth.login_timeout --> mobilerun.agent.utils.oauth.grok_oauth_llm {
-        OAuthLoginDeadline,
-        open_browser_async,
-    }
-    mobilerun.config_manager.auth_profile_store --> mobilerun.agent.utils.oauth.grok_oauth_llm {
-        AuthProfileStore,
-    }
-    mobilerun.config_manager.credential_paths --> mobilerun.agent.utils.oauth.grok_oauth_llm {
-        GROK_OAUTH_CREDENTIAL_PATH,
-    }
     mobilerun --> mobilerun.agent.utils.portal_setup { __version__ }
     mobilerun.agent.tool_registry --> mobilerun.agent.utils.signatures { ToolRegistry }
     mobilerun.agent.utils.actions --> mobilerun.agent.utils.signatures {
@@ -645,21 +433,6 @@ graph import {
         acomplete_with_retries,
     }
     mobilerun.agent.utils.llm_picker --> mobilerun.agent.oneflows.app_starter_workflow { load_llm }
-    mobilerun.agent.trajectory.writer --> mobilerun.agent.utils.trajectory { make_serializable }
-    mobilerun.macro.state --> mobilerun.agent.utils.trajectory {
-        MACRO_SCHEMA_VERSION,
-        UNSUPPORTED_SCHEMA_MESSAGE,
-    }
-    mobilerun.agent.providers.anthropic --> mobilerun.agent.utils.vision_sizing {
-        ANTHROPIC_HIGHRES_MODELS,
-    }
-    mobilerun.tools.helpers.images --> mobilerun.agent.utils.vision_sizing {
-        MODEL_SCREENSHOT_MAX_SIDE,
-        anthropic_resized_size,
-        fit_dimensions_to_max_side,
-    }
-    mobilerun.mcp.client --> mobilerun.mcp.adapter { MCPClientManager }
-    mobilerun.mcp.config --> mobilerun.mcp.client { MCPConfig, MCPServerConfig }
     mobilerun.tools.helpers.coordinate --> mobilerun.tools.ui.ios_provider {
         NORMALIZED_STATE_NOTE,
         bounds_to_normalized,
@@ -676,33 +449,6 @@ graph import {
     }
     mobilerun.tools.ui.provider --> mobilerun.tools.ui.screenshot_provider { StateProvider }
     mobilerun.tools.ui.state --> mobilerun.tools.ui.screenshot_provider { UIState }
-    mobilerun.config_manager.config_manager --> mobilerun.config_manager {
-        AgentConfig,
-        AppCardConfig,
-        CredentialsConfig,
-        DeviceConfig,
-        DroidConfig,
-        ExecutorConfig,
-        FastAgentConfig,
-        LLMProfile,
-        LoggingConfig,
-        ManagerConfig,
-        MobileConfig,
-        TelemetryConfig,
-        ToolsConfig,
-        TracingConfig,
-    }
-    mobilerun.config_manager.loader --> mobilerun.config_manager {
-        ConfigLoader,
-        OutdatedConfigError,
-    }
-    mobilerun.config_manager.path_resolver --> mobilerun.config_manager { PathResolver }
-    mobilerun.config_manager.prompt_loader --> mobilerun.config_manager { PromptLoader }
-    mobilerun.config_manager.config_manager --> mobilerun.config_manager.loader { MobileConfig }
-    mobilerun.config_manager.migrations --> mobilerun.config_manager.loader {
-        CURRENT_VERSION,
-        migrate,
-    }
     mobilerun.macro.replay --> mobilerun.macro;
     mobilerun.agent.utils.trajectory --> mobilerun.macro.replay { Trajectory }
     mobilerun.macro.handoff --> mobilerun.macro.replay { run_agent_handoff }
@@ -764,69 +510,6 @@ graph import {
     mobilerun.telemetry --> mobilerun.cli.main { print_telemetry_message }
     mobilerun.cli.deviceauth --> mobilerun.cli.main;
     mobilerun.cli.doctor --> mobilerun.cli.main { run_doctor }
-    mobilerun.agent.providers.minimax --> mobilerun.cli.configure_wizard {
-        MINIMAX_CHINA_BASE_URL,
-        MINIMAX_GLOBAL_BASE_URL,
-    }
-    mobilerun.agent.providers.registry --> mobilerun.cli.configure_wizard {
-        VARIANT_ENV_KEY_SLOT,
-        model_display_name_for_variant,
-        resolve_provider_variant,
-    }
-    mobilerun.agent.providers.setup_service --> mobilerun.cli.configure_wizard {
-        SetupSelection,
-        apply_selection_to_roles,
-        auth_mode_choices,
-        family_choices,
-        variant_models,
-    }
-    mobilerun.cli.configure_prompts --> mobilerun.cli.configure_wizard {
-        SelectChoice,
-        select_prompt,
-        text_prompt,
-    }
-    mobilerun.config_manager --> mobilerun.cli.configure_wizard { ConfigLoader }
-    mobilerun.config_manager.env_keys --> mobilerun.cli.configure_wizard {
-        load_env_key_sources,
-        resolve_env_key,
-    }
-    mobilerun.agent.providers --> mobilerun.agent.providers.setup_service {
-        ProviderFamilySpec,
-        ProviderVariantSpec,
-        VARIANT_ENV_KEY_SLOT,
-        list_provider_families,
-        resolve_provider_variant,
-    }
-    mobilerun.agent.providers.registry --> mobilerun.agent.providers.setup_service {
-        normalize_model_id_for_variant,
-    }
-    mobilerun.config_manager.config_manager --> mobilerun.agent.providers.setup_service {
-        LLMProfile,
-        MobileConfig,
-    }
-    mobilerun.config_manager.env_keys --> mobilerun.agent.providers.setup_service {
-        load_env_keys,
-        save_env_keys,
-    }
-    mobilerun.agent.providers.minimax --> mobilerun.agent.providers {
-        MINIMAX_CHINA_BASE_URL,
-        MINIMAX_GLOBAL_BASE_URL,
-        MINIMAX_LEGACY_BASE_URL,
-        warn_if_legacy_minimax_endpoint,
-    }
-    mobilerun.agent.providers.registry --> mobilerun.agent.providers {
-        VARIANT_ENV_KEY_SLOT,
-        get_provider_family,
-        list_auth_modes,
-        list_models_for_variant,
-        list_provider_families,
-        normalize_model_id_for_variant,
-        resolve_provider_variant,
-    }
-    mobilerun.agent.providers.types --> mobilerun.agent.providers {
-        ProviderFamilySpec,
-        ProviderVariantSpec,
-    }
     mobilerun.agent.utils.android_device --> mobilerun.cli.device_commands {
         AndroidDeviceSelectionError,
         create_android_portal_http_driver,
@@ -843,27 +526,6 @@ graph import {
     mobilerun.config_manager.credential_paths --> mobilerun.cli.device_commands {
         OAUTH_CREDENTIAL_DIR,
     }
-    mobilerun.agent.utils.oauth.anthropic_oauth_llm --> mobilerun.cli.oauth_actions {
-        AnthropicOAuthLLM,
-        DEFAULT_SETUP_TOKEN_SCOPE,
-    }
-    mobilerun.agent.utils.oauth.gemini_oauth_code_assist_llm --> mobilerun.cli.oauth_actions {
-        DEFAULT_MODEL,
-        GeminiOAuthCodeAssistLLM,
-    }
-    mobilerun.agent.utils.oauth.grok_oauth_llm --> mobilerun.cli.oauth_actions {
-        DEFAULT_GROK_MODEL,
-        GrokOAuth,
-    }
-    mobilerun.agent.utils.oauth.login_timeout --> mobilerun.cli.oauth_actions { OAuthLoginDeadline }
-    mobilerun.agent.utils.oauth.openai_oauth_llm --> mobilerun.cli.oauth_actions {
-        DEFAULT_OPENAI_OAUTH_CALLBACK_HOST,
-        DEFAULT_OPENAI_OAUTH_CALLBACK_PATH,
-        DEFAULT_OPENAI_OAUTH_CALLBACK_PORT,
-        DEFAULT_OPENAI_OAUTH_CREDENTIAL_PATH,
-        OpenAIOAuth,
-    }
-    mobilerun.config_manager.auth_profile_store --> mobilerun.cli.oauth_actions { AuthProfileStore }
     mobilerun.agent.utils.android_device --> mobilerun.macro.cli {
         AndroidDeviceSelectionError,
         resolve_android_serial,
@@ -871,7 +533,6 @@ graph import {
     mobilerun.agent.utils.trajectory --> mobilerun.macro.cli { Trajectory }
     mobilerun.config_manager.path_resolver --> mobilerun.macro.cli { PathResolver }
     mobilerun.macro.replay --> mobilerun.macro.cli { MacroPlayer }
-    mobilerun.config_manager.credential_paths --> mobilerun.cli.deviceauth { OAUTH_CREDENTIAL_DIR }
     mobilerun --> mobilerun.cli.doctor { __version__ }
     mobilerun.config_manager --> mobilerun.cli.doctor { ConfigLoader }
     mobilerun.config_manager.loader --> mobilerun.cli.doctor { OutdatedConfigError }
@@ -894,9 +555,6 @@ graph import {
     mobilerun.agent.utils.trajectory --> mobilerun.agent.utils { Trajectory }
     mobilerun.cli.main --> mobilerun.cli { cli }
     mobilerun.macro.cli --> mobilerun.macro.__main__ { macro_cli }
-    mobilerun.mcp.adapter --> mobilerun.mcp { mcp_to_mobilerun_tools }
-    mobilerun.mcp.client --> mobilerun.mcp { MCPClientManager, MCPToolInfo }
-    mobilerun.mcp.config --> mobilerun.mcp { MCPConfig, MCPServerConfig }
     mobilerun.agent.utils.actions --> tests.eval_coordinate_grounding { _convert_action_point }
     mobilerun.agent.utils.llm_picker --> tests.eval_coordinate_grounding { load_llm }
     mobilerun.agent.utils.vision_sizing --> tests.eval_coordinate_grounding { VisionResizePolicy }
@@ -1512,6 +1170,7 @@ graph import {
     mobilerun.macro.state ++> mobilerun.macro.recorder { build_screen_snapshot }
     mobilerun.tools.filters.base ++> mobilerun.tools.filters.concise_filter { TreeFilter }
     mobilerun.tools.filters.base ++> mobilerun.tools.filters.detailed_filter { TreeFilter }
+    mobilerun.tools.ui.state ++> mobilerun.tools.ui.stealth_state { UIState }
     mobilerun.tools.helpers.coordinate ++> mobilerun.tools.ui.state { NORMALIZED_MAX, to_absolute }
     mobilerun.tools.helpers.geometry ++> mobilerun.tools.ui.state {
         find_clear_point,
@@ -1588,6 +1247,373 @@ graph import {
         ManagerContextEvent,
         ManagerPlanDetailsEvent,
         ManagerResponseEvent,
+    }
+    mobilerun.telemetry ++> mobilerun.agent.droid.state { PackageVisitEvent, capture }
+    mobilerun.tools.helpers.coordinate ++> mobilerun.tools.formatters.indexed_formatter {
+        bounds_to_normalized,
+    }
+    mobilerun.tools.helpers.geometry ++> mobilerun.tools.formatters.indexed_formatter {
+        rects_overlap,
+    }
+    mobilerun.tools.formatters.base ++> mobilerun.tools.formatters.indexed_formatter {
+        TreeFormatter,
+    }
+    mobilerun.agent.utils.errors ++> mobilerun.agent.utils.inference {
+        describe_error,
+        http_status_code as _http_status_code,
+    }
+    mobilerun.macro.state ++> mobilerun.agent.trajectory.writer { MACRO_SCHEMA_VERSION }
+    mobilerun.config_manager.credential_paths ++> mobilerun.cli.deviceauth { OAUTH_CREDENTIAL_DIR }
+    mobilerun.agent.providers.anthropic ++> mobilerun.agent.providers.registry {
+        ANTHROPIC_API_DEFAULT_MODEL,
+        ANTHROPIC_API_MODELS,
+        ANTHROPIC_OAUTH_DEFAULT_MODEL,
+        ANTHROPIC_OAUTH_MODELS,
+    }
+    mobilerun.agent.providers.grok ++> mobilerun.agent.providers.registry {
+        GROK_API_DEFAULT_MODEL,
+        GROK_API_MODELS,
+        GROK_OAUTH_DEFAULT_MODEL,
+        GROK_OAUTH_LEGACY_MODELS,
+        GROK_OAUTH_MODELS,
+        XAI_API_BASE,
+        normalize_grok_model_id,
+    }
+    mobilerun.agent.providers.minimax ++> mobilerun.agent.providers.registry {
+        MINIMAX_DEFAULT_MODEL,
+        MINIMAX_GLOBAL_BASE_URL,
+    }
+    mobilerun.agent.providers.types ++> mobilerun.agent.providers.registry {
+        ProviderFamilySpec,
+        ProviderVariantSpec,
+    }
+    mobilerun.config_manager.credential_paths ++> mobilerun.agent.providers.registry {
+        ANTHROPIC_OAUTH_CREDENTIAL_PATH,
+        GEMINI_OAUTH_CREDENTIAL_PATH,
+        GROK_OAUTH_CREDENTIAL_PATH,
+        OPENAI_OAUTH_CREDENTIAL_PATH,
+    }
+    mobilerun.config_manager.auth_profile_store ++> mobilerun.config_manager.env_keys {
+        AuthProfileStore,
+    }
+    mobilerun.config_manager.credential_paths ++> mobilerun.config_manager.env_keys {
+        AUTH_PROFILES_PATH,
+    }
+    include mobilerun.tools.formatters.base ++> mobilerun.tools.formatters { TreeFormatter }
+    include mobilerun.tools.formatters.indexed_formatter ++> mobilerun.tools.formatters {
+        IndexedFormatter,
+    }
+    mobilerun.app_cards.app_card_provider ++> mobilerun.app_cards.providers.local_provider {
+        AppCardProvider,
+    }
+    mobilerun.config_manager.path_resolver ++> mobilerun.app_cards.providers.local_provider {
+        PathResolver,
+    }
+    mobilerun.app_cards.app_card_provider ++> mobilerun.app_cards.providers.server_provider {
+        AppCardProvider,
+    }
+    mobilerun.agent.utils.errors ++> mobilerun.agent.oneflows.structured_output_agent {
+        describe_error,
+    }
+    mobilerun.agent.utils.inference ++> mobilerun.agent.oneflows.structured_output_agent {
+        astructured_predict_with_retries,
+    }
+    include mobilerun.agent.trajectory.writer ++> mobilerun.agent.trajectory {
+        TrajectoryWriter,
+        make_serializable,
+    }
+    mobilerun.agent.providers.grok ++> mobilerun.agent.utils.oauth.grok_oauth_llm {
+        GROK_OAUTH_DEFAULT_MODEL,
+        GROK_OAUTH_LEGACY_MODELS,
+        GROK_OAUTH_MODELS,
+        normalize_grok_model_id,
+        sanitize_grok_responses_kwargs,
+    }
+    mobilerun.agent.utils.oauth.login_timeout ++> mobilerun.agent.utils.oauth.grok_oauth_llm {
+        OAuthLoginDeadline,
+        open_browser_async,
+    }
+    mobilerun.config_manager.auth_profile_store ++> mobilerun.agent.utils.oauth.grok_oauth_llm {
+        AuthProfileStore,
+    }
+    mobilerun.config_manager.credential_paths ++> mobilerun.agent.utils.oauth.grok_oauth_llm {
+        GROK_OAUTH_CREDENTIAL_PATH,
+    }
+    mobilerun.agent.providers.anthropic ++> mobilerun.agent.utils.vision_sizing {
+        ANTHROPIC_HIGHRES_MODELS,
+    }
+    mobilerun.tools.helpers.images ++> mobilerun.agent.utils.vision_sizing {
+        MODEL_SCREENSHOT_MAX_SIDE,
+        anthropic_resized_size,
+        fit_dimensions_to_max_side,
+    }
+    mobilerun.agent.providers.minimax ++> mobilerun.config_manager.config_manager {
+        warn_if_legacy_minimax_endpoint,
+    }
+    mobilerun.agent.providers.registry ++> mobilerun.config_manager.config_manager {
+        GEMINI_API_DEFAULT_MODEL,
+        VARIANT_ENV_KEY_SLOT,
+    }
+    mobilerun.config_manager.env_keys ++> mobilerun.config_manager.config_manager {
+        API_KEY_ENV_VARS,
+        load_env_key_sources,
+    }
+    mobilerun.config_manager.path_resolver ++> mobilerun.config_manager.config_manager {
+        PathResolver,
+    }
+    mobilerun.mcp.config ++> mobilerun.config_manager.config_manager { MCPConfig, MCPServerConfig }
+    mobilerun.config_manager.migrations ++> mobilerun.config_manager.config_manager {
+        CURRENT_VERSION,
+        migrate,
+    }
+    mobilerun.app_cards.app_card_provider ++> mobilerun.app_cards.providers.composite_provider {
+        AppCardProvider,
+    }
+    mobilerun.app_cards.providers.local_provider ++> mobilerun.app_cards.providers.composite_provider {
+        LocalAppCardProvider,
+    }
+    mobilerun.app_cards.providers.server_provider ++> mobilerun.app_cards.providers.composite_provider {
+        ServerAppCardProvider,
+    }
+    mobilerun.agent.providers.registry ++> mobilerun.agent.utils.oauth.gemini_oauth_code_assist_llm {
+        GEMINI_OAUTH_DEFAULT_MODEL,
+        GEMINI_OAUTH_RETIRED_MODELS,
+        gemini_model_omits_sampling_params,
+        model_display_name_for_variant,
+    }
+    mobilerun.agent.utils.oauth.login_timeout ++> mobilerun.agent.utils.oauth.gemini_oauth_code_assist_llm {
+        OAuthLoginDeadline,
+        open_browser_async,
+    }
+    mobilerun.config_manager.auth_profile_store ++> mobilerun.agent.utils.oauth.gemini_oauth_code_assist_llm {
+        AuthProfileStore,
+    }
+    mobilerun.config_manager.credential_paths ++> mobilerun.agent.utils.oauth.gemini_oauth_code_assist_llm {
+        GEMINI_OAUTH_CREDENTIAL_PATH,
+    }
+    mobilerun.agent.providers.registry ++> mobilerun.agent.utils.oauth.openai_oauth_llm {
+        OPENAI_ASTRA_DEFAULT_REASONING_EFFORT,
+        OPENAI_GPT6_MODELS,
+        OPENAI_OAUTH_DEFAULT_MODEL,
+        OPENAI_OAUTH_UNSUPPORTED_MODELS,
+        OPENAI_REASONING_EFFORTS,
+        normalize_model_id_for_variant,
+    }
+    mobilerun.agent.utils.oauth.login_timeout ++> mobilerun.agent.utils.oauth.openai_oauth_llm {
+        OAuthLoginDeadline,
+        open_browser_async,
+    }
+    mobilerun.config_manager.auth_profile_store ++> mobilerun.agent.utils.oauth.openai_oauth_llm {
+        AuthProfileStore,
+    }
+    mobilerun.config_manager.credential_paths ++> mobilerun.agent.utils.oauth.openai_oauth_llm {
+        OPENAI_OAUTH_CREDENTIAL_PATH,
+    }
+    include mobilerun.agent.providers.minimax ++> mobilerun.agent.providers {
+        MINIMAX_CHINA_BASE_URL,
+        MINIMAX_GLOBAL_BASE_URL,
+        MINIMAX_LEGACY_BASE_URL,
+        warn_if_legacy_minimax_endpoint,
+    }
+    include mobilerun.agent.providers.registry ++> mobilerun.agent.providers {
+        VARIANT_ENV_KEY_SLOT,
+        get_provider_family,
+        list_auth_modes,
+        list_models_for_variant,
+        list_provider_families,
+        normalize_model_id_for_variant,
+        resolve_provider_variant,
+    }
+    include mobilerun.agent.providers.types ++> mobilerun.agent.providers {
+        ProviderFamilySpec,
+        ProviderVariantSpec,
+    }
+    include mobilerun.mcp.adapter ++> mobilerun.mcp { mcp_to_mobilerun_tools }
+    include mobilerun.mcp.client ++> mobilerun.mcp { MCPClientManager, MCPToolInfo }
+    include mobilerun.mcp.config ++> mobilerun.mcp { MCPConfig, MCPServerConfig }
+    mobilerun.config_manager.path_resolver ++> mobilerun.credential_manager.file_credential_manager {
+        PathResolver,
+    }
+    mobilerun.credential_manager.credential_manager ++> mobilerun.credential_manager.file_credential_manager {
+        CredentialManager,
+        CredentialNotFoundError,
+    }
+    mobilerun.config_manager.config_manager ++> mobilerun.credential_manager.file_credential_manager {
+        CredentialsConfig,
+    }
+    include mobilerun.app_cards.providers.composite_provider ++> mobilerun.app_cards.providers {
+        CompositeAppCardProvider,
+    }
+    include mobilerun.app_cards.providers.local_provider ++> mobilerun.app_cards.providers {
+        LocalAppCardProvider,
+    }
+    include mobilerun.app_cards.providers.server_provider ++> mobilerun.app_cards.providers {
+        ServerAppCardProvider,
+    }
+    mobilerun.agent.providers ++> mobilerun.agent.providers.setup_service {
+        VARIANT_ENV_KEY_SLOT,
+        ProviderFamilySpec,
+        ProviderVariantSpec,
+        list_provider_families,
+        resolve_provider_variant,
+    }
+    mobilerun.agent.providers.registry ++> mobilerun.agent.providers.setup_service {
+        normalize_model_id_for_variant,
+    }
+    mobilerun.config_manager.config_manager ++> mobilerun.agent.providers.setup_service {
+        LLMProfile,
+        MobileConfig,
+    }
+    mobilerun.config_manager.env_keys ++> mobilerun.agent.providers.setup_service {
+        load_env_keys,
+        save_env_keys,
+    }
+    include mobilerun.credential_manager.credential_manager ++> mobilerun.credential_manager {
+        CredentialManager,
+        CredentialNotFoundError,
+    }
+    include mobilerun.credential_manager.file_credential_manager ++> mobilerun.credential_manager {
+        FileCredentialManager,
+    }
+    mobilerun.config_manager.config_manager ++> mobilerun.config_manager.loader { MobileConfig }
+    mobilerun.config_manager.migrations ++> mobilerun.config_manager.loader {
+        CURRENT_VERSION,
+        migrate,
+    }
+    mobilerun.agent.trajectory.writer ++> mobilerun.agent.utils.trajectory { make_serializable }
+    mobilerun.macro.state ++> mobilerun.agent.utils.trajectory {
+        MACRO_SCHEMA_VERSION,
+        UNSUPPORTED_SCHEMA_MESSAGE,
+    }
+    mobilerun.agent.providers.anthropic ++> mobilerun.agent.utils.oauth.anthropic_oauth_llm {
+        ANTHROPIC_OAUTH_DEFAULT_MODEL,
+        anthropic_model_context_window,
+        anthropic_model_omits_sampling_params,
+        strip_anthropic_sampling_params,
+    }
+    mobilerun.agent.utils.oauth.login_timeout ++> mobilerun.agent.utils.oauth.anthropic_oauth_llm {
+        OAuthLoginDeadline,
+        open_browser_async,
+    }
+    mobilerun.config_manager.auth_profile_store ++> mobilerun.agent.utils.oauth.anthropic_oauth_llm {
+        AuthProfileStore,
+    }
+    mobilerun.config_manager.credential_paths ++> mobilerun.agent.utils.oauth.anthropic_oauth_llm {
+        ANTHROPIC_OAUTH_CREDENTIAL_PATH,
+    }
+    mobilerun.agent.utils.llm_openai_responses --> mobilerun.agent.utils.llm_picker;
+    mobilerun.agent.utils.llm_google_genai --> mobilerun.agent.utils.llm_picker {
+        MobilerunGoogleGenAI,
+    }
+    mobilerun.agent.utils.llm_anthropic --> mobilerun.agent.utils.llm_picker { MobilerunAnthropic }
+    mobilerun.agent.utils.llm_deepseek --> mobilerun.agent.utils.llm_picker { MobilerunDeepSeek }
+    mobilerun.agent.providers.registry --> mobilerun.agent.utils.llm_openai_responses {
+        OPENAI_ASTRA_DEFAULT_REASONING_EFFORT,
+        OPENAI_GPT6_CONTEXT_WINDOW,
+        OPENAI_GPT6_MODELS,
+        OPENAI_REASONING_EFFORTS,
+    }
+    mobilerun.agent.providers.grok --> mobilerun.agent.utils.llm_openai_responses {
+        sanitize_grok_responses_kwargs,
+    }
+    mobilerun.agent.utils.llm_picker --> mobilerun.agent.utils.llm_openai_responses {
+        OPENAI_ASTRA_MODEL,
+        OPENAI_GPT6_UNSUPPORTED_INCLUDE,
+        OPENAI_GPT6_UNSUPPORTED_PARAMS,
+        OPENAI_RESPONSES_UNSUPPORTED_SAMPLING_PARAMS,
+        _openai_responses_model_omits_sampling_params,
+    }
+    mobilerun.tools.helpers.coordinate ++> mobilerun.tools.ui.provider { NORMALIZED_STATE_NOTE }
+    mobilerun.tools.helpers.images ++> mobilerun.tools.ui.provider {
+        fit_dimensions_to_max_side,
+        resize_image_to_dimensions_with_grid,
+        resize_image_to_max_side_with_grid,
+    }
+    mobilerun.tools.ui.state ++> mobilerun.tools.ui.provider { UIState }
+    mobilerun.tools.ui.stealth_state ++> mobilerun.tools.ui.provider { StealthUIState }
+    mobilerun.agent.providers.registry ++> mobilerun.agent.utils.llm_google_genai {
+        GEMINI_UNSUPPORTED_SAMPLING_PARAMS,
+        gemini_model_omits_sampling_params,
+    }
+    include mobilerun.config_manager.config_manager ++> mobilerun.config_manager {
+        AgentConfig,
+        AppCardConfig,
+        CredentialsConfig,
+        DeviceConfig,
+        DroidConfig,
+        ExecutorConfig,
+        FastAgentConfig,
+        LLMProfile,
+        LoggingConfig,
+        ManagerConfig,
+        MobileConfig,
+        TelemetryConfig,
+        ToolsConfig,
+        TracingConfig,
+    }
+    include mobilerun.config_manager.loader ++> mobilerun.config_manager {
+        ConfigLoader,
+        OutdatedConfigError,
+    }
+    include mobilerun.config_manager.path_resolver ++> mobilerun.config_manager { PathResolver }
+    include mobilerun.config_manager.prompt_loader ++> mobilerun.config_manager { PromptLoader }
+    mobilerun.agent.utils.oauth.anthropic_oauth_llm ++> mobilerun.cli.oauth_actions {
+        DEFAULT_SETUP_TOKEN_SCOPE,
+        AnthropicOAuthLLM,
+    }
+    mobilerun.agent.utils.oauth.gemini_oauth_code_assist_llm ++> mobilerun.cli.oauth_actions {
+        DEFAULT_MODEL as GEMINI_OAUTH_DEFAULT_MODEL,
+        GeminiOAuthCodeAssistLLM,
+    }
+    mobilerun.agent.utils.oauth.grok_oauth_llm ++> mobilerun.cli.oauth_actions {
+        DEFAULT_GROK_MODEL,
+        GrokOAuth,
+    }
+    mobilerun.agent.utils.oauth.login_timeout ++> mobilerun.cli.oauth_actions { OAuthLoginDeadline }
+    mobilerun.agent.utils.oauth.openai_oauth_llm ++> mobilerun.cli.oauth_actions {
+        DEFAULT_OPENAI_OAUTH_CALLBACK_HOST,
+        DEFAULT_OPENAI_OAUTH_CALLBACK_PATH,
+        DEFAULT_OPENAI_OAUTH_CALLBACK_PORT,
+        DEFAULT_OPENAI_OAUTH_CREDENTIAL_PATH,
+        OpenAIOAuth,
+    }
+    mobilerun.config_manager.auth_profile_store ++> mobilerun.cli.oauth_actions { AuthProfileStore }
+    mobilerun.agent.action_result ++> mobilerun.agent.tool_registry { ActionResult }
+    mobilerun.agent.utils.errors ++> mobilerun.agent.tool_registry { describe_error }
+    mobilerun.agent.common.events ++> mobilerun.agent.tool_registry { ToolExecutionEvent }
+    mobilerun.agent.providers.minimax ++> mobilerun.cli.configure_wizard {
+        MINIMAX_CHINA_BASE_URL,
+        MINIMAX_GLOBAL_BASE_URL,
+    }
+    mobilerun.agent.providers.registry ++> mobilerun.cli.configure_wizard {
+        VARIANT_ENV_KEY_SLOT,
+        model_display_name_for_variant,
+        resolve_provider_variant,
+    }
+    mobilerun.agent.providers.setup_service ++> mobilerun.cli.configure_wizard {
+        SetupSelection,
+        apply_selection_to_roles,
+        auth_mode_choices,
+        family_choices,
+        variant_models,
+    }
+    mobilerun.cli.configure_prompts ++> mobilerun.cli.configure_wizard {
+        SelectChoice,
+        select_prompt,
+        text_prompt,
+    }
+    mobilerun.config_manager ++> mobilerun.cli.configure_wizard { ConfigLoader }
+    mobilerun.config_manager.env_keys ++> mobilerun.cli.configure_wizard {
+        load_env_key_sources,
+        resolve_env_key,
+    }
+    mobilerun.agent.providers.anthropic ++> mobilerun.agent.utils.llm_anthropic {
+        ANTHROPIC_UNSUPPORTED_SAMPLING_PARAMS,
+        StreamUsage,
+        anthropic_model_context_window,
+        anthropic_model_omits_sampling_params,
+        collect_stream_usage,
+        record_stream_usage,
     }
 }
 

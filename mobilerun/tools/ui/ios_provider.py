@@ -10,6 +10,7 @@ Known limitations:
 
 from __future__ import annotations
 
+import builtins
 import logging
 import re
 from typing import Any, Dict, List, Optional
@@ -64,7 +65,7 @@ class IOSStateProvider(StateProvider):
         vision_enabled: bool = False,
         vision_resize_policy: Any = None,
     ) -> None:
-        super().__init__(driver)
+        StateProvider.__init__(self, driver)
         self.use_normalized = use_normalized
         self.vision_enabled = vision_enabled
         # Resolves the exact screenshot dims the active vision model grounds on
@@ -194,7 +195,7 @@ class IOSStateProvider(StateProvider):
                 )
                 element["displayBounds"] = ",".join(
                     str(round(value / scale))
-                    for value, scale in zip(
+                    for value, scale in builtins.zip(
                         (left, top, right, bottom),
                         (
                             coordinate_scale_x,

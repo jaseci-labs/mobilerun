@@ -1,0 +1,15 @@
+glob __all__: any = [
+    "MINIMAX_CHINA_BASE_URL",
+    "MINIMAX_GLOBAL_BASE_URL",
+    "MINIMAX_LEGACY_BASE_URL",
+    "VARIANT_ENV_KEY_SLOT",
+    "ProviderFamilySpec",
+    "ProviderVariantSpec",
+    "get_provider_family",
+    "list_auth_modes",
+    "list_models_for_variant",
+    "list_provider_families",
+    "normalize_model_id_for_variant",
+    "resolve_provider_variant",
+    "warn_if_legacy_minimax_endpoint",
+];

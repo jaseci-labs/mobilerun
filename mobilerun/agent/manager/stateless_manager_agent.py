@@ -4,6 +4,7 @@ StatelessManagerAgent - Stateless planning agent that rebuilds context each turn
 
 from __future__ import annotations
 
+import builtins
 import logging
 from typing import TYPE_CHECKING, Optional, Type
 
@@ -87,7 +88,7 @@ class StatelessManagerAgent(Workflow):
                 "outcome": outcome,
                 "error": err,
             }
-            for act, summ, outcome, err in zip(
+            for act, summ, outcome, err in builtins.zip(
                 self.shared_state.action_history[-n:],
                 self.shared_state.summary_history[-n:],
                 self.shared_state.action_outcomes[-n:],

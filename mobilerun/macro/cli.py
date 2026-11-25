@@ -2,6 +2,7 @@
 Command-line interface for Mobilerun macro replay.
 """
 
+import functools
 import asyncio
 import logging
 from typing import Optional
@@ -116,25 +117,6 @@ def replay(
     # Convert start_from from 1-based to 0-based
     start_from_zero = max(0, start_from - 1)
 
-    async def get_device():
-        if device is None:
-            logger.info("🔍 Finding connected device...")
-            try:
-                dev = await resolve_android_serial()
-            except Exception as e:
-                # Dry runs never touch a device, so any discovery failure is fine.
-                if dry_run:
-                    logger.warning(f"⚠️  {e}")
-                    return None
-                if isinstance(e, AndroidDeviceSelectionError):
-                    raise click.ClickException(str(e)) from None
-                raise
-            logger.info(f"📱 Using device: {dev}")
-            return dev
-        else:
-            logger.info(f"📱 Using device: {device}")
-            return device
-
     asyncio.run(
         _replay_with_device(
             path,
@@ -144,7 +126,7 @@ def replay(
             max_steps,
             dry_run,
             logger,
-            get_device,
+            functools.partial(_get_device, device, dry_run, logger),
             on_mismatch,
             state_timeout,
             state_threshold,
@@ -153,6 +135,26 @@ def replay(
             model,
         )
     )
+
+
+async def _get_device(device, dry_run: bool, logger: logging.Logger):
+    if device is None:
+        logger.info("🔍 Finding connected device...")
+        try:
+            dev = await resolve_android_serial()
+        except Exception as e:
+            # Dry runs never touch a device, so any discovery failure is fine.
+            if dry_run:
+                logger.warning(f"⚠️  {e}")
+                return None
+            if isinstance(e, AndroidDeviceSelectionError):
+                raise click.ClickException(str(e)) from None
+            raise
+        logger.info(f"📱 Using device: {dev}")
+        return dev
+    else:
+        logger.info(f"📱 Using device: {device}")
+        return device
 
 
 async def _replay_with_device(
