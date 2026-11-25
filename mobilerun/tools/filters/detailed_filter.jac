@@ -1,7 +1,5 @@
 import builtins;
 
-import operator;
-
 import from typing { Any, Dict, Optional }
 
 """Detailed tree filtering with 10% visibility rule."""
@@ -58,10 +56,10 @@ class DetailedFilter(TreeFilter) {
             return 0.0;
         }
 
-        overflow: any = operator.le(left, 0)
-            and operator.le(top, 0)
-            and operator.ge(right, screen_width)
-            and operator.ge(bottom, screen_height);
+        overflow: any = (left <= 0)
+            and (top <= 0)
+            and (right >= screen_width)
+            and (bottom >= screen_height);
         if overflow {
             return 1.0;
         }
@@ -116,7 +114,7 @@ class DetailedFilter(TreeFilter) {
     class def _filter_keyboard_elements(
         `node: Dict[builtins.str, Any]
     ) -> Optional[Dict[builtins.str, Any]] {
-        filtered_children: any = [];
+        filtered_children = [];
         for child in `node.get("children") or [] {
             filtered_child: any = cls._filter_keyboard_elements(child);
             if filtered_child is not None {
@@ -138,7 +136,7 @@ class DetailedFilter(TreeFilter) {
             return `node;
         }
 
-        filtered_children: any = [];
+        filtered_children = [];
         for child in `node.get("children") or [] {
             filtered_child: any = self._filter_out_of_bounds(child, screen_width, screen_height);
             if filtered_child is not None {
@@ -148,7 +146,7 @@ class DetailedFilter(TreeFilter) {
 
         bounds: any = `node.get("boundsInScreen");
         if bounds is None {
-            visible_percentage: any = 0.0;
+            visible_percentage = 0.0;
         } else {
             visible_percentage = self._get_visible_percentage(bounds, screen_width, screen_height);
         }

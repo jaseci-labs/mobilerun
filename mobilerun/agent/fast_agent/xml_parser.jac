@@ -1,7 +1,5 @@
 import builtins;
 
-import operator;
-
 import json;
 
 import logging;
@@ -319,7 +317,7 @@ def _has_noncanonical_markup(block: builtins.str) -> builtins.bool {
             continue;
         }
         if not `any(
-            operator.le(start, marker.start()) and operator.le(marker.end(), end)
+            (start <= marker.start()) and (marker.end() <= end)
             for (start, end) in payload_spans,
         ) {
             return True;
@@ -363,7 +361,7 @@ def _coerce_param(
     expected: any = param_types.get(name, "string");
 
     if expected == "boolean" {
-        return operator.eq(value.strip().lower(), "true");
+        return (value.strip().lower() == "true");
     }
 
     if expected == "number" {

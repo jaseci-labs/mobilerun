@@ -1,6 +1,3 @@
-import operator;
-
-import from __future__ { annotations }
 
 import from typing { Any, Dict, Iterable, List, Optional, Tuple }
 
@@ -13,7 +10,7 @@ def normalize_ui_state(ui_state: Any) -> Dict[str, Any] {
     phone_state: any = _extract_phone_state(ui_state);
     screen: any = _extract_screen(ui_state);
 
-    nodes: any = [];
+    nodes = [];
     for element in _walk_elements(elements) {
         `node: any = _normalize_element(element);
         if `node {
@@ -35,16 +32,19 @@ def build_screen_snapshot(ui_state: Any) -> Dict[str, Any] {
     return normalize_ui_state(ui_state);
 }
 
+glob _SEMANTIC_FIELDS: tuple[str, ...] = (
+    "resource_id",
+    "class",
+    "text",
+    "content_description",
+    "clickable",
+    "enabled",
+    "focused",
+);
+
+# One read of `node.get` and a builtin map, not seven reads of an any.
 def node_semantic_key(`node: Dict[str, Any]) -> Tuple[Any, ...] {
-    return (
-        `node.get("resource_id"),
-        `node.get("class"),
-        `node.get("text"),
-        `node.get("content_description"),
-        `node.get("clickable"),
-        `node.get("enabled"),
-        `node.get("focused"),
-    );
+    return `tuple(map(`node.get, _SEMANTIC_FIELDS));
 }
 
 def _extract_elements(ui_state: Any) -> List[Dict[str, Any]] {
@@ -128,7 +128,7 @@ def _normalize_element(element: Dict[str, Any]) -> Optional[Dict[str, Any]] {
         "bounds": bounds,
     };
 
-    if not `any(value is not None and operator.ne(value, "") for value in `node.values()) {
+    if not `any(value is not None and (value != "") for value in `node.values()) {
         return None;
     }
     return `node;

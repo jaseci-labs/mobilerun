@@ -6,6 +6,13 @@ type _Box = tuple[int, int, int, int];
 
 glob Bounds: any = Tuple[int, int, int, int];
 
+"""A "left,top,right,bottom" bounds string as a typed box, so the helpers
+below run on typed tuples, with no per-read `held` or per-call `convert`."""
+def parse_bounds(bounds_str: str) -> _Box {
+    v = [`int(p) for p in bounds_str.split(",")];
+    return (v[0], v[1], v[2], v[3]);
+}
+
 def rects_overlap(a: _Box, b: _Box) -> bool {
     return not (a[2] <= b[0] or b[2] <= a[0] or a[3] <= b[1] or b[3] <= a[1]);
 }

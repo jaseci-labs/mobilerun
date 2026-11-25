@@ -1,7 +1,5 @@
 import builtins;
 
-import operator;
-
 import from typing { Any, Dict, Optional }
 
 """Concise tree filtering (formerly Mobilerun)."""
@@ -31,7 +29,7 @@ class ConciseFilter(TreeFilter) {
             return None;
         }
 
-        filtered_children: any = [];
+        filtered_children = [];
         for child in `node.get("children") or [] {
             filtered_child: any = self._filter_node(child, screen_bounds, filtering_params);
             if filtered_child {
@@ -57,7 +55,7 @@ class ConciseFilter(TreeFilter) {
         bounds: any = `node.get("boundsInScreen", {});
         w: any = bounds.get("right", 0) - bounds.get("left", 0);
         h: any = bounds.get("bottom", 0) - bounds.get("top", 0);
-        return operator.gt(w, min_size) and operator.gt(h, min_size);
+        return (w > min_size) and (h > min_size);
     }
 
     def get_name -> builtins.str {

@@ -6,8 +6,8 @@ import from typing { Any, Callable, Dict, List, Tuple }
 
 glob ElementFilter: any = Callable[[List[Dict[str, Any]]], List[Dict[str, Any]]];
 
-def flatten_tree(`root: Dict[builtins.str, Any]) -> List[Dict[builtins.str, Any]] {
-    results: any = [`root];
+def flatten_tree(`root: Dict[builtins.str, Any]) -> list[any] {
+    results: list[any] = [`root];
     for child in `root.get("children") or [] {
         results.extend(flatten_tree(child));
     }
@@ -50,13 +50,13 @@ class Filters {
         }
 
         def filter_fn(nodes: List[Dict]) -> List[Dict] {
-            all_nodes: any = [];
+            all_nodes = [];
             `node: any;
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
 
-            results: any = [];
+            results = [];
 
             for `node in all_nodes {
                 text: any = `node.get("text", "");
@@ -99,13 +99,13 @@ class Filters {
         }
 
         def filter_fn(nodes: List[Dict]) -> List[Dict] {
-            all_nodes: any = [];
+            all_nodes = [];
             `node: any;
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
 
-            results: any = [];
+            results = [];
 
             for `node in all_nodes {
                 resource_id: any = `node.get("resourceId", "");
@@ -143,13 +143,13 @@ class Filters {
             anchor_bottom: any = anchor_bounds.get("bottom", 0);
             (anchor_center_x, anchor_center_y) = get_element_center(anchor) as any;
 
-            all_nodes: any = [];
+            all_nodes = [];
             `node: any;
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
 
-            candidates: any = [];
+            candidates = [];
             for `node in all_nodes {
                 if `node == anchor {
                     continue;
@@ -188,13 +188,13 @@ class Filters {
             anchor_top: any = anchor_bounds.get("top", 0);
             (anchor_center_x, anchor_center_y) = get_element_center(anchor) as any;
 
-            all_nodes: any = [];
+            all_nodes = [];
             `node: any;
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
 
-            candidates: any = [];
+            candidates = [];
             for `node in all_nodes {
                 if `node == anchor {
                     continue;
@@ -233,13 +233,13 @@ class Filters {
             anchor_left: any = anchor_bounds.get("left", 0);
             (anchor_center_x, anchor_center_y) = get_element_center(anchor) as any;
 
-            all_nodes: any = [];
+            all_nodes = [];
             `node: any;
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
 
-            candidates: any = [];
+            candidates = [];
             for `node in all_nodes {
                 if `node == anchor {
                     continue;
@@ -278,13 +278,13 @@ class Filters {
             anchor_right: any = anchor_bounds.get("right", 0);
             (anchor_center_x, anchor_center_y) = get_element_center(anchor) as any;
 
-            all_nodes: any = [];
+            all_nodes = [];
             `node: any;
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
 
-            candidates: any = [];
+            candidates = [];
             for `node in all_nodes {
                 if `node == anchor {
                     continue;
@@ -312,7 +312,7 @@ class Filters {
 
     static def clickable -> ElementFilter {
         def filter_fn(nodes: List[Dict]) -> List[Dict] {
-            all_nodes: any = [];
+            all_nodes = [];
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
@@ -325,7 +325,7 @@ class Filters {
 
     static def non_clickable -> ElementFilter {
         def filter_fn(nodes: List[Dict]) -> List[Dict] {
-            all_nodes: any = [];
+            all_nodes = [];
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
@@ -338,7 +338,7 @@ class Filters {
 
     static def enabled(expected: builtins.bool = True) -> ElementFilter {
         def filter_fn(nodes: List[Dict]) -> List[Dict] {
-            all_nodes: any = [];
+            all_nodes = [];
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
@@ -351,7 +351,7 @@ class Filters {
 
     static def selected(expected: builtins.bool = True) -> ElementFilter {
         def filter_fn(nodes: List[Dict]) -> List[Dict] {
-            all_nodes: any = [];
+            all_nodes = [];
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
@@ -364,7 +364,7 @@ class Filters {
 
     static def checked(expected: builtins.bool = True) -> ElementFilter {
         def filter_fn(nodes: List[Dict]) -> List[Dict] {
-            all_nodes: any = [];
+            all_nodes = [];
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
@@ -377,7 +377,7 @@ class Filters {
 
     static def focused(expected: builtins.bool = True) -> ElementFilter {
         def filter_fn(nodes: List[Dict]) -> List[Dict] {
-            all_nodes: any = [];
+            all_nodes = [];
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
@@ -392,13 +392,13 @@ class Filters {
         width: builtins.int = None, height: builtins.int = None, tolerance: builtins.int = 0
     ) -> ElementFilter {
         def filter_fn(nodes: List[Dict]) -> List[Dict] {
-            all_nodes: any = [];
+            all_nodes = [];
             `node: any;
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
 
-            results: any = [];
+            results = [];
             for `node in all_nodes {
                 bounds: any = `node.get("boundsInScreen", {});
 
@@ -428,13 +428,13 @@ class Filters {
 
     static def contains_child(child_filter: ElementFilter) -> ElementFilter {
         def filter_fn(nodes: List[Dict]) -> List[Dict] {
-            all_nodes: any = [];
+            all_nodes = [];
             `node: any;
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
 
-            results: any = [];
+            results = [];
 
             for `node in all_nodes {
                 children: any = `node.get("children") or [];
@@ -458,13 +458,13 @@ class Filters {
 
     static def contains_descendants(filters: List[ElementFilter]) -> ElementFilter {
         def filter_fn(nodes: List[Dict]) -> List[Dict] {
-            all_nodes: any = [];
+            all_nodes = [];
             `node: any;
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
 
-            results: any = [];
+            results = [];
 
             for `node in all_nodes {
                 descendants: any = flatten_tree(`node);
@@ -512,7 +512,7 @@ class Filters {
 
     static def has_text -> ElementFilter {
         def filter_fn(nodes: List[Dict]) -> List[Dict] {
-            all_nodes: any = [];
+            all_nodes = [];
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
@@ -529,7 +529,7 @@ class Filters {
 
     static def clickable_first -> ElementFilter {
         def filter_fn(nodes: List[Dict]) -> List[Dict] {
-            all_nodes: any = [];
+            all_nodes = [];
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
@@ -542,7 +542,7 @@ class Filters {
 
     static def index(idx: builtins.int) -> ElementFilter {
         def filter_fn(nodes: List[Dict]) -> List[Dict] {
-            all_nodes: any = [];
+            all_nodes = [];
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
@@ -592,7 +592,7 @@ class Filters {
 
             common_ids: any = result_sets[0].intersection(*result_sets[1:]);
 
-            all_nodes: any = [];
+            all_nodes = [];
             for `node in nodes {
                 all_nodes.extend(flatten_tree(`node));
             }
@@ -604,8 +604,8 @@ class Filters {
     }
 
     static def deepest_matching(base_filter: ElementFilter) -> ElementFilter {
-        def find_deepest_in_node(`node: Dict) -> List[Dict] {
-            child_matches: any = [];
+        def find_deepest_in_node(`node: Dict) -> list[any] {
+            child_matches: list[any] = [];
             for child in `node.get("children") or [] {
                 child_matches.extend(find_deepest_in_node(child));
             }
@@ -623,7 +623,7 @@ class Filters {
         }
 
         def filter_fn(nodes: List[Dict]) -> List[Dict] {
-            results: any = [];
+            results = [];
 
             for `node in nodes {
                 results.extend(find_deepest_in_node(`node));

@@ -18,7 +18,7 @@ class IndexedFormatter(TreeFormatter) {
         focused_text: any = self._get_focused_text(phone_state);
 
         if filtered_tree is None {
-            a11y_tree: any = [];
+            a11y_tree = [];
         } else {
             a11y_tree = self._flatten_with_index(filtered_tree, [1]);
         }
@@ -26,7 +26,7 @@ class IndexedFormatter(TreeFormatter) {
         phone_state_text: any = self._format_phone_state(phone_state);
         ui_elements_text: any = self._format_ui_elements_text(a11y_tree);
 
-        formatted_text: any = f"{phone_state_text}\n\n{ui_elements_text}";
+        formatted_text = f"{phone_state_text}\n\n{ui_elements_text}";
 
         return (formatted_text, focused_text, a11y_tree, phone_state);
     }
@@ -52,7 +52,7 @@ class IndexedFormatter(TreeFormatter) {
                 focused_desc = "''";
             }
             if current_app and package_name {
-                app_line: any = f"• **App:** {current_app} ({package_name})";
+                app_line = f"• **App:** {current_app} ({package_name})";
             } elif current_app {
                 app_line = f"• **App:** {current_app}";
             } elif package_name {
@@ -82,10 +82,10 @@ class IndexedFormatter(TreeFormatter) {
     def _format_ui_elements_text(a11y_tree: List[Dict[builtins.str, Any]]) -> builtins.str {
         normalized: any = self.use_normalized and self.screen_width and self.screen_height;
         coord_note: any = " (normalized [0-1000])" if normalized else "";
-        schema: any = "'index. className: resourceId; checkedState, text - bounds(x1,y1,x2,y2)'";
+        schema = "'index. className: resourceId; checkedState, text - bounds(x1,y1,x2,y2)'";
         if a11y_tree {
             formatted_ui: any = IndexedFormatter._format_ui_elements(a11y_tree);
-            ui_elements_text: any = f"Current Clickable UI elements{coord_note}:\n{schema}:\n{formatted_ui}";
+            ui_elements_text = f"Current Clickable UI elements{coord_note}:\n{schema}:\n{formatted_ui}";
         } else {
             ui_elements_text = f"Current Clickable UI elements{coord_note}:\n{schema}:\nNo UI elements found";
         }
@@ -99,7 +99,7 @@ class IndexedFormatter(TreeFormatter) {
             return "";
         }
 
-        formatted_lines: any = [];
+        formatted_lines = [];
         indent: any = "  " * level;
 
         elements: any = ui_data if isinstance(ui_data, `list) else [ui_data];
@@ -117,7 +117,7 @@ class IndexedFormatter(TreeFormatter) {
             checkedState: any = element.get("checkedState", "");
             children: any = element.get("children") or [];
 
-            line_parts: any = [];
+            line_parts = [];
             if index != "" {
                 line_parts.append(f"{index}.");
             }
@@ -125,7 +125,7 @@ class IndexedFormatter(TreeFormatter) {
                 line_parts.append(class_name + ":");
             }
 
-            details: any = [];
+            details = [];
             if resource_id {
                 details.append(f"\"{resource_id}\"");
             }
@@ -161,16 +161,16 @@ class IndexedFormatter(TreeFormatter) {
 
     def _flatten_with_index(
         `node: Dict[builtins.str, Any], counter: List[builtins.int]
-    ) -> List[Dict[builtins.str, Any]] {
-        results: any = [];
+    ) -> list[any] {
+        results: list[any] = [];
 
         formatted: any = self._format_node(`node, counter[0]);
         results.append(formatted);
         counter[0] += 1;
 
-        siblings: any = [];
+        siblings = [];
         for child in `node.get("children") or [] {
-            descendants: any = self._flatten_with_index(child, counter);
+            descendants = self._flatten_with_index(child, counter);
             siblings.append((child, descendants[0]));
             results.extend(descendants);
         }
@@ -189,8 +189,8 @@ class IndexedFormatter(TreeFormatter) {
             if not isinstance(order, `int) or not isinstance(window, `int) or window < 0 {
                 continue;
             }
-            bounds: any = `tuple(map(int, formatted["bounds"].split(",")));
-            blockers: any = [];
+            bounds = parse_bounds(formatted["bounds"]);
+            blockers = [];
             for (other, candidate) in siblings {
                 other_order: any = other.get("drawingOrder");
                 if other.get("windowId") != window
@@ -201,8 +201,7 @@ class IndexedFormatter(TreeFormatter) {
                 {
                     continue;
                 }
-                candidate_bounds: any = `tuple(map(int, candidate["bounds"].split(",")));
-                if rects_overlap(bounds, candidate_bounds) {
+                if rects_overlap(bounds, parse_bounds(candidate["bounds"])) {
                     blockers.append(candidate["bounds"]);
                 }
             }
@@ -253,7 +252,7 @@ class IndexedFormatter(TreeFormatter) {
         class_name: any = `node.get("className", "");
         short_class: any = class_name.split(".")[-1] if class_name else "";
 
-        checked_state: any = "";
+        checked_state = "";
         if `node.get("isCheckable") {
             checked_state = "isChecked=True" if `node.get("isChecked") else "isChecked=False";
         }

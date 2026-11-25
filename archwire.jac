@@ -623,6 +623,7 @@ graph import {
     mobilerun.tools.helpers.geometry ++> mobilerun.tools.ui.state {
         find_clear_point,
         find_uncovered_point,
+        parse_bounds,
         rects_overlap,
     }
     mobilerun.agent.usage ++> mobilerun.agent.executor.events { UsageResult }
@@ -701,6 +702,7 @@ graph import {
         bounds_to_normalized,
     }
     mobilerun.tools.helpers.geometry ++> mobilerun.tools.formatters.indexed_formatter {
+        parse_bounds,
         rects_overlap,
     }
     mobilerun.tools.formatters.base ++> mobilerun.tools.formatters.indexed_formatter {

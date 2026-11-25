@@ -1,6 +1,3 @@
-import operator;
-
-import from __future__ { annotations }
 
 import from dataclasses { dataclass }
 
@@ -45,7 +42,7 @@ def _node_key_set(state: Dict[str, Any]) -> set[Tuple[Any, ...]] {
     return {
         node_semantic_key(`node)
         for `node in state.get("nodes", [])
-        if `any(part is not None and operator.ne(part, "") for part in node_semantic_key(`node))
+        if `any(part is not None and (part != "") for part in node_semantic_key(`node))
     };
 }
 
