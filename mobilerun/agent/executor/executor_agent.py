@@ -65,7 +65,7 @@ class ExecutorAgent(Workflow):
         prompt_resolver: Optional[PromptResolver] = None,
         **kwargs,
     ):
-        super().__init__(**kwargs)
+        Workflow.__init__(self, **kwargs)
         self.llm = llm
         self.agent_config = agent_config
         self.config = agent_config.executor

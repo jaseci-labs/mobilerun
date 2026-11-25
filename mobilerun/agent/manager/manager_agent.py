@@ -75,6 +75,16 @@ def _card_platform(platform: str | None) -> str | None:
     return value if value in ("android", "ios") else None
 
 
+class _DisabledAppCardProvider(AppCardProvider):
+    async def load_app_card(
+        self,
+        package_name: str,
+        instruction: str = "",
+        platform: str | None = None,
+    ) -> str:
+        return ""
+
+
 class ManagerAgent(Workflow):
     """
     Planning and reasoning agent that decides what to do next.
@@ -100,7 +110,7 @@ class ManagerAgent(Workflow):
         tracing_config: "TracingConfig | None" = None,
         **kwargs,
     ):
-        super().__init__(**kwargs)
+        Workflow.__init__(self, **kwargs)
         self.llm = llm
         self.config = agent_config.manager
         self.vision = self.config.vision
@@ -129,17 +139,7 @@ class ManagerAgent(Workflow):
     def _initialize_app_card_provider(self) -> AppCardProvider:
         """Initialize app card provider based on configuration mode."""
         if not self.app_card_config.enabled:
-
-            class DisabledProvider(AppCardProvider):
-                async def load_app_card(
-                    self,
-                    package_name: str,
-                    instruction: str = "",
-                    platform: str | None = None,
-                ) -> str:
-                    return ""
-
-            return DisabledProvider()
+            return _DisabledAppCardProvider()
 
         mode = self.app_card_config.mode.lower()
 

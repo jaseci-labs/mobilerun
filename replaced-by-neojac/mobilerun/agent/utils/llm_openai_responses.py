@@ -152,7 +152,7 @@ class MobilerunOpenAIResponses(OpenAIResponses):
     @property
     def metadata(self) -> LLMMetadata:
         if self.model not in OPENAI_GPT6_MODELS:
-            return super().metadata
+            return OpenAIResponses.metadata.fget(self)
         return LLMMetadata(
             context_window=self.context_window or OPENAI_GPT6_CONTEXT_WINDOW,
             num_output=self.max_output_tokens or -1,

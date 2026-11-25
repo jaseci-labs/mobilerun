@@ -237,7 +237,7 @@ def _load_openai_responses(*, grok: bool = False, **kwargs: Any) -> LLM:
     # Upstream calls the parser through the class, so patch it there.
     _patch_responses_output_parser(OpenAIResponses)
 
-    from mobilerun.agent.utils import llm_openai_responses as adapters
+    import mobilerun.agent.utils.llm_openai_responses as adapters
 
     if grok:
         kwargs = dict(sanitize_grok_responses_kwargs(kwargs))

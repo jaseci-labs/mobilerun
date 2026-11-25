@@ -11,7 +11,7 @@ import os
 import re
 import sys
 import tempfile
-from functools import wraps
+from functools import partial, wraps
 from typing import Optional
 
 import click
@@ -80,12 +80,12 @@ def resolve_cloud_api_key() -> Optional[str]:
     return None
 
 
-def coro(f):
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        return asyncio.run(f(*args, **kwargs))
+def _run_coroutine(f, *args, **kwargs):
+    return asyncio.run(f(*args, **kwargs))
 
-    return wrapper
+
+def coro(f):
+    return wraps(f)(partial(_run_coroutine, f))
 
 
 def device_options(f):

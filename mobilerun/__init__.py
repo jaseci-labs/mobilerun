@@ -2,6 +2,7 @@
 Mobilerun - A framework for controlling Android devices through LLM agents.
 """
 
+import sys
 import logging
 from importlib.metadata import version
 
@@ -107,5 +108,5 @@ def __getattr__(name):
             DeprecationWarning,
             stacklevel=2,
         )
-        return globals()[new_name]
+        return getattr(sys.modules[__name__], new_name)
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

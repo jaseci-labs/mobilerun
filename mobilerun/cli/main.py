@@ -11,7 +11,7 @@ import sys
 import tomllib
 import warnings
 from contextlib import nullcontext
-from functools import wraps
+from functools import partial, wraps
 from pathlib import Path
 
 import click
@@ -116,12 +116,12 @@ def _setup_cli_logging(debug: bool) -> None:
     configure_logging(debug=debug, handler=handler)
 
 
-def coro(f):
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        return asyncio.run(f(*args, **kwargs))
+def _run_coroutine(f, *args, **kwargs):
+    return asyncio.run(f(*args, **kwargs))
 
-    return wrapper
+
+def coro(f):
+    return wraps(f)(partial(_run_coroutine, f))
 
 
 async def run_command(

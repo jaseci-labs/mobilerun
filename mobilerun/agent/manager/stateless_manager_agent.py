@@ -62,7 +62,7 @@ class StatelessManagerAgent(Workflow):
         tracing_config: "TracingConfig | None" = None,
         **kwargs,
     ):
-        super().__init__(**kwargs)
+        Workflow.__init__(self, **kwargs)
         self.llm = llm
         self.config = agent_config.manager
         self.vision = self.config.vision

@@ -384,7 +384,7 @@ class MobileAgent(Workflow):
         self.action_ctx = None
         self.state_provider = None
 
-        super().__init__(*args, timeout=timeout, **kwargs)
+        Workflow.__init__(self, *args, timeout=timeout, **kwargs)
 
         self._tracing_session_id = self.config.tracing.langfuse_session_id
         self._tracing_user_id = self.config.tracing.langfuse_user_id
@@ -505,7 +505,7 @@ class MobileAgent(Workflow):
         with session_context(
             self._tracing_session_id, self._tracing_user_id, agent=self
         ):
-            return super().run(*args, **kwargs)
+            return Workflow.run(self, *args, **kwargs)
 
     async def _initialize_workflow_deadline(self, ctx: Context) -> None:
         """Store a deadline owned by the runtime execution of this run."""

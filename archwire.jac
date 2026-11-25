@@ -349,60 +349,6 @@ graph import {
         AgentConfig,
         TracingConfig,
     }
-    mobilerun.agent.utils.llm_picker --> mobilerun.agent.utils.llm_loader {
-        load_llm,
-        load_llms_from_profiles,
-    }
-    mobilerun.config_manager.config_manager --> mobilerun.agent.utils.llm_loader { MobileConfig }
-    mobilerun.agent.providers.anthropic --> mobilerun.agent.utils.llm_picker {
-        ANTHROPIC_API_DEFAULT_MODEL,
-        ANTHROPIC_MODELS_WITHOUT_FORCED_TOOL_CHOICE,
-        ANTHROPIC_UNSUPPORTED_SAMPLING_PARAMS,
-        StreamUsage,
-        anthropic_model_context_window,
-        anthropic_model_omits_sampling_params,
-        collect_stream_usage,
-        record_stream_usage,
-    }
-    mobilerun.agent.providers.grok --> mobilerun.agent.utils.llm_picker {
-        GROK_API_DEFAULT_MODEL,
-        GROK_CONTEXT_WINDOW,
-        XAI_API_BASE,
-        normalize_grok_model_id,
-        sanitize_grok_responses_kwargs,
-    }
-    mobilerun.agent.providers.minimax --> mobilerun.agent.utils.llm_picker {
-        MINIMAX_DEFAULT_MODEL,
-        MINIMAX_GLOBAL_BASE_URL,
-        apply_minimax_defaults,
-        is_minimax_base_url,
-        warn_if_legacy_minimax_endpoint,
-    }
-    mobilerun.agent.providers.registry --> mobilerun.agent.utils.llm_picker {
-        GEMINI_API_DEFAULT_MODEL,
-        GEMINI_UNSUPPORTED_SAMPLING_PARAMS,
-        OPENAI_API_DEFAULT_MODEL,
-        OPENAI_ASTRA_DEFAULT_REASONING_EFFORT,
-        OPENAI_GPT6_CONTEXT_WINDOW,
-        OPENAI_GPT6_MODELS,
-        OPENAI_OAUTH_UNSUPPORTED_MODELS,
-        OPENAI_REASONING_EFFORTS,
-        gemini_model_omits_sampling_params,
-        list_models_for_variant,
-        normalize_model_id_for_variant,
-    }
-    mobilerun.agent.usage --> mobilerun.agent.utils.llm_picker { track_usage }
-    mobilerun.config_manager.config_manager --> mobilerun.agent.utils.llm_picker { LLMProfile }
-    mobilerun.agent.utils.oauth.openai_oauth_llm --> mobilerun.agent.utils.llm_picker {
-        OpenAIOAuth,
-    }
-    mobilerun.agent.utils.oauth.anthropic_oauth_llm --> mobilerun.agent.utils.llm_picker {
-        AnthropicOAuthLLM,
-    }
-    mobilerun.agent.utils.oauth.gemini_oauth_code_assist_llm --> mobilerun.agent.utils.llm_picker {
-        GeminiOAuthCodeAssistLLM,
-    }
-    mobilerun.agent.utils.oauth.grok_oauth_llm --> mobilerun.agent.utils.llm_picker { GrokOAuth }
     mobilerun --> mobilerun.agent.utils.portal_setup { __version__ }
     mobilerun.agent.tool_registry --> mobilerun.agent.utils.signatures { ToolRegistry }
     mobilerun.agent.utils.actions --> mobilerun.agent.utils.signatures {
@@ -521,12 +467,6 @@ graph import {
     mobilerun.config_manager --> mobilerun.cli.doctor { ConfigLoader }
     mobilerun.config_manager.loader --> mobilerun.cli.doctor { OutdatedConfigError }
     mobilerun.cli.main --> mobilerun.cli.doctor { _setup_portal }
-    mobilerun.tools.ui --> mobilerun.tools { AndroidStateProvider, StateProvider, UIState }
-    mobilerun.tools.ui.ios_provider --> mobilerun.tools.ui { IOSStateProvider }
-    mobilerun.tools.ui.provider --> mobilerun.tools.ui { AndroidStateProvider, StateProvider }
-    mobilerun.tools.ui.screenshot_provider --> mobilerun.tools.ui { ScreenshotOnlyStateProvider }
-    mobilerun.tools.ui.state --> mobilerun.tools.ui { UIState }
-    mobilerun.tools.ui.stealth_state --> mobilerun.tools.ui { StealthUIState }
     mobilerun.cli.main --> mobilerun.__main__ { cli }
     mobilerun.agent.utils.chat_utils --> mobilerun.agent.utils {
         filter_empty_messages,
@@ -1485,21 +1425,6 @@ graph import {
     mobilerun.config_manager.credential_paths ++> mobilerun.agent.utils.oauth.anthropic_oauth_llm {
         ANTHROPIC_OAUTH_CREDENTIAL_PATH,
     }
-    mobilerun.agent.utils.llm_openai_responses --> mobilerun.agent.utils.llm_picker;
-    mobilerun.agent.utils.llm_google_genai --> mobilerun.agent.utils.llm_picker {
-        MobilerunGoogleGenAI,
-    }
-    mobilerun.agent.utils.llm_anthropic --> mobilerun.agent.utils.llm_picker { MobilerunAnthropic }
-    mobilerun.agent.utils.llm_deepseek --> mobilerun.agent.utils.llm_picker { MobilerunDeepSeek }
-    mobilerun.agent.providers.registry --> mobilerun.agent.utils.llm_openai_responses {
-        OPENAI_ASTRA_DEFAULT_REASONING_EFFORT,
-        OPENAI_GPT6_CONTEXT_WINDOW,
-        OPENAI_GPT6_MODELS,
-        OPENAI_REASONING_EFFORTS,
-    }
-    mobilerun.agent.providers.grok --> mobilerun.agent.utils.llm_openai_responses {
-        sanitize_grok_responses_kwargs,
-    }
     mobilerun.tools.helpers.coordinate ++> mobilerun.tools.ui.provider { NORMALIZED_STATE_NOTE }
     mobilerun.tools.helpers.images ++> mobilerun.tools.ui.provider {
         fit_dimensions_to_max_side,
@@ -1608,6 +1533,73 @@ graph import {
     }
     mobilerun.tools.ui.state ++> mobilerun.tools.ui.screenshot_provider { UIState }
     mobilerun.tools.ui.provider ++> mobilerun.tools.ui.screenshot_provider { StateProvider }
+    include mobilerun.tools.ui.ios_provider ++> mobilerun.tools.ui { IOSStateProvider }
+    include mobilerun.tools.ui.provider ++> mobilerun.tools.ui {
+        AndroidStateProvider,
+        StateProvider,
+    }
+    include mobilerun.tools.ui.screenshot_provider ++> mobilerun.tools.ui {
+        ScreenshotOnlyStateProvider,
+    }
+    include mobilerun.tools.ui.state ++> mobilerun.tools.ui { UIState }
+    include mobilerun.tools.ui.stealth_state ++> mobilerun.tools.ui { StealthUIState }
+    include mobilerun.tools.ui ++> mobilerun.tools { AndroidStateProvider, StateProvider, UIState }
+    mobilerun.agent.providers.registry ++> mobilerun.agent.utils.llm_openai_responses {
+        OPENAI_ASTRA_DEFAULT_REASONING_EFFORT,
+        OPENAI_GPT6_CONTEXT_WINDOW,
+        OPENAI_GPT6_MODELS,
+        OPENAI_REASONING_EFFORTS,
+    }
+    mobilerun.agent.providers.grok ++> mobilerun.agent.utils.llm_openai_responses {
+        sanitize_grok_responses_kwargs,
+    }
+    mobilerun.agent.providers.anthropic ++> mobilerun.agent.utils.llm_picker {
+        ANTHROPIC_API_DEFAULT_MODEL,
+        ANTHROPIC_MODELS_WITHOUT_FORCED_TOOL_CHOICE,
+    }
+    mobilerun.agent.providers.grok ++> mobilerun.agent.utils.llm_picker {
+        GROK_API_DEFAULT_MODEL,
+        GROK_CONTEXT_WINDOW,
+        XAI_API_BASE,
+        normalize_grok_model_id,
+        sanitize_grok_responses_kwargs,
+    }
+    mobilerun.agent.providers.minimax ++> mobilerun.agent.utils.llm_picker {
+        MINIMAX_DEFAULT_MODEL,
+        MINIMAX_GLOBAL_BASE_URL,
+        apply_minimax_defaults,
+        is_minimax_base_url,
+        warn_if_legacy_minimax_endpoint,
+    }
+    mobilerun.agent.providers.registry ++> mobilerun.agent.utils.llm_picker {
+        GEMINI_API_DEFAULT_MODEL,
+        OPENAI_API_DEFAULT_MODEL,
+        OPENAI_OAUTH_UNSUPPORTED_MODELS,
+        list_models_for_variant,
+        normalize_model_id_for_variant,
+    }
+    mobilerun.agent.usage ++> mobilerun.agent.utils.llm_picker { track_usage }
+    mobilerun.agent.utils.llm_openai_responses as adapters ++> mobilerun.agent.utils.llm_picker;
+    mobilerun.agent.utils.llm_google_genai ++> mobilerun.agent.utils.llm_picker {
+        MobilerunGoogleGenAI,
+    }
+    mobilerun.agent.utils.llm_anthropic ++> mobilerun.agent.utils.llm_picker { MobilerunAnthropic }
+    mobilerun.agent.utils.llm_deepseek ++> mobilerun.agent.utils.llm_picker { MobilerunDeepSeek }
+    mobilerun.agent.utils.oauth.openai_oauth_llm ++> mobilerun.agent.utils.llm_picker {
+        OpenAIOAuth,
+    }
+    mobilerun.agent.utils.oauth.anthropic_oauth_llm ++> mobilerun.agent.utils.llm_picker {
+        AnthropicOAuthLLM,
+    }
+    mobilerun.agent.utils.oauth.gemini_oauth_code_assist_llm ++> mobilerun.agent.utils.llm_picker {
+        GeminiOAuthCodeAssistLLM,
+    }
+    mobilerun.agent.utils.oauth.grok_oauth_llm ++> mobilerun.agent.utils.llm_picker { GrokOAuth }
+    mobilerun.agent.utils.llm_picker ++> mobilerun.agent.utils.llm_loader {
+        load_llm,
+        load_llms_from_profiles,
+    }
+    mobilerun.config_manager.config_manager ++> mobilerun.agent.utils.llm_loader { MobileConfig }
 }
 
 graph spaces {
