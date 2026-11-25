@@ -62,31 +62,37 @@ import from llama_index.core.llms.callbacks { llm_chat_callback, llm_completion_
 
 import from llama_index.core.llms.custom { CustomLLM }
 
-glob DEFAULT_MODEL: any;
+glob DEFAULT_MODEL: any = GEMINI_OAUTH_DEFAULT_MODEL;
 
-glob DEFAULT_CODE_ASSIST_ENDPOINT: any;
+glob DEFAULT_CODE_ASSIST_ENDPOINT: any = "https://daily-cloudcode-pa.googleapis.com";
 
-glob DEFAULT_CODE_ASSIST_API_VERSION: any;
+glob DEFAULT_CODE_ASSIST_API_VERSION: any = "v1internal";
 
-glob DEFAULT_CODE_ASSIST_MODELS_METHOD: any;
+glob DEFAULT_CODE_ASSIST_MODELS_METHOD: any = "fetchAvailableModels";
 
-glob DEFAULT_TOKEN_URL: any;
+glob DEFAULT_TOKEN_URL: any = "https://oauth2.googleapis.com/token";
 
-glob DEFAULT_AUTHORIZE_URL: any;
+glob DEFAULT_AUTHORIZE_URL: any = "https://accounts.google.com/o/oauth2/v2/auth";
 
-glob DEFAULT_CREDENTIAL_PATH: any;
+glob DEFAULT_CREDENTIAL_PATH: any = `str(GEMINI_OAUTH_CREDENTIAL_PATH);
 
-glob DEFAULT_CLIENT_ID: any;
+glob DEFAULT_CLIENT_ID: any = "1071006060591-tmhssin2h21lcre235vtolojh4g403ep.apps.googleusercontent.com";
 
-glob DEFAULT_CLIENT_SECRET: any;
+glob DEFAULT_CLIENT_SECRET: any = "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";
 
-glob DEFAULT_OAUTH_SCOPES: any;
+glob DEFAULT_OAUTH_SCOPES: any = (
+    "https://www.googleapis.com/auth/aicode",
+    "https://www.googleapis.com/auth/cclog",
+    "https://www.googleapis.com/auth/cloud-platform",
+    "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/userinfo.profile",
+);
 
-glob DEFAULT_CREDENTIAL_SLOT: any;
+glob DEFAULT_CREDENTIAL_SLOT: any = "geminiAntigravityOauth";
 
-glob ANTIGRAVITY_CLIENT_VERSION: any;
+glob ANTIGRAVITY_CLIENT_VERSION: any = "2.14.0";
 
-glob DEFAULT_TIMEOUT_SECONDS: any;
+glob DEFAULT_TIMEOUT_SECONDS: any = 60.0;
 
 glob _IGNORED_REQUEST_KWARGS: any;
 
@@ -95,29 +101,6 @@ glob _GEMINI_SAMPLING_CONFIG_KEYS: any;
 glob _UNSET: any;
 
 glob _MAX_CODE_ATTEMPTS: any;
-
-with entry {
-    DEFAULT_MODEL = GEMINI_OAUTH_DEFAULT_MODEL;
-    DEFAULT_CODE_ASSIST_ENDPOINT = "https://daily-cloudcode-pa.googleapis.com";
-    DEFAULT_CODE_ASSIST_API_VERSION = "v1internal";
-    DEFAULT_CODE_ASSIST_MODELS_METHOD = "fetchAvailableModels";
-    DEFAULT_TOKEN_URL = "https://oauth2.googleapis.com/token";
-    DEFAULT_AUTHORIZE_URL = "https://accounts.google.com/o/oauth2/v2/auth";
-    DEFAULT_CREDENTIAL_PATH = `str(GEMINI_OAUTH_CREDENTIAL_PATH);
-    DEFAULT_CLIENT_ID = "1071006060591-tmhssin2h21lcre235vtolojh4g403ep.apps.googleusercontent.com";
-    DEFAULT_CLIENT_SECRET = "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";
-
-    DEFAULT_OAUTH_SCOPES = (
-        "https://www.googleapis.com/auth/aicode",
-        "https://www.googleapis.com/auth/cclog",
-        "https://www.googleapis.com/auth/cloud-platform",
-        "https://www.googleapis.com/auth/userinfo.email",
-        "https://www.googleapis.com/auth/userinfo.profile",
-    );
-    DEFAULT_CREDENTIAL_SLOT = "geminiAntigravityOauth";
-    ANTIGRAVITY_CLIENT_VERSION = "2.14.0";
-    DEFAULT_TIMEOUT_SECONDS = 60.0;
-}
 
 def _antigravity_user_agent -> builtins.str;
 

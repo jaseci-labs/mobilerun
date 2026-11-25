@@ -12,28 +12,19 @@ glob _MAX_TITLE_CHARS: any = 100;
 
 glob _TITLE_SCAN_CHARS: any = 20000;
 
-glob _HTML_TAG: any;
+glob _HTML_TAG: any = re.compile("<!doctype\\s+html|<html[\\s>]", re.IGNORECASE);
 
-glob _PAGE_TAG: any;
+glob _PAGE_TAG: any = re.compile("<(?:head|body|title|script|/html)[\\s>]", re.IGNORECASE);
 
-glob _HTML_TITLE: any;
+glob _HTML_TITLE: any = re.compile("<title[^>]{0,200}>([^<]{0,500})</title>", re.IGNORECASE);
 
-glob _PAGE_PREAMBLE: any;
+glob _PAGE_PREAMBLE: any = re.compile(
+    "(?:\\s|\\ufeff|\\\\[nrt]|<\\?xml[^>]{0,200}\\?>|<!--.{0,500}?-->)*$", re.DOTALL
+);
 
-glob _ESCAPES: any;
+glob _ESCAPES: any = re.compile("\\\\[nrt]|\\ufeff");
 
-glob _TRUNCATION_MARKER: any;
-
-with entry {
-    _HTML_TAG = re.compile("<!doctype\\s+html|<html[\\s>]", re.IGNORECASE);
-    _PAGE_TAG = re.compile("<(?:head|body|title|script|/html)[\\s>]", re.IGNORECASE);
-    _HTML_TITLE = re.compile("<title[^>]{0,200}>([^<]{0,500})</title>", re.IGNORECASE);
-    _PAGE_PREAMBLE = re.compile(
-        "(?:\\s|\\ufeff|\\\\[nrt]|<\\?xml[^>]{0,200}\\?>|<!--.{0,500}?-->)*$", re.DOTALL
-    );
-    _ESCAPES = re.compile("\\\\[nrt]|\\ufeff");
-    _TRUNCATION_MARKER = re.compile("\\.\\.\\. \\[\\d+ more characters\\]$");
-}
+glob _TRUNCATION_MARKER: any = re.compile("\\.\\.\\. \\[\\d+ more characters\\]$");
 
 def http_status_code(error: BaseException) -> int | None;
 

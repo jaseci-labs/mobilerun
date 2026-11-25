@@ -186,13 +186,9 @@ class LoggingConfig {
 
 def _fill_default_profiles(config: any) -> None;
 
-glob DEFAULT_DISABLED_TOOLS: tuple[str, ...];
+glob DEFAULT_DISABLED_TOOLS: tuple[str, ...] = ("click_at", "click_area", "long_press_at");
 
 glob DroidConfig: any;
-
-with entry {
-    DEFAULT_DISABLED_TOOLS = ("click_at", "click_area", "long_press_at");
-}
 
 """Tools configuration.
 

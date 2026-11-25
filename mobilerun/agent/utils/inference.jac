@@ -19,33 +19,22 @@ import from llama_index.core.prompts { PromptTemplate }
 
 import from pydantic { BaseModel }
 
-glob logger: any;
+glob logger: any = logging.getLogger("mobilerun");
 
-glob T: any;
+glob T: any = TypeVar("T", bound=BaseModel);
 
-glob _RETRYABLE_HTTP_CLIENT_STATUS_CODES: any;
+glob _RETRYABLE_HTTP_CLIENT_STATUS_CODES: any = {408, 409, 425, 429};
 
-glob _BLOCKED: any;
+glob _BLOCKED: any = {
+    "safety",
+    "recitation",
+    "blocklist",
+    "prohibited_content",
+    "content_filter",
+    "refusal",
+};
 
-glob _TRUNCATED: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-
-    T = TypeVar("T", bound=BaseModel);
-
-    _RETRYABLE_HTTP_CLIENT_STATUS_CODES = {408, 409, 425, 429};
-
-    _BLOCKED = {
-        "safety",
-        "recitation",
-        "blocklist",
-        "prohibited_content",
-        "content_filter",
-        "refusal",
-    };
-    _TRUNCATED = {"max_tokens", "length", "max_output_tokens"};
-}
+glob _TRUNCATED: any = {"max_tokens", "length", "max_output_tokens"};
 
 def _as_dict(value: builtins.object) -> builtins.dict;
 

@@ -39,15 +39,9 @@ import from rich.console { Console }
 
 glob __version__: any = _PACKAGE_VERSION;
 
-glob console: any;
+glob console: any = Console();
 
-glob PORTAL_REMOTE_PORT: any;
-
-with entry {
-    console = Console();
-
-    PORTAL_REMOTE_PORT = 8080;
-}
+glob PORTAL_REMOTE_PORT: any = 8080;
 
 class Status(Enum) {
     static has PASS: any = "pass";

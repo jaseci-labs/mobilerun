@@ -4,11 +4,7 @@ import re;
 
 import from typing { Any, Callable, Dict, List, Tuple }
 
-glob ElementFilter: any;
-
-with entry {
-    ElementFilter = Callable[[List[Dict[str, Any]]], List[Dict[str, Any]]];
-}
+glob ElementFilter: any = Callable[[List[Dict[str, Any]]], List[Dict[str, Any]]];
 
 def flatten_tree(`root: Dict[builtins.str, Any]) -> List[Dict[builtins.str, Any]];
 

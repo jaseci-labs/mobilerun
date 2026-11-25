@@ -20,11 +20,7 @@ import from llama_index_instrumentation { get_dispatcher }
 
 import from openinference.instrumentation { TraceConfig }
 
-glob dispatcher: any;
-
-with entry {
-    dispatcher = get_dispatcher();
-}
+glob dispatcher: any = get_dispatcher();
 
 def arize_phoenix_callback_handler(**kwargs: Any) -> BaseCallbackHandler;
 

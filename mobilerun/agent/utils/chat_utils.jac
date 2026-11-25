@@ -12,11 +12,7 @@ import from llama_index.core.base.llms.types { ChatMessage, ImageBlock, TextBloc
 
 import from PIL { Image }
 
-glob logger: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-}
+glob logger: any = logging.getLogger("mobilerun");
 
 def _ensure_image_bytes(
     image_source: Union[builtins.str, Path, Image.Image, builtins.bytes]

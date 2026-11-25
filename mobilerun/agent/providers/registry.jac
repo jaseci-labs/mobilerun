@@ -2,106 +2,83 @@ import operator;
 
 import from __future__ { annotations }
 
-glob VARIANT_ENV_KEY_SLOT: dict[str, str];
+glob VARIANT_ENV_KEY_SLOT: dict[str, str] = {
+    "GoogleGenAI": "google",
+    "OpenAIResponses": "openai",
+    "XAI": "xai",
+    "Anthropic": "anthropic",
+    "ZAI": "zai",
+    "ZAI_Coding": "zai",
+    "MiniMax": "minimax",
+};
 
-glob OPENAI_MODEL_ALIASES: dict[str, str];
+glob OPENAI_MODEL_ALIASES: dict[str, str] = {"gpt-5.6": "gpt-5.6-sol"};
 
-glob OPENAI_API_DEFAULT_MODEL: any;
+glob OPENAI_API_DEFAULT_MODEL: any = "gpt-6-astra";
 
-glob OPENAI_OAUTH_DEFAULT_MODEL: any;
+glob OPENAI_OAUTH_DEFAULT_MODEL: any = OPENAI_API_DEFAULT_MODEL;
 
-glob OPENAI_ASTRA_DEFAULT_REASONING_EFFORT: any;
+glob OPENAI_ASTRA_DEFAULT_REASONING_EFFORT: any = "low";
 
-glob OPENAI_OAUTH_UNSUPPORTED_MODELS: any;
+glob OPENAI_OAUTH_UNSUPPORTED_MODELS: any = frozenset({
+    "gpt-5.3-codex",
+    "gpt-5.4",
+    "gpt-5.4-mini",
+    "gpt-5.4-nano",
+});
 
-glob OPENAI_LEGACY_MODELS: any;
+glob OPENAI_LEGACY_MODELS: any = frozenset({
+    "gpt-6-sol",
+    "gpt-6-luna",
+    "gpt-5.4",
+    "gpt-5.4-mini",
+    "gpt-5.4-nano",
+});
 
-glob OPENAI_GPT6_MODELS: any;
+glob OPENAI_GPT6_MODELS: any = frozenset({"gpt-6-astra", "gpt-6.1-sol", "gpt-6-sol", "gpt-6-luna"});
 
-glob OPENAI_GPT6_CONTEXT_WINDOW: any;
+glob OPENAI_GPT6_CONTEXT_WINDOW: any = 1050000;
 
-glob _OPENAI_LOW_TO_MAX_EFFORTS: any;
+glob _OPENAI_LOW_TO_MAX_EFFORTS: any = frozenset({"low", "medium", "high", "xhigh", "max"});
 
-glob _OPENAI_NONE_TO_MAX_EFFORTS: any;
+glob _OPENAI_NONE_TO_MAX_EFFORTS: any = _OPENAI_LOW_TO_MAX_EFFORTS | {"none"};
 
-glob OPENAI_REASONING_EFFORTS: dict[str, any];
+glob OPENAI_REASONING_EFFORTS: dict[str, any] = {
+    "gpt-6-astra": _OPENAI_LOW_TO_MAX_EFFORTS,
+    "gpt-6.1-sol": _OPENAI_LOW_TO_MAX_EFFORTS,
+    "gpt-6-sol": _OPENAI_NONE_TO_MAX_EFFORTS,
+    "gpt-6-luna": _OPENAI_NONE_TO_MAX_EFFORTS,
+    "gpt-5.6-sol": _OPENAI_NONE_TO_MAX_EFFORTS,
+    "gpt-5.6-terra": _OPENAI_NONE_TO_MAX_EFFORTS,
+    "gpt-5.6-luna": _OPENAI_NONE_TO_MAX_EFFORTS,
+};
 
-glob GEMINI_API_DEFAULT_MODEL: any;
+glob GEMINI_API_DEFAULT_MODEL: any = "gemini-3.8-flash";
 
-glob GEMINI_OAUTH_DEFAULT_MODEL: any;
+glob GEMINI_OAUTH_DEFAULT_MODEL: any = "gemini-3.8-flash-tiered";
 
-glob GEMINI_OAUTH_RETIRED_MODELS: any;
+glob GEMINI_OAUTH_RETIRED_MODELS: any = frozenset({
+    "gemini-3.5-flash-low",
+    "gemini-3.5-flash-extra-low",
+    "gemini-3-flash-agent",
+});
 
-glob GEMINI_API_MODELS: tuple[str, ...];
+glob GEMINI_API_MODELS: tuple[str, ...] = (
+    GEMINI_API_DEFAULT_MODEL,
+    "gemini-4-argon",
+    "gemini-3.7-flash",
+    "gemini-3.5-flash-lite",
+    "gemini-3.1-pro-preview",
+);
 
-glob _GEMINI_OAUTH_MODEL_DISPLAY_NAMES: dict[str, str];
+glob _GEMINI_OAUTH_MODEL_DISPLAY_NAMES: dict[str, str] = {
+    "gemini-3.8-flash-tiered": "gemini-3.8-flash",
+    "gemini-3.7-flash-tiered": "gemini-3.7-flash",
+};
 
-glob GEMINI_UNSUPPORTED_SAMPLING_PARAMS: any;
+glob GEMINI_UNSUPPORTED_SAMPLING_PARAMS: any = frozenset({"temperature", "top_p", "top_k"});
 
 glob PROVIDER_FAMILIES: tuple[ProviderFamilySpec, ...];
-
-with entry {
-    VARIANT_ENV_KEY_SLOT = {
-        "GoogleGenAI": "google",
-        "OpenAIResponses": "openai",
-        "XAI": "xai",
-        "Anthropic": "anthropic",
-        "ZAI": "zai",
-        "ZAI_Coding": "zai",
-        "MiniMax": "minimax",
-    };
-
-    OPENAI_MODEL_ALIASES = {"gpt-5.6": "gpt-5.6-sol"};
-    OPENAI_API_DEFAULT_MODEL = "gpt-6-astra";
-    OPENAI_OAUTH_DEFAULT_MODEL = OPENAI_API_DEFAULT_MODEL;
-    OPENAI_ASTRA_DEFAULT_REASONING_EFFORT = "low";
-    OPENAI_OAUTH_UNSUPPORTED_MODELS = frozenset({
-        "gpt-5.3-codex",
-        "gpt-5.4",
-        "gpt-5.4-mini",
-        "gpt-5.4-nano",
-    });
-    OPENAI_LEGACY_MODELS = frozenset({
-        "gpt-6-sol",
-        "gpt-6-luna",
-        "gpt-5.4",
-        "gpt-5.4-mini",
-        "gpt-5.4-nano",
-    });
-    OPENAI_GPT6_MODELS = frozenset({"gpt-6-astra", "gpt-6.1-sol", "gpt-6-sol", "gpt-6-luna"});
-    OPENAI_GPT6_CONTEXT_WINDOW = 1050000;
-    _OPENAI_LOW_TO_MAX_EFFORTS = frozenset({"low", "medium", "high", "xhigh", "max"});
-    _OPENAI_NONE_TO_MAX_EFFORTS = _OPENAI_LOW_TO_MAX_EFFORTS | {"none"};
-    OPENAI_REASONING_EFFORTS = {
-        "gpt-6-astra": _OPENAI_LOW_TO_MAX_EFFORTS,
-        "gpt-6.1-sol": _OPENAI_LOW_TO_MAX_EFFORTS,
-        "gpt-6-sol": _OPENAI_NONE_TO_MAX_EFFORTS,
-        "gpt-6-luna": _OPENAI_NONE_TO_MAX_EFFORTS,
-        "gpt-5.6-sol": _OPENAI_NONE_TO_MAX_EFFORTS,
-        "gpt-5.6-terra": _OPENAI_NONE_TO_MAX_EFFORTS,
-        "gpt-5.6-luna": _OPENAI_NONE_TO_MAX_EFFORTS,
-    };
-
-    GEMINI_API_DEFAULT_MODEL = "gemini-3.8-flash";
-    GEMINI_OAUTH_DEFAULT_MODEL = "gemini-3.8-flash-tiered";
-    GEMINI_OAUTH_RETIRED_MODELS = frozenset({
-        "gemini-3.5-flash-low",
-        "gemini-3.5-flash-extra-low",
-        "gemini-3-flash-agent",
-    });
-    GEMINI_API_MODELS = (
-        GEMINI_API_DEFAULT_MODEL,
-        "gemini-4-argon",
-        "gemini-3.7-flash",
-        "gemini-3.5-flash-lite",
-        "gemini-3.1-pro-preview",
-    );
-    _GEMINI_OAUTH_MODEL_DISPLAY_NAMES = {
-        "gemini-3.8-flash-tiered": "gemini-3.8-flash",
-        "gemini-3.7-flash-tiered": "gemini-3.7-flash",
-    };
-    GEMINI_UNSUPPORTED_SAMPLING_PARAMS = frozenset({"temperature", "top_p", "top_k"});
-}
 
 def gemini_model_omits_sampling_params(model: object) -> bool;
 

@@ -22,11 +22,7 @@ import from aiofiles { ospath }
 
 import from PIL { Image }
 
-glob logger: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-}
+glob logger: any = logging.getLogger("mobilerun");
 
 def make_serializable(`obj) -> any;
 

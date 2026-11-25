@@ -6,29 +6,20 @@ import from typing { Iterable }
 
 import httpx;
 
-glob DEFAULT_KWARGS_BY_VARIANT: dict[str, dict[str, int]];
+glob DEFAULT_KWARGS_BY_VARIANT: dict[str, dict[str, int]] = {
+    "anthropic_oauth": {"max_tokens": 4096},
+    "gemini_oauth_code_assist": {"max_tokens": 4096},
+    "Ollama": {"context_window": 32768},
+    "XAI": {"context_window": 500000},
+};
 
-glob HIDDEN_ROLE_FALLBACKS: tuple[str, ...];
+glob HIDDEN_ROLE_FALLBACKS: tuple[str, ...] = ("app_opener", "structured_output");
 
-glob _MINIMAX_DETERMINISTIC_TEMPERATURE: any;
+glob _MINIMAX_DETERMINISTIC_TEMPERATURE: any = 0.1;
 
-glob _ZAI_GLOBAL_BASE_URL: any;
+glob _ZAI_GLOBAL_BASE_URL: any = "https://api.z.ai/api/paas/v4";
 
-glob _ZAI_CODING_GLOBAL_BASE_URL: any;
-
-with entry {
-    DEFAULT_KWARGS_BY_VARIANT = {
-        "anthropic_oauth": {"max_tokens": 4096},
-        "gemini_oauth_code_assist": {"max_tokens": 4096},
-        "Ollama": {"context_window": 32768},
-        "XAI": {"context_window": 500000},
-    };
-
-    HIDDEN_ROLE_FALLBACKS = ("app_opener", "structured_output");
-    _MINIMAX_DETERMINISTIC_TEMPERATURE = 0.1;
-    _ZAI_GLOBAL_BASE_URL = "https://api.z.ai/api/paas/v4";
-    _ZAI_CODING_GLOBAL_BASE_URL = "https://api.z.ai/api/coding/paas/v4";
-}
+glob _ZAI_CODING_GLOBAL_BASE_URL: any = "https://api.z.ai/api/coding/paas/v4";
 
 @dataclass(frozen=True)
 class SetupSelection {

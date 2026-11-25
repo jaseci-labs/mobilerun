@@ -12,11 +12,7 @@ import from dataclasses { dataclass }
 
 import from typing { TYPE_CHECKING, Any }
 
-glob logger: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-}
+glob logger: any = logging.getLogger("mobilerun");
 
 """Cached metadata about an MCP tool."""
 @dataclass

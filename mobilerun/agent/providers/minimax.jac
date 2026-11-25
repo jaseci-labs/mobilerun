@@ -27,11 +27,7 @@ glob MINIMAX_MODEL_CONTEXT_WINDOWS: any = {
     "MiniMax-M2": 204800,
 };
 
-glob logger: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-}
+glob logger: any = logging.getLogger("mobilerun");
 
 def _normalize_base_url(base_url: str | None) -> str;
 

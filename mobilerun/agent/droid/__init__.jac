@@ -1,10 +1,6 @@
-glob _LEGACY_ALIASES: any;
+glob _LEGACY_ALIASES: any = {"DroidAgent": MobileAgent, "DroidAgentState": MobileAgentState};
 
 glob __all__: any;
-
-with entry {
-    _LEGACY_ALIASES = {"DroidAgent": MobileAgent, "DroidAgentState": MobileAgentState};
-}
 
 def __getattr__(name) -> any;
 

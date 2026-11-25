@@ -2,11 +2,7 @@ import builtins;
 
 import logging;
 
-glob logger: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-}
+glob logger: any = logging.getLogger("mobilerun");
 
 """Translates workflow events into logger calls.
 

@@ -54,44 +54,29 @@ import from workflows.events { Event }
 
 import from workflows.handler { WorkflowHandler }
 
-glob logger: any;
+glob logger: any = logging.getLogger("mobilerun");
 
-glob _COORDINATE_TOOL_NAMES: any;
+glob _COORDINATE_TOOL_NAMES: any = {"click_at", "click_area", "long_press_at"};
 
-glob _FINALIZE_BUDGET_SECONDS: any;
+glob _FINALIZE_BUDGET_SECONDS: any = 60.0;
 
-glob _FINALIZE_SCHEDULING_RESERVE_SECONDS: any;
+glob _FINALIZE_SCHEDULING_RESERVE_SECONDS: any = 1.0;
 
-glob _FINALIZE_OBSERVATION_SECONDS: any;
+glob _FINALIZE_OBSERVATION_SECONDS: any = 15.0;
 
-glob _FINALIZE_TELEMETRY_SECONDS: any;
+glob _FINALIZE_TELEMETRY_SECONDS: any = 10.0;
 
-glob _FINALIZE_TRAJECTORY_SECONDS: any;
+glob _FINALIZE_TRAJECTORY_SECONDS: any = 30.0;
 
-glob _FINALIZE_MCP_SECONDS: any;
+glob _FINALIZE_MCP_SECONDS: any = 3.0;
 
-glob _FINALIZE_CLEANUP_MAX_FRACTION: any;
+glob _FINALIZE_CLEANUP_MAX_FRACTION: any = 0.5;
 
-glob _WORKFLOW_DEADLINE_KEY: any;
+glob _WORKFLOW_DEADLINE_KEY: any = "mobile_agent_workflow_deadline";
 
-glob _ABANDONED_FINALIZE_TASKS: builtins.set[asyncio.Task[Any]];
+glob _ABANDONED_FINALIZE_TASKS: builtins.set[asyncio.Task[Any]] = set[any]();
 
 glob DroidAgent: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-
-    _COORDINATE_TOOL_NAMES = {"click_at", "click_area", "long_press_at"};
-    _FINALIZE_BUDGET_SECONDS = 60.0;
-    _FINALIZE_SCHEDULING_RESERVE_SECONDS = 1.0;
-    _FINALIZE_OBSERVATION_SECONDS = 15.0;
-    _FINALIZE_TELEMETRY_SECONDS = 10.0;
-    _FINALIZE_TRAJECTORY_SECONDS = 30.0;
-    _FINALIZE_MCP_SECONDS = 3.0;
-    _FINALIZE_CLEANUP_MAX_FRACTION = 0.5;
-    _WORKFLOW_DEADLINE_KEY = "mobile_agent_workflow_deadline";
-    _ABANDONED_FINALIZE_TASKS = set[any]();
-}
 
 def _reap_abandoned_finalize_task(task: asyncio.Task[Any]) -> None;
 

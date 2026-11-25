@@ -16,40 +16,33 @@ import from llama_index.core.llms { LLM, ChatResponse }
 
 import from pydantic { BaseModel }
 
-glob logger: any;
+glob logger: any = logging.getLogger("mobilerun");
 
-glob SUPPORTED_PROVIDERS: any;
+glob SUPPORTED_PROVIDERS: any = [
+    "Gemini",
+    "GoogleGenAI",
+    "GenAI",
+    "GeminiOAuthCodeAssistLLM",
+    "gemini_oauth_code_assist",
+    "OpenAIResponses",
+    "OpenAILike",
+    "OpenAIOAuth",
+    "Anthropic",
+    "Anthropic_LLM",
+    "AnthropicOAuthLLM",
+    "Ollama",
+];
 
-glob PROVIDER_ALIASES: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-    SUPPORTED_PROVIDERS = [
-        "Gemini",
-        "GoogleGenAI",
-        "GenAI",
-        "GeminiOAuthCodeAssistLLM",
-        "gemini_oauth_code_assist",
-        "OpenAIResponses",
-        "OpenAILike",
-        "OpenAIOAuth",
-        "Anthropic",
-        "Anthropic_LLM",
-        "AnthropicOAuthLLM",
-        "Ollama",
-    ];
-
-    PROVIDER_ALIASES = {
-        "MobilerunAnthropic": "Anthropic",
-        "MobilerunDeepSeek": "OpenAILike",
-        "MobilerunGoogleGenAI": "GoogleGenAI",
-        "MobilerunOpenAIResponses": "OpenAIResponses",
-        "openai_responses_llm": "OpenAIResponses",
-        "GrokOAuth": "OpenAIResponses",
-        "xai_oauth": "OpenAIResponses",
-        "Ollama_llm": "Ollama",
-    };
-}
+glob PROVIDER_ALIASES: any = {
+    "MobilerunAnthropic": "Anthropic",
+    "MobilerunDeepSeek": "OpenAILike",
+    "MobilerunGoogleGenAI": "GoogleGenAI",
+    "MobilerunOpenAIResponses": "OpenAIResponses",
+    "openai_responses_llm": "OpenAIResponses",
+    "GrokOAuth": "OpenAIResponses",
+    "xai_oauth": "OpenAIResponses",
+    "Ollama_llm": "Ollama",
+};
 
 class UsageResult(BaseModel) {
     has request_tokens: builtins.int;

@@ -16,11 +16,7 @@ import from opentelemetry { trace }
 
 import from pydantic { BaseModel }
 
-glob logger: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-}
+glob logger: any = logging.getLogger("mobilerun");
 
 class StatelessManagerAgent(Workflow) {
     def init(

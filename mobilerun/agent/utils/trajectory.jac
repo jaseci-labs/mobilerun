@@ -14,11 +14,7 @@ import from typing { Any, Dict, List }
 
 import from llama_index.core.workflow { Event }
 
-glob logger: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-}
+glob logger: any = logging.getLogger("mobilerun");
 
 class Trajectory {
     has events: any,
@@ -56,5 +52,3 @@ class Trajectory {
 def get_trajectory_statistics(
     trajectory_steps: List[Dict[builtins.str, Any]]
 ) -> Dict[builtins.str, Any];
-
-with entry {}

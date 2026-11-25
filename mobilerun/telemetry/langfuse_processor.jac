@@ -22,25 +22,21 @@ import from opentelemetry.context { Context }
 
 import from opentelemetry.sdk.trace { ReadableSpan, Span, SpanProcessor }
 
-glob _current_agent: ContextVar[Optional["MobileAgent"]];
+glob _current_agent: ContextVar[Optional["MobileAgent"]] = ContextVar(
+    "_current_agent", default=None
+);
 
-glob _root_span_context: ContextVar[Optional[Context]];
+glob _root_span_context: ContextVar[Optional[Context]] = ContextVar(
+    "_root_span_context", default=None
+);
 
-glob _last_step_span_context: ContextVar[Optional[Context]];
+glob _last_step_span_context: ContextVar[Optional[Context]] = ContextVar(
+    "_last_step_span_context", default=None
+);
 
-glob MAX_IMAGE_SIZE_KB: any;
+glob MAX_IMAGE_SIZE_KB: any = 10000;
 
-glob logger: any;
-
-with entry {
-    _current_agent = ContextVar("_current_agent", default=None);
-    _root_span_context = ContextVar("_root_span_context", default=None);
-    _last_step_span_context = ContextVar("_last_step_span_context", default=None);
-
-    MAX_IMAGE_SIZE_KB = 10000;
-
-    logger = logging.getLogger("mobilerun");
-}
+glob logger: any = logging.getLogger("mobilerun");
 
 def set_current_agent(agent: "MobileAgent") -> None;
 

@@ -8,11 +8,7 @@ import from llama_index.core.llms.llm { LLM }
 
 import from pydantic { BaseModel }
 
-glob logger: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-}
+glob logger: any = logging.getLogger("mobilerun");
 
 def _get_required_profiles(
     config: MobileConfig, output_model: Type[BaseModel] | None = None

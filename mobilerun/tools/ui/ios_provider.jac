@@ -12,46 +12,35 @@ import from typing { Any, Dict, List, Optional }
 
 import from mobilerun_core_local.driver.base { DeviceDisconnectedError, DeviceDriver }
 
-glob logger: any;
+glob logger: any = logging.getLogger("mobilerun");
 
-glob _SKIP_TYPES: any;
+glob _SKIP_TYPES: any = {
+    "Window",
+    "Window (Main)",
+    "ScrollView",
+    "CollectionView",
+    "Table",
+    "Toolbar",
+    "TabBar",
+    "StatusBar",
+    "PageIndicator",
+};
 
-glob _COORD_RE: any;
+glob _COORD_RE: any = re.compile(
+    "\\{\\{([0-9.]+),\\s*([0-9.]+)\\},\\s*\\{([0-9.]+),\\s*([0-9.]+)\\}\\}"
+);
 
-glob _ELEMENT_TYPE_RE: any;
+glob _ELEMENT_TYPE_RE: any = re.compile("\\s*(.+?),");
 
-glob _LABEL_RE: any;
+glob _LABEL_RE: any = re.compile("label:\\s*'([^']*)'");
 
-glob _IDENTIFIER_RE: any;
+glob _IDENTIFIER_RE: any = re.compile("identifier:\\s*'([^']*)'");
 
-glob _PLACEHOLDER_RE: any;
+glob _PLACEHOLDER_RE: any = re.compile("placeholderValue:\\s*'([^']*)'");
 
-glob _VALUE_RE: any;
+glob _VALUE_RE: any = re.compile("value:\\s*([^,}]+)");
 
-glob _CLOCK_RE: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-    _SKIP_TYPES = {
-        "Window",
-        "Window (Main)",
-        "ScrollView",
-        "CollectionView",
-        "Table",
-        "Toolbar",
-        "TabBar",
-        "StatusBar",
-        "PageIndicator",
-    };
-
-    _COORD_RE = re.compile("\\{\\{([0-9.]+),\\s*([0-9.]+)\\},\\s*\\{([0-9.]+),\\s*([0-9.]+)\\}\\}");
-    _ELEMENT_TYPE_RE = re.compile("\\s*(.+?),");
-    _LABEL_RE = re.compile("label:\\s*'([^']*)'");
-    _IDENTIFIER_RE = re.compile("identifier:\\s*'([^']*)'");
-    _PLACEHOLDER_RE = re.compile("placeholderValue:\\s*'([^']*)'");
-    _VALUE_RE = re.compile("value:\\s*([^,}]+)");
-    _CLOCK_RE = re.compile("^\\d{1,2}:\\d{2}$");
-}
+glob _CLOCK_RE: any = re.compile("^\\d{1,2}:\\d{2}$");
 
 """Produces ``UIState`` from an iOS device's accessibility tree."""
 class IOSStateProvider(StateProvider) {

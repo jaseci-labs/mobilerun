@@ -4,11 +4,7 @@ import operator;
 
 import from typing { List, Optional, Tuple }
 
-glob Bounds: any;
-
-with entry {
-    Bounds = Tuple[int, int, int, int];
-}
+glob Bounds: any = Tuple[int, int, int, int];
 
 def rects_overlap(a: Bounds, b: Bounds) -> builtins.bool;
 

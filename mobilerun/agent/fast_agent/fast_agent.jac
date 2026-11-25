@@ -24,24 +24,15 @@ import from opentelemetry { trace }
 
 import from pydantic { BaseModel }
 
-glob logger: any;
+glob logger: any = logging.getLogger("mobilerun");
 
-glob _MALFORMED_TOOL_CALL_LIMIT: any;
+glob _MALFORMED_TOOL_CALL_LIMIT: any = 3;
 
-glob _TOOL_CALLING_MODES: any;
+glob _TOOL_CALLING_MODES: any = ("auto", "xml");
 
-glob _NATIVE_NO_TOOL_CALL: any;
+glob _NATIVE_NO_TOOL_CALL: any = "No tool was called. Call one of the provided tools to continue. To mark the task as complete (whether it failed or succeeded), call the `complete` tool.";
 
-glob _NATIVE_CONTINUE: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-
-    _MALFORMED_TOOL_CALL_LIMIT = 3;
-    _TOOL_CALLING_MODES = ("auto", "xml");
-    _NATIVE_NO_TOOL_CALL = "No tool was called. Call one of the provided tools to continue. To mark the task as complete (whether it failed or succeeded), call the `complete` tool.";
-    _NATIVE_CONTINUE = "The tool results are above. Continue with the next step.";
-}
+glob _NATIVE_CONTINUE: any = "The tool results are above. Continue with the next step.";
 
 def _malformed_tool_call_correction(attempt: builtins.int) -> builtins.str;
 

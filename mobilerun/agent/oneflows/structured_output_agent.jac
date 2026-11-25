@@ -12,11 +12,7 @@ import from llama_index.core.workflow { Context, StartEvent, StopEvent, Workflow
 
 import from pydantic { BaseModel }
 
-glob logger: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-}
+glob logger: any = logging.getLogger("mobilerun");
 
 """
     Agent that extracts structured output from text answers.

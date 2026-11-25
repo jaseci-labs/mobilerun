@@ -14,15 +14,9 @@ import from dataclasses { dataclass }
 
 import from typing { TYPE_CHECKING, Any, Callable, Dict, Optional, Set }
 
-glob logger: any;
+glob logger: any = logging.getLogger("mobilerun");
 
-glob _JSON_SCHEMA_TYPES: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-
-    _JSON_SCHEMA_TYPES = {"string", "number", "integer", "boolean", "array", "object"};
-}
+glob _JSON_SCHEMA_TYPES: any = {"string", "number", "integer", "boolean", "array", "object"};
 
 def _json_schema_for_type(type_name: str) -> Dict[str, Any];
 

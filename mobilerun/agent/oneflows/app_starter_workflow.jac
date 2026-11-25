@@ -10,13 +10,9 @@ import from workflows { Context, Workflow, step }
 
 import from workflows.events { StartEvent, StopEvent }
 
-glob logger: any;
+glob logger: any = logging.getLogger("mobilerun");
 
 glob asyncio: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-}
 
 """
     A simple workflow that opens an app based on a description.

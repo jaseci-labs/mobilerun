@@ -16,21 +16,52 @@ import from llama_index.core.llms.llm { LLM }
 
 import from llama_index.core.types { PydanticProgramMode }
 
-glob logger: any;
+glob logger: any = logging.getLogger("mobilerun");
 
-glob SUPPORTED_PROVIDERS: any;
+glob SUPPORTED_PROVIDERS: any = [
+    "OpenAIResponses",
+    "OpenAILike",
+    "GoogleGenAI",
+    "Ollama",
+    "Anthropic",
+    "DeepSeek",
+    "OpenRouter",
+    "MiniMax",
+    "XAI",
+];
 
-glob PROVIDER_ALIASES: any;
+glob PROVIDER_ALIASES: any = {
+    "openai": "OpenAIResponses",
+    "gpt": "OpenAIResponses",
+    "gemini": "GoogleGenAI",
+    "google": "GoogleGenAI",
+    "claude": "Anthropic",
+    "openai compatible": "OpenAILike",
+    "openai-like": "OpenAILike",
+    "openai like": "OpenAILike",
+    "openai_compatible": "OpenAILike",
+    "openai_like": "OpenAILike",
+    "zai": "ZAI",
+    "z.ai": "ZAI",
+    "xai": "XAI",
+};
 
-glob ZAI_GLOBAL_API_BASE: any;
+glob ZAI_GLOBAL_API_BASE: any = "https://api.z.ai/api/paas/v4";
 
-glob GEMINI_OAUTH_UNSUPPORTED_MODELS: any;
+glob GEMINI_OAUTH_UNSUPPORTED_MODELS: any = {
+    "gemini-3.8-flash",
+    "gemini-3.7-flash",
+    "gemini-3.6-flash",
+    "gemini-3.5-flash",
+    "gemini-3-flash-preview",
+    "gemini-3.1-pro-preview",
+};
 
-glob DEEPSEEK_DEFAULT_MODEL: any;
+glob DEEPSEEK_DEFAULT_MODEL: any = "deepseek-flash";
 
-glob DEEPSEEK_CONTEXT_WINDOW: any;
+glob DEEPSEEK_CONTEXT_WINDOW: any = 1048576;
 
-glob DEEPSEEK_FUNCTION_CALLING_MODELS: any;
+glob DEEPSEEK_FUNCTION_CALLING_MODELS: any = {"deepseek-flash", "deepseek-v4-pro"};
 
 glob _OLLAMA_DEFAULT_CONTEXT_WINDOW: any;
 
@@ -53,51 +84,6 @@ glob llm: any;
 glob tracker: any;
 
 glob res: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-
-    SUPPORTED_PROVIDERS = [
-        "OpenAIResponses",
-        "OpenAILike",
-        "GoogleGenAI",
-        "Ollama",
-        "Anthropic",
-        "DeepSeek",
-        "OpenRouter",
-        "MiniMax",
-        "XAI",
-    ];
-
-    PROVIDER_ALIASES = {
-        "openai": "OpenAIResponses",
-        "gpt": "OpenAIResponses",
-        "gemini": "GoogleGenAI",
-        "google": "GoogleGenAI",
-        "claude": "Anthropic",
-        "openai compatible": "OpenAILike",
-        "openai-like": "OpenAILike",
-        "openai like": "OpenAILike",
-        "openai_compatible": "OpenAILike",
-        "openai_like": "OpenAILike",
-        "zai": "ZAI",
-        "z.ai": "ZAI",
-        "xai": "XAI",
-    };
-
-    ZAI_GLOBAL_API_BASE = "https://api.z.ai/api/paas/v4";
-    GEMINI_OAUTH_UNSUPPORTED_MODELS = {
-        "gemini-3.8-flash",
-        "gemini-3.7-flash",
-        "gemini-3.6-flash",
-        "gemini-3.5-flash",
-        "gemini-3-flash-preview",
-        "gemini-3.1-pro-preview",
-    };
-    DEEPSEEK_DEFAULT_MODEL = "deepseek-flash";
-    DEEPSEEK_CONTEXT_WINDOW = 1048576;
-    DEEPSEEK_FUNCTION_CALLING_MODELS = {"deepseek-flash", "deepseek-v4-pro"};
-}
 
 def normalize_provider_name(provider_name: builtins.str) -> builtins.str;
 

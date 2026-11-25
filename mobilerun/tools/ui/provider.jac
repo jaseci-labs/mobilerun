@@ -20,29 +20,19 @@ import httpx;
 
 import from mobilerun_core_local.driver.base { DeviceDisconnectedError }
 
-glob logger: any;
+glob logger: any = logging.getLogger("mobilerun");
 
-glob _RETRY_DELAYS: any;
+glob _RETRY_DELAYS: any = [1.0, 2.0, 3.0, 5.0, 8.0, 10.0];
 
-glob _MAX_RETRIES: any;
+glob _MAX_RETRIES: any = 7;
 
-glob _RECOVERY_AFTER_ATTEMPT: any;
+glob _RECOVERY_AFTER_ATTEMPT: any = 5;
 
-glob _MAX_TIMEOUT_ATTEMPTS: any;
+glob _MAX_TIMEOUT_ATTEMPTS: any = 2;
 
-glob _SLOW_FETCH_NOTICE_S: any;
+glob _SLOW_FETCH_NOTICE_S: any = 3.0;
 
-glob _A11Y_SERVICE_NOT_AVAILABLE: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-    _RETRY_DELAYS = [1.0, 2.0, 3.0, 5.0, 8.0, 10.0];
-    _MAX_RETRIES = 7;
-    _RECOVERY_AFTER_ATTEMPT = 5;
-    _MAX_TIMEOUT_ATTEMPTS = 2;
-    _SLOW_FETCH_NOTICE_S = 3.0;
-    _A11Y_SERVICE_NOT_AVAILABLE = "Accessibility service not available";
-}
+glob _A11Y_SERVICE_NOT_AVAILABLE: any = "Accessibility service not available";
 
 def _is_timeout(error: BaseException) -> bool;
 

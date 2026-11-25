@@ -18,11 +18,7 @@ import from rich.console { Console }
 
 import from rich.table { Table }
 
-glob console: any;
-
-with entry {
-    console = Console();
-}
+glob console: any = Console();
 
 """Configure logging for the macro CLI."""
 def configure_logging(debug: builtins.bool = False) -> any;

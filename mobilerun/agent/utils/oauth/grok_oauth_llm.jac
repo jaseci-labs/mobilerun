@@ -44,11 +44,11 @@ import from llama_index.llms.openai.responses { OpenAIResponses }
 
 import from llama_index.llms.openai.utils { to_openai_message_dicts }
 
-glob DEFAULT_GROK_MODEL: any;
+glob DEFAULT_GROK_MODEL: any = GROK_OAUTH_DEFAULT_MODEL;
 
-glob DEFAULT_GROK_CONTEXT_WINDOW: any;
+glob DEFAULT_GROK_CONTEXT_WINDOW: any = 500000;
 
-glob DEFAULT_GROK_OAUTH_ISSUER: any;
+glob DEFAULT_GROK_OAUTH_ISSUER: any = "https://auth.x.ai";
 
 glob DEFAULT_GROK_OAUTH_AUTHORIZE_URL: any;
 
@@ -95,9 +95,6 @@ glob _TOKEN_ERROR_CODES: any;
 glob GrokOAuthLLM: any;
 
 with entry {
-    DEFAULT_GROK_MODEL = GROK_OAUTH_DEFAULT_MODEL;
-    DEFAULT_GROK_CONTEXT_WINDOW = 500000;
-    DEFAULT_GROK_OAUTH_ISSUER = "https://auth.x.ai";
     DEFAULT_GROK_OAUTH_AUTHORIZE_URL = f"{DEFAULT_GROK_OAUTH_ISSUER}/oauth2/authorize";
     DEFAULT_GROK_OAUTH_DEVICE_URL = f"{DEFAULT_GROK_OAUTH_ISSUER}/oauth2/device/code";
     DEFAULT_GROK_OAUTH_TOKEN_URL = f"{DEFAULT_GROK_OAUTH_ISSUER}/oauth2/token";

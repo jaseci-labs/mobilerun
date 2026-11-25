@@ -1,19 +1,12 @@
 import from __future__ { annotations }
 
-glob SETUP_TOKEN_EXPIRES_IN_SECONDS: any;
+glob SETUP_TOKEN_EXPIRES_IN_SECONDS: any = 365 * 24 * 60 * 60;
 
-with entry {
-    SETUP_TOKEN_EXPIRES_IN_SECONDS = 365 * 24 * 60 * 60;
-    callback_host_default_ = DEFAULT_OPENAI_OAUTH_CALLBACK_HOST;
-    callback_port_default_ = DEFAULT_OPENAI_OAUTH_CALLBACK_PORT;
-    callback_path_default_ = DEFAULT_OPENAI_OAUTH_CALLBACK_PATH;
-}
+glob callback_host_default_: any = DEFAULT_OPENAI_OAUTH_CALLBACK_HOST;
 
-glob callback_host_default_: any;
+glob callback_port_default_: any = DEFAULT_OPENAI_OAUTH_CALLBACK_PORT;
 
-glob callback_port_default_: any;
-
-glob callback_path_default_: any;
+glob callback_path_default_: any = DEFAULT_OPENAI_OAUTH_CALLBACK_PATH;
 
 def run_openai_oauth_login(
     credential_path: str,

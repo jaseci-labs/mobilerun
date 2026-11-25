@@ -4,9 +4,9 @@ import logging;
 
 import from importlib.metadata { version }
 
-glob __version__: any;
+glob __version__: any = version("mobilerun");
 
-glob _logger: any;
+glob _logger: any = logging.getLogger("mobilerun");
 
 glob _retry_logger: any;
 
@@ -15,9 +15,6 @@ glob __all__: any;
 glob _LEGACY_ALIASES: any;
 
 with entry {
-    __version__ = version("mobilerun");
-
-    _logger = logging.getLogger("mobilerun");
     _logger.addHandler(CLILogHandler());
     _logger.setLevel(logging.INFO);
     _logger.propagate = False;

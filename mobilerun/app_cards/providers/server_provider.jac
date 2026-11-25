@@ -6,11 +6,7 @@ import from typing { Dict }
 
 import httpx;
 
-glob logger: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-}
+glob logger: any = logging.getLogger("mobilerun");
 
 """Load app cards from remote server with in-memory caching."""
 class ServerAppCardProvider(AppCardProvider) {

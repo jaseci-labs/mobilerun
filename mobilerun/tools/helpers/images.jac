@@ -18,11 +18,7 @@ def anthropic_resized_size(
 
 def image_dimensions(image: bytes) -> tuple[int, int];
 
-glob max_side_default_: any;
-
-with entry {
-    max_side_default_ = MODEL_SCREENSHOT_MAX_SIDE;
-}
+glob max_side_default_: any = MODEL_SCREENSHOT_MAX_SIDE;
 
 def fit_dimensions_to_max_side(
     width: int, height: int, max_side: int = max_side_default_

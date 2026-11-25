@@ -16,11 +16,7 @@ import from llama_index.core.llms.llm { LLM }
 
 import from llama_index.core.workflow { Context, StartEvent, StopEvent, Workflow, step }
 
-glob logger: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-}
+glob logger: any = logging.getLogger("mobilerun");
 
 """
     Action execution agent that performs specific actions.

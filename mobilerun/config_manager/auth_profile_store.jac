@@ -19,14 +19,9 @@ import from filelock { FileLock }
 """Raised when an existing auth-profiles file is not a JSON object."""
 class AuthProfileFormatError(ValueError) {}
 
-glob _T: any;
+glob _T: any = TypeVar("_T");
 
-glob _FCHMOD: Callable[[int, int], None] | None;
-
-with entry {
-    _T = TypeVar("_T");
-    _FCHMOD = getattr(os, "fchmod", None);
-}
+glob _FCHMOD: Callable[[int, int], None] | None = getattr(os, "fchmod", None);
 
 """A locked read/modify/write transaction over an auth profile file."""
 class AuthProfileTransaction(AbstractContextManager) {

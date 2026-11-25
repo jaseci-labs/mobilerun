@@ -4,11 +4,7 @@ import logging;
 
 import from typing { Dict }
 
-glob logger: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-}
+glob logger: any = logging.getLogger("mobilerun");
 
 """
     Load app cards from server with local fallback.

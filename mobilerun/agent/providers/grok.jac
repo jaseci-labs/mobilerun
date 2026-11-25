@@ -8,30 +8,23 @@ glob GROK_API_DEFAULT_MODEL: any = "grok-4.6";
 
 glob GROK_OAUTH_DEFAULT_MODEL: any = "grok-4.7";
 
-glob GROK_API_MODELS: any;
+glob GROK_API_MODELS: any = (GROK_API_DEFAULT_MODEL,);
 
-glob GROK_OAUTH_MODELS: any;
+glob GROK_OAUTH_MODELS: any = (GROK_OAUTH_DEFAULT_MODEL, "grok-4.6");
 
-glob GROK_OAUTH_LEGACY_MODELS: any;
+glob GROK_OAUTH_LEGACY_MODELS: any = ("grok-4.5",);
 
-glob GROK_MODEL_ALIASES: any;
+glob GROK_MODEL_ALIASES: any = {"grok-4.5-latest": "grok-4.5"};
 
-glob XAI_API_BASE: any;
+glob XAI_API_BASE: any = "https://api.x.ai/v1";
 
-glob GROK_CONTEXT_WINDOW: any;
+glob GROK_CONTEXT_WINDOW: any = 500000;
 
-glob GROK_UNSUPPORTED_SAMPLING_PARAMS: any;
-
-with entry {
-    GROK_API_MODELS = (GROK_API_DEFAULT_MODEL,);
-    GROK_OAUTH_MODELS = (GROK_OAUTH_DEFAULT_MODEL, "grok-4.6");
-    GROK_OAUTH_LEGACY_MODELS = ("grok-4.5",);
-    GROK_MODEL_ALIASES = {"grok-4.5-latest": "grok-4.5"};
-
-    XAI_API_BASE = "https://api.x.ai/v1";
-    GROK_CONTEXT_WINDOW = 500000;
-    GROK_UNSUPPORTED_SAMPLING_PARAMS = frozenset({"presence_penalty", "frequency_penalty", "stop"});
-}
+glob GROK_UNSUPPORTED_SAMPLING_PARAMS: any = frozenset({
+    "presence_penalty",
+    "frequency_penalty",
+    "stop",
+});
 
 def normalize_grok_model_id(model: object) -> str;
 

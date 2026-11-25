@@ -4,11 +4,7 @@ import logging;
 
 import from rich.console { Console }
 
-glob COLORS: any;
-
-with entry {
-    COLORS = frozenset({"blue", "cyan", "green", "red", "yellow", "magenta", "white", "dim"});
-}
+glob COLORS: any = frozenset({"blue", "cyan", "green", "red", "yellow", "magenta", "white", "dim"});
 
 def configure_logging(debug: builtins.bool, handler: logging.Handler) -> None;
 

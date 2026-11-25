@@ -14,40 +14,25 @@ import from uuid { UUID, uuid4 }
 
 import from posthog { Posthog }
 
-glob logger: any;
+glob logger: any = logging.getLogger("mobilerun-telemetry");
 
-glob mobilerun_logger: any;
+glob mobilerun_logger: any = logging.getLogger("mobilerun");
 
-glob PROJECT_API_KEY: any;
+glob PROJECT_API_KEY: any = "phc_XyD3HKIsetZeRkmnfaBughs8fXWYArSUFc30C0HmRiO";
 
-glob HOST: any;
+glob HOST: any = "https://eu.i.posthog.com";
 
-glob USER_ID_PATH: any;
+glob USER_ID_PATH: any = Path.home() / ".droidrun" / "user_id";
 
-glob RUN_ID: any;
+glob RUN_ID: any = `str(uuid4());
 
-glob TELEMETRY_ENABLED_MESSAGE: any;
+glob TELEMETRY_ENABLED_MESSAGE: any = "Anonymized telemetry enabled. See https://docs.mobilerun.ai/v3/guides/telemetry for more information.";
 
-glob TELEMETRY_DISABLED_MESSAGE: any;
+glob TELEMETRY_DISABLED_MESSAGE: any = "🛑 Anonymized telemetry disabled. Telemetry can be controlled through Mobilerun configuration or the MOBILERUN_TELEMETRY_ENABLED environment variable.";
 
-glob _posthog: Posthog | None;
+glob _posthog: Posthog | None = None;
 
-glob _posthog_lock: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun-telemetry");
-    mobilerun_logger = logging.getLogger("mobilerun");
-
-    PROJECT_API_KEY = "phc_XyD3HKIsetZeRkmnfaBughs8fXWYArSUFc30C0HmRiO";
-    HOST = "https://eu.i.posthog.com";
-    USER_ID_PATH = Path.home() / ".droidrun" / "user_id";
-    RUN_ID = `str(uuid4());
-
-    TELEMETRY_ENABLED_MESSAGE = "Anonymized telemetry enabled. See https://docs.mobilerun.ai/v3/guides/telemetry for more information.";
-    TELEMETRY_DISABLED_MESSAGE = "🛑 Anonymized telemetry disabled. Telemetry can be controlled through Mobilerun configuration or the MOBILERUN_TELEMETRY_ENABLED environment variable.";
-    _posthog = None;
-    _posthog_lock = Lock();
-}
+glob _posthog_lock: any = Lock();
 
 def _get_posthog -> Posthog;
 

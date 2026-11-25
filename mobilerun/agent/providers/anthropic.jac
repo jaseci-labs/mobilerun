@@ -12,90 +12,74 @@ import from typing { Any }
 
 glob ANTHROPIC_API_DEFAULT_MODEL: any = "claude-sonnet-5";
 
-glob ANTHROPIC_OAUTH_DEFAULT_MODEL: any;
+glob ANTHROPIC_OAUTH_DEFAULT_MODEL: any = ANTHROPIC_API_DEFAULT_MODEL;
 
-glob ANTHROPIC_FABLE_5_1_MODEL: any;
+glob ANTHROPIC_FABLE_5_1_MODEL: any = "claude-fable-5-1";
 
-glob ANTHROPIC_OPUS_5_5_MODEL: any;
+glob ANTHROPIC_OPUS_5_5_MODEL: any = "claude-opus-5-5";
 
-glob ANTHROPIC_SONNET_5_5_MODEL: any;
+glob ANTHROPIC_SONNET_5_5_MODEL: any = "claude-sonnet-5-5";
 
-glob ANTHROPIC_API_MODELS: any;
+glob ANTHROPIC_API_MODELS: any = (
+    ANTHROPIC_API_DEFAULT_MODEL,
+    ANTHROPIC_SONNET_5_5_MODEL,
+    ANTHROPIC_OPUS_5_5_MODEL,
+    ANTHROPIC_FABLE_5_1_MODEL,
+);
 
-glob ANTHROPIC_OAUTH_MODELS: any;
+glob ANTHROPIC_OAUTH_MODELS: any = (
+    ANTHROPIC_OAUTH_DEFAULT_MODEL,
+    ANTHROPIC_SONNET_5_5_MODEL,
+    ANTHROPIC_OPUS_5_5_MODEL,
+    ANTHROPIC_FABLE_5_1_MODEL,
+);
 
-glob ANTHROPIC_MODEL_CONTEXT_WINDOWS: any;
+glob ANTHROPIC_MODEL_CONTEXT_WINDOWS: any = {
+    ANTHROPIC_SONNET_5_5_MODEL: 1000000,
+    ANTHROPIC_OPUS_5_5_MODEL: 1000000,
+    "claude-opus-5": 1000000,
+    "claude-sonnet-5": 1000000,
+    ANTHROPIC_FABLE_5_1_MODEL: 1000000,
+    "claude-fable-5": 1000000,
+    "claude-opus-4-8": 1000000,
+    "claude-opus-4-7": 1000000,
+    "claude-opus-4-6": 1000000,
+    "claude-sonnet-4-6": 1000000,
+    "claude-haiku-4-5": 200000,
+};
 
-glob ANTHROPIC_MODELS_WITHOUT_SAMPLING_PARAMS: any;
+glob ANTHROPIC_MODELS_WITHOUT_SAMPLING_PARAMS: any = frozenset({
+    ANTHROPIC_SONNET_5_5_MODEL,
+    ANTHROPIC_OPUS_5_5_MODEL,
+    "claude-opus-5",
+    "claude-sonnet-5",
+    ANTHROPIC_FABLE_5_1_MODEL,
+    "claude-fable-5",
+    "claude-opus-4-8",
+    "claude-opus-4-7",
+});
 
-glob ANTHROPIC_UNSUPPORTED_SAMPLING_PARAMS: any;
+glob ANTHROPIC_UNSUPPORTED_SAMPLING_PARAMS: any = frozenset({"temperature", "top_p", "top_k"});
 
-glob ANTHROPIC_MODELS_WITHOUT_FORCED_TOOL_CHOICE: any;
+glob ANTHROPIC_MODELS_WITHOUT_FORCED_TOOL_CHOICE: any = frozenset({
+    ANTHROPIC_FABLE_5_1_MODEL,
+    ANTHROPIC_OPUS_5_5_MODEL,
+    ANTHROPIC_SONNET_5_5_MODEL,
+});
 
-glob ANTHROPIC_HIGHRES_MODELS: any;
+glob ANTHROPIC_HIGHRES_MODELS: any = frozenset({
+    "claude-opus-4-7",
+    "claude-opus-4-8",
+    "claude-opus-5",
+    ANTHROPIC_OPUS_5_5_MODEL,
+    ANTHROPIC_SONNET_5_5_MODEL,
+    "claude-sonnet-5",
+    ANTHROPIC_FABLE_5_1_MODEL,
+    "claude-fable-5",
+    "claude-mythos-5",
+});
 
 glob _stream_usage: ContextVar[StreamUsage | None];
-
-with entry {
-    ANTHROPIC_OAUTH_DEFAULT_MODEL = ANTHROPIC_API_DEFAULT_MODEL;
-    ANTHROPIC_FABLE_5_1_MODEL = "claude-fable-5-1";
-    ANTHROPIC_OPUS_5_5_MODEL = "claude-opus-5-5";
-    ANTHROPIC_SONNET_5_5_MODEL = "claude-sonnet-5-5";
-
-    ANTHROPIC_API_MODELS = (
-        ANTHROPIC_API_DEFAULT_MODEL,
-        ANTHROPIC_SONNET_5_5_MODEL,
-        ANTHROPIC_OPUS_5_5_MODEL,
-        ANTHROPIC_FABLE_5_1_MODEL,
-    );
-
-    ANTHROPIC_OAUTH_MODELS = (
-        ANTHROPIC_OAUTH_DEFAULT_MODEL,
-        ANTHROPIC_SONNET_5_5_MODEL,
-        ANTHROPIC_OPUS_5_5_MODEL,
-        ANTHROPIC_FABLE_5_1_MODEL,
-    );
-    ANTHROPIC_MODEL_CONTEXT_WINDOWS = {
-        ANTHROPIC_SONNET_5_5_MODEL: 1000000,
-        ANTHROPIC_OPUS_5_5_MODEL: 1000000,
-        "claude-opus-5": 1000000,
-        "claude-sonnet-5": 1000000,
-        ANTHROPIC_FABLE_5_1_MODEL: 1000000,
-        "claude-fable-5": 1000000,
-        "claude-opus-4-8": 1000000,
-        "claude-opus-4-7": 1000000,
-        "claude-opus-4-6": 1000000,
-        "claude-sonnet-4-6": 1000000,
-        "claude-haiku-4-5": 200000,
-    };
-    ANTHROPIC_MODELS_WITHOUT_SAMPLING_PARAMS = frozenset({
-        ANTHROPIC_SONNET_5_5_MODEL,
-        ANTHROPIC_OPUS_5_5_MODEL,
-        "claude-opus-5",
-        "claude-sonnet-5",
-        ANTHROPIC_FABLE_5_1_MODEL,
-        "claude-fable-5",
-        "claude-opus-4-8",
-        "claude-opus-4-7",
-    });
-    ANTHROPIC_UNSUPPORTED_SAMPLING_PARAMS = frozenset({"temperature", "top_p", "top_k"});
-    ANTHROPIC_MODELS_WITHOUT_FORCED_TOOL_CHOICE = frozenset({
-        ANTHROPIC_FABLE_5_1_MODEL,
-        ANTHROPIC_OPUS_5_5_MODEL,
-        ANTHROPIC_SONNET_5_5_MODEL,
-    });
-    ANTHROPIC_HIGHRES_MODELS = frozenset({
-        "claude-opus-4-7",
-        "claude-opus-4-8",
-        "claude-opus-5",
-        ANTHROPIC_OPUS_5_5_MODEL,
-        ANTHROPIC_SONNET_5_5_MODEL,
-        "claude-sonnet-5",
-        ANTHROPIC_FABLE_5_1_MODEL,
-        "claude-fable-5",
-        "claude-mythos-5",
-    });
-}
 
 def anthropic_model_context_window(model: object) -> int | None;
 

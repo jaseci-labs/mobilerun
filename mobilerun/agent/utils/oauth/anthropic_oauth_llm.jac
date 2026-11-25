@@ -62,35 +62,35 @@ import from llama_index.core.llms.callbacks { llm_chat_callback, llm_completion_
 
 import from llama_index.core.llms.custom { CustomLLM }
 
-glob DEFAULT_MODEL: any;
+glob DEFAULT_MODEL: any = ANTHROPIC_OAUTH_DEFAULT_MODEL;
 
-glob DEFAULT_MAX_TOKENS: any;
+glob DEFAULT_MAX_TOKENS: any = 8192;
 
-glob DEFAULT_API_BASE: any;
+glob DEFAULT_API_BASE: any = "https://api.anthropic.com";
 
-glob DEFAULT_TOKEN_URL: any;
+glob DEFAULT_TOKEN_URL: any = "https://platform.claude.com/v1/oauth/token";
 
-glob DEFAULT_AUTHORIZE_URL: any;
+glob DEFAULT_AUTHORIZE_URL: any = "https://platform.claude.com/oauth/authorize";
 
-glob DEFAULT_MODERN_AUTHORIZE_URL: any;
+glob DEFAULT_MODERN_AUTHORIZE_URL: any = "https://claude.com/cai/oauth/authorize";
 
-glob DEFAULT_CLIENT_ID: any;
+glob DEFAULT_CLIENT_ID: any = "9d1c250a-e61b-44d9-88ed-5944d1962f5e";
 
-glob DEFAULT_CREDENTIAL_PATH: any;
+glob DEFAULT_CREDENTIAL_PATH: any = `str(ANTHROPIC_OAUTH_CREDENTIAL_PATH);
 
-glob DEFAULT_LOGIN_SCOPE: any;
+glob DEFAULT_LOGIN_SCOPE: any = "org:create_api_key user:profile";
 
-glob DEFAULT_MODERN_LOGIN_SCOPE: any;
+glob DEFAULT_MODERN_LOGIN_SCOPE: any = "org:create_api_key user:profile user:inference user:sessions:claude_code user:mcp_servers user:file_upload";
 
-glob DEFAULT_SETUP_TOKEN_SCOPE: any;
+glob DEFAULT_SETUP_TOKEN_SCOPE: any = "user:inference";
 
-glob DEFAULT_REFRESH_SCOPE: any;
+glob DEFAULT_REFRESH_SCOPE: any = "user:inference user:profile user:file_upload user:mcp_servers user:sessions:claude_code";
 
-glob DEFAULT_OAUTH_BETA: any;
+glob DEFAULT_OAUTH_BETA: any = "oauth-2025-04-20";
 
-glob DEFAULT_ANTHROPIC_VERSION: any;
+glob DEFAULT_ANTHROPIC_VERSION: any = "2023-06-01";
 
-glob DEFAULT_CLAUDE_CODE_VERSION: any;
+glob DEFAULT_CLAUDE_CODE_VERSION: any = "2.1.281";
 
 glob DEFAULT_USER_AGENT: any;
 
@@ -107,21 +107,6 @@ glob _ERROR_TYPE_STATUS: any;
 glob _MAX_CODE_ATTEMPTS: any;
 
 with entry {
-    DEFAULT_MODEL = ANTHROPIC_OAUTH_DEFAULT_MODEL;
-    DEFAULT_MAX_TOKENS = 8192;
-    DEFAULT_API_BASE = "https://api.anthropic.com";
-    DEFAULT_TOKEN_URL = "https://platform.claude.com/v1/oauth/token";
-    DEFAULT_AUTHORIZE_URL = "https://platform.claude.com/oauth/authorize";
-    DEFAULT_MODERN_AUTHORIZE_URL = "https://claude.com/cai/oauth/authorize";
-    DEFAULT_CLIENT_ID = "9d1c250a-e61b-44d9-88ed-5944d1962f5e";
-    DEFAULT_CREDENTIAL_PATH = `str(ANTHROPIC_OAUTH_CREDENTIAL_PATH);
-    DEFAULT_LOGIN_SCOPE = "org:create_api_key user:profile";
-    DEFAULT_MODERN_LOGIN_SCOPE = "org:create_api_key user:profile user:inference user:sessions:claude_code user:mcp_servers user:file_upload";
-    DEFAULT_SETUP_TOKEN_SCOPE = "user:inference";
-    DEFAULT_REFRESH_SCOPE = "user:inference user:profile user:file_upload user:mcp_servers user:sessions:claude_code";
-    DEFAULT_OAUTH_BETA = "oauth-2025-04-20";
-    DEFAULT_ANTHROPIC_VERSION = "2023-06-01";
-    DEFAULT_CLAUDE_CODE_VERSION = "2.1.281";
     DEFAULT_USER_AGENT = f"claude-cli/{DEFAULT_CLAUDE_CODE_VERSION}";
     DEFAULT_CC_VERSION = f"{DEFAULT_CLAUDE_CODE_VERSION}.000";
     DEFAULT_CC_ENTRYPOINT = "cli";

@@ -8,18 +8,11 @@ import from pathlib { Path }
 
 import from typing { Dict }
 
-glob logger: any;
+glob logger: any = logging.getLogger("mobilerun");
 
-glob PLATFORMS: any;
+glob PLATFORMS: any = ("android", "ios");
 
-glob _MAPPING_FILE: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-
-    PLATFORMS = ("android", "ios");
-    _MAPPING_FILE = "app_cards.json";
-}
+glob _MAPPING_FILE: any = "app_cards.json";
 
 def _resolve_cards_folder(app_cards_dir: builtins.str) -> Path;
 

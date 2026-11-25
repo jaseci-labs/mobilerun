@@ -8,11 +8,7 @@ import from typing { Any, Dict, Optional }
 
 import yaml;
 
-glob logger: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-}
+glob logger: any = logging.getLogger("mobilerun");
 
 """
     Credential manager that supports both dict and YAML file sources.

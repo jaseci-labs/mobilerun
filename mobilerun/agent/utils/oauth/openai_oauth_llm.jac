@@ -61,7 +61,7 @@ glob DEFAULT_OPENAI_OAUTH_ISSUER: any = "https://auth.openai.com";
 
 glob DEFAULT_OPENAI_OAUTH_CLIENT_ID: any = "app_EMoamEEZ73f0CkXaXp7hrann";
 
-glob DEFAULT_OPENAI_OAUTH_CREDENTIAL_PATH: any;
+glob DEFAULT_OPENAI_OAUTH_CREDENTIAL_PATH: any = OPENAI_OAUTH_CREDENTIAL_PATH;
 
 glob DEFAULT_AUTH_MODEL: any;
 
@@ -92,7 +92,6 @@ glob _CODEX_CONTEXT_WINDOW: any;
 glob _DEVICE_CODE_TIMEOUT: any;
 
 with entry {
-    DEFAULT_OPENAI_OAUTH_CREDENTIAL_PATH = OPENAI_OAUTH_CREDENTIAL_PATH;
     DEFAULT_AUTH_MODEL = f"openai-codex/{OPENAI_OAUTH_DEFAULT_MODEL}";
     DEFAULT_OPENAI_API_BASE = "https://api.openai.com/v1";
     DEFAULT_CODEX_API_BASE = "https://chatgpt.com/backend-api/codex";

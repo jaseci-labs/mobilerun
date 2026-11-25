@@ -14,14 +14,9 @@ import from typing { Any, Dict, Optional }
 
 import from mobilerun_core_local.driver.android { AndroidDriver }
 
-glob logger: any;
+glob logger: any = logging.getLogger("mobilerun-macro");
 
-glob _KEYCODE_TO_BUTTON: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun-macro");
-    _KEYCODE_TO_BUTTON = {4: "back", 3: "home", 66: "enter"};
-}
+glob _KEYCODE_TO_BUTTON: any = {4: "back", 3: "home", 66: "enter"};
 
 """
     A class for loading and replaying Mobilerun macro sequences.

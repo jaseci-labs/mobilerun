@@ -45,23 +45,15 @@ import from mobilerun_core_local.driver.ios {
 
 import from rich.console { Console }
 
-glob console: any;
+glob console: any = Console();
 
-glob DEFAULT_CLOUD_BASE_URL: any;
+glob DEFAULT_CLOUD_BASE_URL: any = "https://api.mobilerun.ai/v1";
 
-glob CLOUD_API_KEY_ENV: any;
+glob CLOUD_API_KEY_ENV: any = "MOBILERUN_CLOUD_API_KEY";
 
-glob _CLOUD_DEVICE_ID_RE: any;
-
-with entry {
-    console = Console();
-
-    DEFAULT_CLOUD_BASE_URL = "https://api.mobilerun.ai/v1";
-    CLOUD_API_KEY_ENV = "MOBILERUN_CLOUD_API_KEY";
-    _CLOUD_DEVICE_ID_RE = re.compile(
-        "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", re.IGNORECASE
-    );
-}
+glob _CLOUD_DEVICE_ID_RE: any = re.compile(
+    "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", re.IGNORECASE
+);
 
 def _looks_like_cloud_device_id(value: Optional[builtins.str]) -> builtins.bool;
 

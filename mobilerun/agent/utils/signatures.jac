@@ -2,11 +2,7 @@ import builtins;
 
 import logging;
 
-glob logger: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-}
+glob logger: any = logging.getLogger("mobilerun");
 
 async def build_tool_registry(
     supported_buttons: builtins.set[builtins.str] | None = None,

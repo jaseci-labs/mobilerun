@@ -8,15 +8,9 @@ import logging;
 
 import from typing { TYPE_CHECKING, List }
 
-glob logger: any;
+glob logger: any = logging.getLogger("mobilerun");
 
-glob _MACRO_FOCUS_SETTLE_SECONDS: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-
-    _MACRO_FOCUS_SETTLE_SECONDS = 0.5;
-}
+glob _MACRO_FOCUS_SETTLE_SECONDS: any = 0.5;
 
 def _uses_screenshot_only_coordinates(ctx: "ActionContext") -> builtins.bool;
 

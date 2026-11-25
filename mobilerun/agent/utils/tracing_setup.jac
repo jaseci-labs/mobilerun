@@ -24,43 +24,30 @@ import from uuid { uuid4 }
 
 import llama_index.core;
 
-glob logger: any;
+glob logger: any = logging.getLogger("mobilerun");
 
-glob _default_session_id: builtins.str;
+glob _default_session_id: builtins.str = `str(uuid4());
 
-glob _legacy_session_context: builtins.tuple[builtins.str, builtins.str];
+glob _legacy_session_context: builtins.tuple[builtins.str, builtins.str] = (
+    _default_session_id,
+    "anonymous",
+);
 
-glob _tracing_initialized: builtins.bool;
+glob _tracing_initialized: builtins.bool = False;
 
-glob _tracing_provider: Optional[builtins.str];
+glob _tracing_provider: Optional[builtins.str] = None;
 
-glob _langfuse_client: Optional[builtins.object];
+glob _langfuse_client: Optional[builtins.object] = None;
 
-glob _langfuse_preprocessor: Optional[builtins.object];
+glob _langfuse_preprocessor: Optional[builtins.object] = None;
 
-glob _langfuse_tracer_provider: Optional[builtins.object];
+glob _langfuse_tracer_provider: Optional[builtins.object] = None;
 
-glob _langfuse_setup_attempted: builtins.bool;
+glob _langfuse_setup_attempted: builtins.bool = False;
 
-glob _tracing_setup_lock: any;
+glob _tracing_setup_lock: any = threading.Lock();
 
-glob DEFAULT_LANGFUSE_BASE_URL: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-
-    _default_session_id = `str(uuid4());
-    _legacy_session_context = (_default_session_id, "anonymous");
-    _tracing_initialized = False;
-    _tracing_provider = None;
-    _langfuse_client = None;
-    _langfuse_preprocessor = None;
-    _langfuse_tracer_provider = None;
-    _langfuse_setup_attempted = False;
-    _tracing_setup_lock = threading.Lock();
-
-    DEFAULT_LANGFUSE_BASE_URL = "https://us.cloud.langfuse.com";
-}
+glob DEFAULT_LANGFUSE_BASE_URL: any = "https://us.cloud.langfuse.com";
 
 def setup_tracing(tracing_config: TracingConfig, agent: Optional[builtins.object] = None) -> None;
 

@@ -10,13 +10,11 @@ import from pathlib { Path }
 
 import from typing { Any, Callable, Dict, List, Optional, TypedDict }
 
-glob logger: any;
+glob logger: any = logging.getLogger("mobilerun");
 
 glob _EXTERNAL_DIR: any;
 
 with entry {
-    logger = logging.getLogger("mobilerun");
-
     _EXTERNAL_DIR = Path(__file__).parent;
 }
 

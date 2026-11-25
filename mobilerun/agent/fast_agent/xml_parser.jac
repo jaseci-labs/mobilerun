@@ -18,56 +18,38 @@ import from html { escape }
 
 import from typing { Any, Dict, List, Optional, Tuple }
 
-glob logger: any;
+glob logger: any = logging.getLogger("mobilerun");
 
-glob OPEN_TAG: any;
+glob OPEN_TAG: any = "<function_calls>";
 
-glob CLOSE_TAG: any;
+glob CLOSE_TAG: any = "</function_calls>";
 
-glob _PARAM_RE: any;
+glob _PARAM_RE: any = re.compile(
+    "(<parameter\\s+name=(?:\"[^\"]*\"|'[^']*')\\s*>)(.*?)(</parameter>)", re.DOTALL
+);
 
-glob _PARAM_OPEN_RE: any;
+glob _PARAM_OPEN_RE: any = re.compile("<parameter(?=[\\s>/])");
 
-glob _DSML_MARKUP_PATTERN: any;
+glob _DSML_MARKUP_PATTERN: any = "(?:<|＜)\\s*[/／]?\\s*｜+DSML｜+";
 
-glob _DSML_MARKUP_RE: any;
+glob _DSML_MARKUP_RE: any = re.compile(_DSML_MARKUP_PATTERN, re.IGNORECASE);
 
-glob _TOOL_CALL_MARKUP_RE: any;
+glob _TOOL_CALL_MARKUP_RE: any = re.compile(
+    "(?:<|＜)\\s*[/／]?\\s*(?:function_calls?|tool_calls?|invoke|parameter)\\b|"
+        + _DSML_MARKUP_PATTERN,
+    re.IGNORECASE,
+);
 
-glob _CANONICAL_BLOCK_TAGS: any;
+glob _CANONICAL_BLOCK_TAGS: any = ("<invoke", "</invoke", "<parameter", "</parameter");
 
-glob _PROSE_PUNCTUATION: any;
+glob _PROSE_PUNCTUATION: any = "`.,;:!?)";
 
-glob _BLOCK_CONTENT_RE: any;
+glob _BLOCK_CONTENT_RE: any = re.compile(
+    "(?:<|＜)\\s*[/／]?\\s*(?:function_call|tool_calls?|invoke|parameter)\\b|" + _DSML_MARKUP_PATTERN,
+    re.IGNORECASE,
+);
 
 glob _ADD_MEMORY_RE: any;
-
-with entry {
-    logger = logging.getLogger("mobilerun");
-
-    OPEN_TAG = "<function_calls>";
-    CLOSE_TAG = "</function_calls>";
-
-    _PARAM_RE = re.compile(
-        "(<parameter\\s+name=(?:\"[^\"]*\"|'[^']*')\\s*>)(.*?)(</parameter>)", re.DOTALL
-    );
-    _PARAM_OPEN_RE = re.compile("<parameter(?=[\\s>/])");
-
-    _DSML_MARKUP_PATTERN = "(?:<|＜)\\s*[/／]?\\s*｜+DSML｜+";
-    _DSML_MARKUP_RE = re.compile(_DSML_MARKUP_PATTERN, re.IGNORECASE);
-    _TOOL_CALL_MARKUP_RE = re.compile(
-        "(?:<|＜)\\s*[/／]?\\s*(?:function_calls?|tool_calls?|invoke|parameter)\\b|"
-            + _DSML_MARKUP_PATTERN,
-        re.IGNORECASE,
-    );
-    _CANONICAL_BLOCK_TAGS = ("<invoke", "</invoke", "<parameter", "</parameter");
-    _PROSE_PUNCTUATION = "`.,;:!?)";
-    _BLOCK_CONTENT_RE = re.compile(
-        "(?:<|＜)\\s*[/／]?\\s*(?:function_call|tool_calls?|invoke|parameter)\\b|"
-            + _DSML_MARKUP_PATTERN,
-        re.IGNORECASE,
-    );
-}
 
 """A parsed tool invocation from the LLM response."""
 @dataclass
