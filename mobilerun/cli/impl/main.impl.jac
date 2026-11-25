@@ -282,7 +282,6 @@ impl _print_version(ctx, param, value) -> any {
             repo_root: any = Path(__file__).resolve().parents[2];
             pyproject: any = repo_root / "pyproject.toml";
             if pyproject.exists() {
-                f: any;
                 with pyproject.open("rb") as f {
                     data: any = tomllib.load(f);
                     version = data.get("project", {}).get("version");
@@ -392,7 +391,6 @@ impl _list_cloud_devices(
     raise_on_error: builtins.bool = False,
     silent_errors: builtins.bool = False,
 ) -> builtins.int {
-    api_key: any;
     api_key = resolve_cloud_api_key();
     if not api_key {
         if silent_if_no_key {
@@ -446,7 +444,6 @@ impl _list_cloud_devices(
 }
 
 impl devices(cloud: builtins.bool, base_url: builtins.str | None) -> any {
-    device: any;
     if cloud {
         await _list_cloud_devices(base_url, raise_on_error=True);
         return;
@@ -547,7 +544,6 @@ impl whoami -> any {
 }
 
 impl connect(serial: builtins.str) -> any {
-    device: any;
     try {
         device = await adb.connect(serial);
         if device.count("already connected") {
@@ -642,7 +638,6 @@ impl _setup_portal(
             }
             return;
         }
-        apk_path: any;
         with apk_context as apk_path {
             if not os.path.exists(apk_path) {
                 console.print(f"[bold red]Error:[/] APK file not found at {apk_path}");

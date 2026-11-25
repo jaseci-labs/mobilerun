@@ -418,7 +418,6 @@ impl FastAgent.handle_llm_output(ctx: Context, ev: FastAgentResponseEvent) -> Fa
 
 impl FastAgent.execute_code(ctx: Context, ev: FastAgentToolCallEvent) -> FastAgentOutputEvent
     | FastAgentEndEvent {
-    call: any;
     tool_calls: any = (await ctx.store.get("pending_tool_calls", []));
     ignored_blocks: any = (await ctx.store.get("ignored_tool_call_blocks", 0));
 
@@ -430,7 +429,6 @@ impl FastAgent.execute_code(ctx: Context, ev: FastAgentToolCallEvent) -> FastAge
 
     results: builtins.list[ToolResult] = [];
 
-    index: any;
     for item_ in enumerate(tool_calls) {
         (index, call) = item_;
         logger.debug(f"Executing: {call.name}({call.parameters})");

@@ -10,8 +10,6 @@ impl _fetch_with_notice(
     }
     task: any = asyncio.ensure_future(fetch());
     try {
-        done: any;
-        _: any;
         (done, _) = await asyncio.wait({task}, timeout=_SLOW_FETCH_NOTICE_S) as any;
     } except BaseException {
         task.cancel();
@@ -253,7 +251,6 @@ impl AndroidStateProvider.get_final_state -> UIState {
 }
 
 impl AndroidStateProvider._state_from_data_async(combined_data: dict) -> UIState {
-    processor: any;
     processor = copy(self);
     processor.tree_filter = deepcopy(self.tree_filter);
     processor.tree_formatter = deepcopy(self.tree_formatter);
@@ -264,8 +261,6 @@ impl AndroidStateProvider._state_from_data_async(combined_data: dict) -> UIState
         return (state, processor.resize_model_screenshot);
     }
 
-    state: any;
-    resize: any;
     (state, resize) = (await asyncio.to_thread(process)) as any;
     self.resize_model_screenshot = resize;
     self.model_screenshot_width = state.model_screenshot_width;
@@ -315,10 +310,6 @@ impl AndroidStateProvider._state_from_data(combined_data: dict) -> UIState {
     self.tree_formatter.display_scale_x = coordinate_scale_x;
     self.tree_formatter.display_scale_y = coordinate_scale_y;
 
-    formatted_text: any;
-    focused_text: any;
-    elements: any;
-    phone_state: any;
     (formatted_text, focused_text, elements, phone_state) = self.tree_formatter.format(
         filtered, combined_data["phone_state"]
     ) as any;

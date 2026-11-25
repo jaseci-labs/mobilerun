@@ -59,8 +59,6 @@ impl IOSStateProvider.get_state -> UIState {
     if self._vision_contract_intent and screen_width and screen_height {
         try {
             screenshot: any = (await self.driver.screenshot());
-            shot_width: any;
-            shot_height: any;
             (shot_width, shot_height) = image_dimensions(screenshot) as any;
             if self.vision_resize_policy is not None {
                 (display_width, display_height) = self.vision_resize_policy.effective_dims(
@@ -90,12 +88,7 @@ impl IOSStateProvider.get_state -> UIState {
     self.model_screenshot_height = display_height;
 
     if display_width and display_height {
-        element: any;
         for element in elements {
-            left: any;
-            top: any;
-            right: any;
-            bottom: any;
             (left, top, right, bottom) = (`int(part)
             for part in element["bounds"].split(",")) as any;
             element["displayBounds"] = ",".join(
@@ -174,10 +167,6 @@ impl _parse_a11y_tree(a11y_text: str) -> List[Dict[str, Any]] {
             continue;
         }
 
-        x: any;
-        y: any;
-        width: any;
-        height: any;
         (x, y, width, height) = map(float, coord_match.groups()) as any;
         if width == 0 or height == 0 {
             continue;
@@ -246,7 +235,6 @@ impl _normalize_phone_state(phone_state: Dict[str, Any], a11y_text: str) -> Dict
 }
 
 impl _prioritize_actionable_elements(elements: List[Dict[str, Any]]) -> List[Dict[str, Any]] {
-    actionable_types: any;
     actionable_types = {
         "Icon",
         "Button",

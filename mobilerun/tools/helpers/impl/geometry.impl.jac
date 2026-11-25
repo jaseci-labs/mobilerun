@@ -8,10 +8,6 @@ impl find_uncovered_point(
     regions: any = [bounds] if bounds[0] < bounds[2] and bounds[1] < bounds[3] else [];
     for blocker in blockers {
         remaining: any = [];
-        left: any;
-        top: any;
-        right: any;
-        bottom: any;
         for (left, top, right, bottom) in regions {
             bl: any = max(left, blocker[0]);
             bt: any = max(top, blocker[1]);
@@ -46,12 +42,6 @@ impl find_uncovered_point(
 impl find_clear_point(
     bounds: Bounds, blockers: List[Bounds], depth: builtins.int = 0
 ) -> Optional[Tuple[builtins.int, builtins.int]] {
-    cx: any;
-    cy: any;
-    left: any;
-    top: any;
-    right: any;
-    bottom: any;
     (left, top, right, bottom) = bounds as any;
     (cx, cy) = ((left + right) // 2, (top + bottom) // 2);
 

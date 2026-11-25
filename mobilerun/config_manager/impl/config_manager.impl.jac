@@ -184,7 +184,6 @@ impl MobileConfig.from_dict(data: Dict[str, Any]) -> "MobileConfig" {
 }
 
 impl MobileConfig.from_yaml(path: str) -> "MobileConfig" {
-    f: any;
     with open(path, "r", encoding="utf-8") as f {
         data: any = yaml.safe_load(f);
     }

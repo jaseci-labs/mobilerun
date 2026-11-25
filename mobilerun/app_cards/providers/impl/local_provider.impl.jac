@@ -1,5 +1,4 @@
 impl _resolve_cards_folder(app_cards_dir: builtins.str) -> Path {
-    folder: any;
     path: any = Path(app_cards_dir).expanduser();
     if path.is_absolute() {
         _warn_if_flat(path);
@@ -40,7 +39,6 @@ impl LocalAppCardProvider.init(app_cards_dir: builtins.str = "config/app_cards")
             continue;
         }
         try {
-            f: any;
             with open(mapping_path, "r", encoding="utf-8") as f {
                 mapping: any = json.load(f);
             }
@@ -79,8 +77,6 @@ impl LocalAppCardProvider.load_app_card(
         self._content_cache[cache_key] = "";
         return "";
     }
-    cards_folder: any;
-    mapping: any;
     (cards_folder, mapping) = source as any;
     filename: any = mapping[package_name];
     if not isinstance(filename, `str) {

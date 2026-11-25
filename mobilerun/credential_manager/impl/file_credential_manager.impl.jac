@@ -51,7 +51,6 @@ impl FileCredentialManager._load_from_file(
     file_path: builtins.str
 ) -> Dict[builtins.str, builtins.str] {
     path: any = PathResolver.resolve(file_path, must_exist=True);
-    f: any;
     with open(path, "r") as f {
         data: any = yaml.safe_load(f);
     }

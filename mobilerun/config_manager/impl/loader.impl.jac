@@ -35,7 +35,6 @@ impl ConfigLoader.load(config_path: Optional[str] = None) -> MobileConfig {
 }
 
 impl ConfigLoader._load_user_config(user_config_path: Path) -> MobileConfig {
-    f: any;
     with open(user_config_path, "r", encoding="utf-8") as f {
         user_dict: any = yaml.safe_load(f) or dict[any, any]();
     }
@@ -75,7 +74,6 @@ impl ConfigLoader._save_dict(config_dict: Dict[str, Any], path: Path) -> Path {
         comptime if target().os != "windows" {
             os.fchmod(fd, 384);
         }
-        f: any;
         with os.fdopen(fd, "w", encoding="utf-8") as f {
             fd = -1;
             f.seek(0);

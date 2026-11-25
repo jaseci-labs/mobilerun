@@ -2,7 +2,6 @@ impl get_migrations -> List {
     migrations: any = [];
     migrations_dir: any = Path(__file__).parent;
 
-    _: any;
     for (_, name, _) in pkgutil.iter_modules([`str(migrations_dir)]) {
         if name.startswith("v") and name[1:4].isdigit() {
             module: any = importlib.import_module(f".{name}", package=__name__);

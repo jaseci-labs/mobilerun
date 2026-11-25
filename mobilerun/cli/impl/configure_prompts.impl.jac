@@ -14,7 +14,6 @@ impl select_prompt(
     inquirer: any = _import_inquirer_select();
     if inquirer is not None {
         rendered: any = [];
-        choice: any;
         for choice in choices {
             name: any = f"• {choice.label}";
             if choice.hint {

@@ -86,7 +86,6 @@ impl _prepare_ollama_kwargs(
 }
 
 impl _patch_responses_output_parser(responses_cls: Any) -> None {
-    original: any;
     original = responses_cls._parse_response_output;
     if getattr(original, "_mobilerun_patched", False) {
         return;

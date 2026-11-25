@@ -72,7 +72,6 @@ impl parse_tool_calls_detailed(
 }
 
 impl _count_tool_call_blocks(text: builtins.str, end: builtins.int) -> builtins.int {
-    parts: any;
     parts = text[end:].split(OPEN_TAG);
     count: any = 1 if _BLOCK_CONTENT_RE.search(parts[0]) else 0;
     parts[0] = text[:end] + parts[0];
@@ -199,7 +198,6 @@ impl _has_text_outside_parameters(`root: ET.Element) -> builtins.bool {
 }
 
 impl _has_noncanonical_markup(block: builtins.str) -> builtins.bool {
-    marker: any;
     payload_spans: List[Tuple[builtins.int, builtins.int]] = [];
     for parameter in _PARAM_RE.finditer(block) {
         payload: any = parameter.group(2);
@@ -239,9 +237,6 @@ impl _format_param_value(value: Any) -> builtins.str {
 
 impl _sanitize_param_content(block: builtins.str) -> builtins.str {
     def _escape(m: re.Match) -> builtins.str {
-        pre: any;
-        content: any;
-        post: any;
         (pre, content, post) = (m.group(1), m.group(2), m.group(3));
         clean: any = content.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
         return pre + clean + post;

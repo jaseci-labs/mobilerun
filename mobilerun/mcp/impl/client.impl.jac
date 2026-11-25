@@ -3,10 +3,7 @@ impl _own_connection(server_params: Any, ready: asyncio.Future, shutdown: asynci
     import from mcp.client.stdio { stdio_client }
 
     try {
-        stack: any;
         async with AsyncExitStack() as stack {
-            read: any;
-            write: any;
             (read, write) = await stack.enter_async_context(stdio_client(server_params)) as any;
             session: any = await stack.enter_async_context(ClientSession(read, write));
             await session.initialize();
@@ -68,11 +65,8 @@ impl MCPClientManager._discover_server_tools(server_name: str, config: "MCPServe
 
     server_tool_names: list[str] = [];
 
-    stack: any;
     async with (AsyncExitStack()) as stack {
         transport: any = (await stack.enter_async_context(stdio_client(server_params)));
-        read: any;
-        write: any;
         (read, write) = transport as any;
         session: any = (await stack.enter_async_context(ClientSession(read, write)));
         (await session.initialize());

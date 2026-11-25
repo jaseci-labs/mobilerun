@@ -190,15 +190,11 @@ impl _teardown_android(driver) -> any {
 impl device_cli -> any {}
 
 impl screenshot(device, config_path, tcp, ios, cloud, device_id, base_url) -> any {
-    driver: any;
-    _: any;
     (driver, _) = await _create_driver(
         device, config_path, tcp, ios, cloud, device_id, base_url
     ) as any;
     try {
         png_bytes: any = await driver.screenshot();
-        fd: any;
-        path: any;
         (fd, path) = tempfile.mkstemp(prefix="mobilerun_", suffix=".png") as any;
         try {
             os.write(fd, png_bytes);
@@ -213,8 +209,6 @@ impl screenshot(device, config_path, tcp, ios, cloud, device_id, base_url) -> an
 
 impl ui(device, config_path, tcp, ios, cloud, device_id, base_url) -> any {
     _log_progress_to_stderr();
-    driver: any;
-    is_ios: any;
     (driver, is_ios) = await _create_driver(
         device, config_path, tcp, ios, cloud, device_id, base_url
     ) as any;
@@ -237,8 +231,6 @@ impl ui(device, config_path, tcp, ios, cloud, device_id, base_url) -> any {
 }
 
 impl tap(x, y, device, config_path, tcp, ios, cloud, device_id, base_url) -> any {
-    driver: any;
-    _: any;
     (driver, _) = await _create_driver(
         device, config_path, tcp, ios, cloud, device_id, base_url
     ) as any;
@@ -253,8 +245,6 @@ impl tap(x, y, device, config_path, tcp, ios, cloud, device_id, base_url) -> any
 impl swipe_cmd(
     x1, y1, x2, y2, duration, device, config_path, tcp, ios, cloud, device_id, base_url
 ) -> any {
-    driver: any;
-    _: any;
     (driver, _) = await _create_driver(
         device, config_path, tcp, ios, cloud, device_id, base_url
     ) as any;
@@ -270,8 +260,6 @@ impl long_press(x, y, device, config_path, tcp, ios, cloud, device_id, base_url)
     if ios {
         raise click.ClickException("long-press is not supported on iOS");
     }
-    driver: any;
-    _: any;
     (driver, _) = await _create_driver(
         device, config_path, tcp, ios, cloud, device_id, base_url
     ) as any;
@@ -284,8 +272,6 @@ impl long_press(x, y, device, config_path, tcp, ios, cloud, device_id, base_url)
 }
 
 impl type_text(text, clear, device, config_path, tcp, ios, cloud, device_id, base_url) -> any {
-    driver: any;
-    _: any;
     (driver, _) = await _create_driver(
         device, config_path, tcp, ios, cloud, device_id, base_url
     ) as any;
@@ -302,8 +288,6 @@ impl type_text(text, clear, device, config_path, tcp, ios, cloud, device_id, bas
 }
 
 impl press(button, device, config_path, tcp, ios, cloud, device_id, base_url) -> any {
-    driver: any;
-    _: any;
     (driver, _) = await _create_driver(
         device, config_path, tcp, ios, cloud, device_id, base_url
     ) as any;
@@ -316,8 +300,6 @@ impl press(button, device, config_path, tcp, ios, cloud, device_id, base_url) ->
 }
 
 impl apps(system, device, config_path, tcp, ios, cloud, device_id, base_url) -> any {
-    driver: any;
-    _: any;
     (driver, _) = await _create_driver(
         device, config_path, tcp, ios, cloud, device_id, base_url
     ) as any;
@@ -341,8 +323,6 @@ impl apps(system, device, config_path, tcp, ios, cloud, device_id, base_url) -> 
 }
 
 impl start(package, device, config_path, tcp, ios, cloud, device_id, base_url) -> any {
-    driver: any;
-    _: any;
     (driver, _) = await _create_driver(
         device, config_path, tcp, ios, cloud, device_id, base_url
     ) as any;

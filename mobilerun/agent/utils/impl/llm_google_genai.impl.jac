@@ -15,7 +15,6 @@ impl MobilerunGoogleGenAI._sanitize_call_kwargs(
     }
 
     sanitized: any = `dict(call_kwargs);
-    param: any;
     for param in GEMINI_UNSUPPORTED_SAMPLING_PARAMS {
         sanitized.pop(param, None);
     }

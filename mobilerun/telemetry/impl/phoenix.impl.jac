@@ -72,11 +72,6 @@ impl clean_span(span_name: builtins.str) -> any {
         @functools.wraps(func)
         def wrapper(*args__, **kwargs) -> any {
             args: any = tuple(args__);
-            span_id: any;
-            bound_args: any;
-            instance: any;
-            context: any;
-            token: any;
             import from llama_index_instrumentation.dispatcher { active_instrument_tags }
             import from llama_index_instrumentation.span { active_span_id }
 

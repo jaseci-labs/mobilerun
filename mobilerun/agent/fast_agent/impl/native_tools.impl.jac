@@ -74,7 +74,6 @@ impl _to_tool_call(
     }
 
     parameters: Dict[builtins.str, Any] = {};
-    value: any;
     for (param_name, value) in arguments.items() {
         if isinstance(value, `str) and param_types {
             if param_types.get(param_name, "string") != "string" {

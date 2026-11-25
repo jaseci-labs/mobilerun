@@ -59,7 +59,6 @@ impl Trajectory.load_trajectory_folder(trajectory_folder: builtins.str) -> Dict[
     try {
         trajectory_json_path: any = os.path.join(trajectory_folder, "trajectory.json");
         if os.path.exists(trajectory_json_path) {
-            f: any;
             with open(trajectory_json_path, "r") as f {
                 result["trajectory_data"] = json.load(f);
             }
@@ -91,7 +90,6 @@ impl Trajectory.load_macro_sequence(macro_file_path: builtins.str) -> Dict[built
     }
 
     try {
-        f: any;
         with open(macro_file_path, "r") as f {
             macro_data: any = json.load(f);
         }

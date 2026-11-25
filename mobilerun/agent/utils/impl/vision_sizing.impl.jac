@@ -12,12 +12,9 @@ impl model_uses_normalized_coordinates(model_id: str) -> bool {
 }
 
 impl model_effective_dims(model_id: str, width: int, height: int) -> tuple[int, int] {
-    base_w: any;
-    base_h: any;
     (base_w, base_h) = fit_dimensions_to_max_side(width, height, MODEL_SCREENSHOT_MAX_SIDE) as any;
     if _is_anthropic(model_id) {
         `edge: any;
-        tokens: any;
         (`edge, tokens) = (
             _ANTHROPIC_HIGHRES if model_id in ANTHROPIC_HIGHRES_MODELS else _ANTHROPIC_STANDARD
         ) as any;
@@ -48,8 +45,6 @@ impl VisionResizePolicy.effective_dims(width: int, height: int) -> tuple[int, in
     candidates: any = [model_effective_dims(m, width, height) for m in self._model_ids] or [
         fit_dimensions_to_max_side(width, height, MODEL_SCREENSHOT_MAX_SIDE),
     ];
-    w: any;
-    h: any;
     (w, h) = min(candidates, key=builtins.max) as any;
     if self._cap and max(w, h) > self._cap {
         (w, h) = fit_dimensions_to_max_side(w, h, self._cap) as any;

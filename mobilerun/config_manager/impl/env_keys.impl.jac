@@ -47,9 +47,6 @@ impl resolve_env_key(slot: str, source: str = "auto") -> str {
 }
 
 impl save_env_keys(keys: dict[str, str]) -> None {
-    known_keys: any;
-    slot: any;
-    val: any;
     known_keys = {slot: val for (slot, val) in keys.items() if slot in API_KEY_ENV_VARS};
 
     def _update(existing: dict) -> None {

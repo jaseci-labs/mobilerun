@@ -39,7 +39,6 @@ impl MobilerunAnthropic._get_all_kwargs(**kwargs: Any) -> builtins.dict[builtins
     extra_body: any = `dict(model_kwargs.get("extra_body") or {});
     effective_model: any = extra_body.get("model", model_kwargs.get("model", self.model));
     if anthropic_model_omits_sampling_params(effective_model) {
-        param: any;
         for param in ANTHROPIC_UNSUPPORTED_SAMPLING_PARAMS {
             model_kwargs.pop(param, None);
             extra_body.pop(param, None);

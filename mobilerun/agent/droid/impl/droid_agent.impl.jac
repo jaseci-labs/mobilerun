@@ -36,8 +36,6 @@ impl _run_finalize_stage(
             logger.debug("Skipping final %s: epilog budget exhausted", name);
             return (False, None);
         }
-        done: any;
-        _: any;
         (done, _) = await asyncio.wait({task}, timeout=remaining) as any;
         if not done {
             logger.warning("Final %s timed out", name);
@@ -557,8 +555,6 @@ impl MobileAgent.start_handler(ctx: Context, ev: StartEvent) -> FastAgentExecute
     if getattr(self.state_provider, "use_normalized", False) {
         logger.info("📐 Coordinates: normalized 0-1000");
     }
-    registry: any;
-    standard_tool_names: any;
     (registry, standard_tool_names) = (
         await build_tool_registry(
             supported_buttons=driver.supported_buttons,
@@ -904,8 +900,6 @@ impl MobileAgent.finalize(ctx: Context, ev: FinalizeEvent) -> ResultEvent {
                 pydantic_model=self.output_model,
                 answer_text=ev.reason,
             );
-            completed: any;
-            extraction_event: any;
             (completed, extraction_event) = (
                 await _run_finalize_stage(
                     "structured-output",
@@ -940,7 +934,6 @@ impl MobileAgent.finalize(ctx: Context, ev: FinalizeEvent) -> ResultEvent {
         );
         try {
             screenshot_operation: any = self.action_ctx.driver.screenshot();
-            screenshot: any;
             (completed, screenshot) = (
                 await _run_finalize_stage(
                     "screenshot",
@@ -972,7 +965,6 @@ impl MobileAgent.finalize(ctx: Context, ev: FinalizeEvent) -> ResultEvent {
             final_state: any = getattr(
                 self.state_provider, "get_final_state", self.state_provider.get_state
             );
-            ui_state: any;
             (completed, ui_state) = (
                 await _run_finalize_stage(
                     "ui-state",
@@ -1015,7 +1007,6 @@ impl MobileAgent.finalize(ctx: Context, ev: FinalizeEvent) -> ResultEvent {
                 )
                     if has_mcp
                     else 0.0;
-                _: any;
                 (completed, _) = (
                     await _run_finalize_stage(
                         "trajectory-stop",

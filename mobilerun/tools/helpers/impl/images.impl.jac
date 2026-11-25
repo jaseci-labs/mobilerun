@@ -19,15 +19,11 @@ impl anthropic_resized_size(
         return (width, height);
     }
     if height > width {
-        rw: any;
-        rh: any;
         (rw, rh) = anthropic_resized_size(height, width, max_edge, max_tokens) as any;
         return (rh, rw);
     }
 
     aspect: any = width / height;
-    lo: any;
-    hi: any;
     (lo, hi) = (1, width);
     while lo + 1 < hi {
         mid: any = (lo + hi) // 2;
@@ -42,8 +38,6 @@ impl anthropic_resized_size(
 
 impl image_dimensions(image: bytes) -> tuple[int, int] {
     if image.startswith(b"\x89PNG\r\n\x1a\n") and len(image) >= 24 {
-        width: any;
-        height: any;
         (width, height) = struct.unpack(">II", image[16:24]) as any;
         return (`int(width), `int(height));
     }
@@ -70,17 +64,12 @@ impl fit_dimensions_to_max_side(
 }
 
 impl resize_image_to_max_side(image: bytes, max_side: int = max_side_default__) -> bytes {
-    width: any;
-    height: any;
     (width, height) = image_dimensions(image) as any;
-    target_width: any;
-    target_height: any;
     (target_width, target_height) = fit_dimensions_to_max_side(width, height, max_side) as any;
     if (target_width, target_height) == (width, height) {
         return image;
     }
 
-    source: any;
     with Image.open(BytesIO(image)) as source {
         resized: any = source.convert("RGBA").resize(
             (target_width, target_height), Image.Resampling.LANCZOS
@@ -94,11 +83,7 @@ impl resize_image_to_max_side(image: bytes, max_side: int = max_side_default__) 
 impl resize_image_to_max_side_with_grid(
     image: bytes, max_side: int = max_side_default___, divisions: int = 10
 ) -> bytes {
-    width: any;
-    height: any;
     (width, height) = image_dimensions(image) as any;
-    target_width: any;
-    target_height: any;
     (target_width, target_height) = fit_dimensions_to_max_side(width, height, max_side) as any;
     return resize_image_to_dimensions_with_grid(
         image, target_width, target_height, divisions=divisions
@@ -108,10 +93,7 @@ impl resize_image_to_max_side_with_grid(
 impl resize_image_to_dimensions_with_grid(
     image: bytes, target_width: int, target_height: int, divisions: int = 10
 ) -> bytes {
-    width: any;
-    height: any;
     (width, height) = image_dimensions(image) as any;
-    source: any;
     with Image.open(BytesIO(image)) as source {
         screenshot: any = source.convert("RGBA");
         if (target_width, target_height) != (width, height) {
@@ -126,8 +108,6 @@ impl resize_image_to_dimensions_with_grid(
 }
 
 impl _draw_coordinate_grid(image: Image.Image, divisions: int) -> None {
-    width: any;
-    height: any;
     (width, height) = image.size as any;
     if divisions <= 0 or width <= 0 or height <= 0 {
         return;
@@ -169,8 +149,6 @@ impl _draw_grid_label(
     shadow: tuple[int, int, int, int],
     background: tuple[int, int, int, int],
 ) -> None {
-    x: any;
-    y: any;
     (x, y) = position as any;
     bbox: any = draw.textbbox((x, y), text, font=font);
     draw.rectangle((bbox[0] - 2, bbox[1] - 1, bbox[2] + 2, bbox[3] + 1), fill=background);

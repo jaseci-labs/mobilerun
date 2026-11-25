@@ -244,17 +244,11 @@ impl _show_dry_run(
         details: any = "";
 
         if action_type == "tap" {
-            x: any;
-            y: any;
             (x, y) = (action.get("x", 0), action.get("y", 0));
             element_text: any = action.get("element_text", "");
             details = f"({x}, {y}) - '{element_text}'";
         } elif action_type == "swipe" {
-            start_x: any;
-            start_y: any;
             (start_x, start_y) = (action.get("start_x", 0), action.get("start_y", 0));
-            end_x: any;
-            end_y: any;
             (end_x, end_y) = (action.get("end_x", 0), action.get("end_y", 0));
             details = f"({start_x}, {start_y}) → ({end_x}, {end_y})";
         } elif action_type == "input_text" {

@@ -36,7 +36,6 @@ impl _is_headless_environment -> bool {
 impl _tls_preflight(
     issuer: str, timeout: float = 5.0, *, deadline: OAuthLoginDeadline | None = None
 ) -> None {
-    err_str: any;
     probe_url: any = format(issuer.rstrip("/"), "") + "/oauth/authorize";
     try {
         request_timeout: any = deadline.remaining(cap=timeout) if deadline else timeout;
@@ -652,8 +651,6 @@ impl OpenAIOAuth.login(
     deadline: OAuthLoginDeadline | None = None,
 ) -> OpenAIOAuthCredentials {
     result: Dict[str, Optional[str]];
-    done: any;
-    callback_lock: any;
     login_deadline: any = deadline
         or OAuthLoginDeadline(timeout_seconds, timeout_message=_OPENAI_LOGIN_TIMEOUT_MESSAGE);
     login_deadline.check();
@@ -673,8 +670,6 @@ impl OpenAIOAuth.login(
     result = {"code": None, "state": None, "error": None};
     done = threading.Event();
     callback_lock = threading.Lock();
-    code_verifier: any;
-    code_challenge: any;
     (code_verifier, code_challenge) = _pkce_pair() as any;
     state: any = _b64_no_pad(secrets.token_bytes(32));
 
@@ -1228,9 +1223,6 @@ impl OpenAIOAuth._chat(messages: list[ChatMessage], **kwargs: Any) -> ChatRespon
 
     try {
         events: any = client.responses.create(input=payload, **request_kwargs);
-        text: any;
-        response: any;
-        tool_calls: any;
         (text, response, tool_calls) = self._collect_stream_text_sync(events) as any;
     } except Exception as exc {
         if self._should_fall_back_to_backend_api(exc) {
@@ -1258,9 +1250,6 @@ impl OpenAIOAuth._achat(messages: list[ChatMessage], **kwargs: Any) -> ChatRespo
 
     try {
         events: any = (await aclient.responses.create(input=payload, **request_kwargs));
-        text: any;
-        response: any;
-        tool_calls: any;
         (text, response, tool_calls) = (await self._collect_stream_text_async(events)) as any;
     } except Exception as exc {
         if self._should_fall_back_to_backend_api(exc) {
@@ -1281,7 +1270,6 @@ impl OpenAIOAuth._achat(messages: list[ChatMessage], **kwargs: Any) -> ChatRespo
 }
 
 impl OpenAIOAuth._stream_chat(messages: list[ChatMessage], **kwargs: Any) -> ChatResponseGen {
-    events: any;
     request_kwargs: any = self._codex_request_kwargs(messages, kwargs);
     self._ensure_access_token();
     payload: any = self._build_responses_payload(messages);

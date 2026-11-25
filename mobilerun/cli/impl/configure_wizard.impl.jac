@@ -343,7 +343,6 @@ impl _configure_advanced_settings(console: Console, config) -> None {
                     "[red]MiniMax temperature must be greater than 0 and no more than 1.[/red]"
                 );
             }
-            role: any;
             for role in _ALL_CONFIG_ROLES {
                 if role in config.llm_profiles {
                     config.llm_profiles[role].temperature = value;
@@ -516,8 +515,6 @@ impl _configure_provider_model(
                     );
                 }
             } else {
-                selected_key: any;
-                selected_source: any;
                 (selected_key, selected_source) = _prompt_api_key_for_variant(variant) as any;
                 if selected_key == _BACK {
                     if model_is_fixed {

@@ -70,14 +70,12 @@ impl AuthProfileStore.transaction(
 }
 
 impl AuthProfileStore.read_profile -> dict[str, Any] {
-    transaction: any;
     with self.transaction() as transaction {
         return `dict(transaction.profile);
     }
 }
 
 impl AuthProfileStore.read_slot(slot: str) -> dict[str, Any] | None {
-    transaction: any;
     with self.transaction() as transaction {
         return transaction.get_slot(slot);
     }
@@ -90,14 +88,12 @@ impl AuthProfileStore.update_slot(
     lock_timeout: float | None = None,
     before_commit: Callable[[], None] | None = None,
 ) -> None {
-    transaction: any;
     with self.transaction(lock_timeout=lock_timeout, before_commit=before_commit) as transaction {
         transaction.set_slot(slot, payload);
     }
 }
 
 impl AuthProfileStore.update_profile(updater: Callable[[dict[str, Any]], _T]) -> _T {
-    transaction: any;
     with self.transaction() as transaction {
         return transaction.update(updater);
     }
@@ -129,7 +125,6 @@ impl AuthProfileStore._write_unlocked(
     fd: int | None = None;
     tmp_path: Path | None = None;
     try {
-        raw_tmp_path: any;
         (fd, raw_tmp_path) = tempfile.mkstemp(
             dir=self.path.parent, prefix=f".{self.path.name}.", suffix=".tmp"
         ) as any;
@@ -137,7 +132,6 @@ impl AuthProfileStore._write_unlocked(
         if _FCHMOD is not None {
             _FCHMOD(fd, 384);
         }
-        handle: any;
         with os.fdopen(fd, "w", encoding="utf-8") as handle {
             fd = None;
             json.dump(profile, handle, indent=2);

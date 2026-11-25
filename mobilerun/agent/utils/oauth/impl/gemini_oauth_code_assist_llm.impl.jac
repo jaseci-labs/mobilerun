@@ -73,8 +73,6 @@ impl _normalize_manual_code(raw: builtins.str, expected_state: builtins.str) -> 
     }
 
     if "#" in first_token {
-        code_part: any;
-        fragment: any;
         (code_part, fragment) = first_token.split("#", 1) as any;
         if fragment and fragment != expected_state {
             raise RuntimeError("OAuth manual code state mismatch.");
@@ -467,8 +465,6 @@ impl GeminiOAuthCodeAssistLLM.login(
     persist_credentials: builtins.bool = True,
 ) -> builtins.str {
     result: Dict[builtins.str, Optional[builtins.str]];
-    done: any;
-    callback_lock: any;
     active_deadline: any = deadline or OAuthLoginDeadline(timeout_seconds);
     active_deadline.check();
     use_authcode: any = _is_headless_environment()
@@ -491,8 +487,6 @@ impl GeminiOAuthCodeAssistLLM.login(
     done = threading.Event();
     callback_lock = threading.Lock();
     expected_state: any = secrets.token_hex(32);
-    code_verifier: any;
-    code_challenge: any;
     (code_verifier, code_challenge) = _pkce_pair() as any;
 
     class _OAuthHandler(BaseHTTPRequestHandler) {
@@ -611,13 +605,9 @@ impl GeminiOAuthCodeAssistLLM.login_headless(
     persist_credentials: builtins.bool = True,
 ) -> builtins.str {
     input_queue: queue.Queue[Optional[builtins.str]];
-    stop: any;
-    need_more: any;
     active_deadline: any = deadline or OAuthLoginDeadline(timeout_seconds);
     active_deadline.check();
 
-    code_verifier: any;
-    code_challenge: any;
     (code_verifier, code_challenge) = _pkce_pair() as any;
     expected_state: any = secrets.token_hex(32);
     redirect_uri: any = "https://codeassist.google.com/authcode";
@@ -986,7 +976,6 @@ impl GeminiOAuthCodeAssistLLM.complete(prompt: builtins.str, **kwargs: Any) -> C
 impl GeminiOAuthCodeAssistLLM.stream_chat(
     messages: Sequence[ChatMessage], **kwargs: Any
 ) -> ChatResponseGen {
-    response: any;
     token: any = self._resolve_access_token();
     payload: any = self._to_code_assist_request(messages, **kwargs);
 

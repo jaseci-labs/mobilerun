@@ -1,6 +1,4 @@
 impl make_serializable(`obj) -> any {
-    k: any;
-    v: any;
     if hasattr(`obj, "__class__") and `obj.__class__.__name__ == "ChatMessage" {
         if hasattr(`obj, "content") and `obj.content is not None {
             return {"role": `obj.role.value, "content": `obj.content};
@@ -45,21 +43,18 @@ impl make_serializable(`obj) -> any {
 impl WriteJob.execute -> None {}
 
 impl EventsWriteJob.execute -> None {
-    f: any;
     async with (aiofiles.open(self.target_path, "w")) as f {
         (await f.write(self.serialized_events));
     }
 }
 
 impl MacroWriteJob.execute -> None {
-    f: any;
     async with (aiofiles.open(self.target_path, "w")) as f {
         (await f.write(self.serialized_macro));
     }
 }
 
 impl ScreenshotWriteJob.execute -> None {
-    f: any;
     async with (aiofiles.open(self.target_path, "wb")) as f {
         (await f.write(self.screenshot_bytes));
     }
@@ -111,7 +106,6 @@ impl GifWriteJob.execute -> None {
 
 impl UIStateWriteJob.execute -> None {
     if not (await ospath.exists(self.target_path)) {
-        f: any;
         async with (aiofiles.open(self.target_path, "w", encoding="utf-8")) as f {
             (await f.write(self.serialized_state));
         }
@@ -142,8 +136,6 @@ impl WriterWorker.stop(timeout: builtins.float = 30.0) -> None {
 
     drain_task: any = asyncio.create_task(self.queue.join());
     try {
-        done: any;
-        _: any;
         (done, _) = (await asyncio.wait({drain_task}, timeout=timeout)) as any;
         if not done {
             logger.warning(f"Writer timeout after {timeout}s, {self.queue.qsize()} jobs remaining");

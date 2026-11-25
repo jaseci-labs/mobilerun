@@ -153,8 +153,6 @@ impl GrokIDTokenValidator.init(jwks_client: Any | None = None) {
 impl GrokIDTokenValidator.validate(
     token: str, *, nonce: str | None, deadline: OAuthLoginDeadline | None = None
 ) -> dict[str, Any] {
-    original_timeout: any;
-    original_fetch: any;
     if deadline is None {
         self._jwks_lock.acquire();
     } elif not self._jwks_lock.acquire(timeout=deadline.remaining()) {
@@ -501,7 +499,6 @@ impl GrokOAuthSessionManager.get_valid_credentials(
     *, force_refresh: bool = False, rejected_access_token: str | None = None
 ) -> GrokOAuthCredentials {
     with self._thread_lock {
-        transaction: any;
         with self.credential_store.profile_store.transaction() as transaction {
             payload: any = transaction.get_slot(DEFAULT_GROK_OAUTH_SLOT);
             credentials: any = GrokOAuthCredentials.from_payload(payload)
@@ -748,8 +745,6 @@ impl GrokOAuth.login(
     deadline: OAuthLoginDeadline | None = None,
 ) -> GrokOAuthCredentials {
     result: dict[str, str | None];
-    done: any;
-    callback_lock: any;
     login_deadline: any = deadline
         or OAuthLoginDeadline(
             timeout_seconds,
@@ -769,8 +764,6 @@ impl GrokOAuth.login(
         return self._login_device_code(deadline=login_deadline, open_browser=open_browser);
     }
 
-    code_verifier: any;
-    code_challenge: any;
     (code_verifier, code_challenge) = _pkce_pair() as any;
     state: any = _b64_no_pad(secrets.token_bytes(32));
     nonce: any = _b64_no_pad(secrets.token_bytes(32));

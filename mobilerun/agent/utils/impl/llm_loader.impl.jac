@@ -63,7 +63,6 @@ impl load_agent_llms(
     output_model: Type[BaseModel] | None = None,
     **kwargs: Any,
 ) -> builtins.dict[builtins.str, LLM] {
-    name: any;
     if custom_provider is not None or custom_model is not None {
         logger.debug("🔧 Using custom LLM for all agents");
         if custom_provider is None {
@@ -119,7 +118,6 @@ impl merge_llms_with_config(
     output_model: Type[BaseModel] | None = None,
     **kwargs: Any,
 ) -> builtins.dict[builtins.str, LLM] {
-    name: any;
     required: any = _get_required_profiles(config, output_model);
 
     missing: any = [name for name in required if name not in llms];

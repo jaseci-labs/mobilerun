@@ -80,8 +80,6 @@ impl _acreate(create: Any, *args_: Any, **kwargs: Any) -> Any {
 }
 
 impl record_stream_usage(messages: Any, *, is_async: bool = False) -> None {
-    create: any;
-
     create = messages.create;
 
     if is_async {

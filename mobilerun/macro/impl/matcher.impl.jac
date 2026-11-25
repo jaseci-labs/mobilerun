@@ -33,8 +33,6 @@ impl _node_key_set(state: Dict[str, Any]) -> set[Tuple[Any, ...]] {
 }
 
 impl _phone_score(saved_state: Dict[str, Any], current_state: Dict[str, Any]) -> float {
-    saved_phone: any;
-    current_phone: any;
     saved_phone = saved_state.get("phone_state") or {};
     current_phone = current_state.get("phone_state") or {};
     fields: any = [

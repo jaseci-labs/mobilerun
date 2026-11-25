@@ -211,7 +211,6 @@ impl TokenCountingHandler.end_trace(
 
 impl llm_callback(llm: LLM, *args_: List[BaseCallbackHandler]) -> Generator[any, any, any] {
     args: any = tuple(args_);
-    arg: any;
     for arg in args {
         llm.callback_manager.add_handler(arg);
     }

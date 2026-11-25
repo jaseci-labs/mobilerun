@@ -286,9 +286,6 @@ impl MacroPlayer.replay_macro(
             logger.info(f"   Description: {description_text}");
         }
 
-        state_matched: any;
-        current_state: any;
-        match_result: any;
         (state_matched, current_state, match_result) = (
             await self.wait_for_pre_state(action.get("pre_state"), i)
         ) as any;

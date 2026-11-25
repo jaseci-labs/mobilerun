@@ -305,8 +305,6 @@ impl LangfuseSpanProcessor._process_field(attrs: builtins.dict, field: builtins.
             self._transform_and_set_field(attrs, field, data);
             return;
         }
-        sanitized: any;
-        contains_data_uri: any;
         (sanitized, contains_data_uri) = self._sanitize_serialized_data_uris(data) as any;
         if contains_data_uri {
             attrs[f"langfuse.observation.{field}"] = json.dumps(sanitized);
@@ -441,9 +439,6 @@ impl LangfuseSpanProcessor._sanitize_serialized_data_uris(
     value: Any
 ) -> builtins.tuple[Any, builtins.bool] {
     if isinstance(value, `str) {
-        header: any;
-        separator: any;
-        _payload: any;
         (header, separator, _payload) = value.partition(",") as any;
         is_base64_data_uri: any = value.startswith("data:")
             and `bool(separator)
@@ -462,10 +457,7 @@ impl LangfuseSpanProcessor._sanitize_serialized_data_uris(
     if isinstance(value, `list) {
         sanitized_items: any = [];
         contains_data_uri: any = False;
-        item: any;
         for item in value {
-            sanitized: any;
-            found: any;
             (sanitized, found) = cls._sanitize_serialized_data_uris(item) as any;
             sanitized_items.append(sanitized);
             contains_data_uri = contains_data_uri or found;
@@ -527,7 +519,6 @@ impl LangfuseSpanProcessor._prepare_image_for_native_upload(
 
         encoded: any = image;
         if image.startswith("data:") and "," in image {
-            header: any;
             (header, encoded) = image.split(",", 1) as any;
             if header.endswith(";base64") {
                 mime_type = header[5:-7];

@@ -25,7 +25,6 @@ impl ServerAppCardProvider.load_app_card(
 
     for attempt in range(1, self.max_retries + 1) {
         try {
-            client: any;
             async with (httpx.AsyncClient(timeout=self.timeout)) as client {
                 response: any = (await client.post(endpoint, json=payload));
 

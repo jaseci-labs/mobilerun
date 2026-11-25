@@ -21,10 +21,6 @@ impl StealthUIState.get_element_coords(index: int) -> Tuple[int, int] {
     }
 
     try {
-        left: any;
-        top: any;
-        right: any;
-        bottom: any;
         (left, top, right, bottom) = map(int, bounds_str.split(",")) as any;
     } except ValueError as e {
         raise ValueError(
@@ -50,8 +46,6 @@ impl StealthUIState.get_element_coords(index: int) -> Tuple[int, int] {
 }
 
 impl StealthUIState.get_clear_point(index: int) -> Tuple[int, int] {
-    cx: any;
-    cy: any;
     (cx, cy) = super.get_clear_point(index) as any;
 
     element: any = self._find_by_index(self.elements, index);
@@ -60,10 +54,6 @@ impl StealthUIState.get_clear_point(index: int) -> Tuple[int, int] {
         return (cx, cy);
     }
 
-    left: any;
-    top: any;
-    right: any;
-    bottom: any;
     (left, top, right, bottom) = map(int, bounds_str.split(",")) as any;
     width: any = right - left;
     height: any = bottom - top;

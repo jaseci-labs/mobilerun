@@ -81,8 +81,6 @@ impl _validate_model_space_point(
     if dims is None {
         return;
     }
-    width: any;
-    height: any;
     (width, height) = dims as any;
     try {
         px: any = `float(x);
@@ -144,8 +142,6 @@ impl _convert_action_point(
     _validate_normalized_point(x, y, ctx=ctx);
     _require_active_coordinate_contract(ctx);
     _validate_model_space_point(x, y, ctx=ctx);
-    abs_x: any;
-    abs_y: any;
     (abs_x, abs_y) = ctx.ui.convert_point(x, y) as any;
     return (`int(round(abs_x)), `int(round(abs_y)));
 }
@@ -237,8 +233,6 @@ impl _record_driver_log_delta(
 impl click(index: builtins.int, *, ctx: "ActionContext") -> ActionResult {
     try {
         pre_ui: any = await _macro_pre_ui(ctx);
-        x: any;
-        y: any;
         (x, y) = ctx.ui.get_element_coords(index) as any;
         await ctx.driver.tap(x, y);
         _record_macro_action(ctx, {"action_type": "tap", "x": x, "y": y}, pre_ui=pre_ui);
@@ -267,8 +261,6 @@ impl click(index: builtins.int, *, ctx: "ActionContext") -> ActionResult {
 impl long_press(index: builtins.int, *, ctx: "ActionContext") -> ActionResult {
     try {
         pre_ui: any = await _macro_pre_ui(ctx);
-        x: any;
-        y: any;
         (x, y) = ctx.ui.get_element_coords(index) as any;
         await ctx.driver.swipe(x, y, x, y, 1000);
         _record_macro_action(
@@ -297,8 +289,6 @@ impl long_press(index: builtins.int, *, ctx: "ActionContext") -> ActionResult {
 impl long_press_at(x: builtins.int, y: builtins.int, *, ctx: "ActionContext") -> ActionResult {
     try {
         pre_ui: any = await _macro_pre_ui(ctx);
-        abs_x: any;
-        abs_y: any;
         (abs_x, abs_y) = _convert_action_point(x, y, ctx=ctx) as any;
         await ctx.driver.swipe(abs_x, abs_y, abs_x, abs_y, 1000);
         _record_macro_action(
@@ -326,8 +316,6 @@ impl long_press_at(x: builtins.int, y: builtins.int, *, ctx: "ActionContext") ->
 impl click_at(x: builtins.int, y: builtins.int, *, ctx: "ActionContext") -> ActionResult {
     try {
         pre_ui: any = await _macro_pre_ui(ctx);
-        abs_x: any;
-        abs_y: any;
         (abs_x, abs_y) = _convert_action_point(x, y, ctx=ctx) as any;
         await ctx.driver.tap(abs_x, abs_y);
         _record_macro_action(ctx, {"action_type": "tap", "x": abs_x, "y": abs_y}, pre_ui=pre_ui);
@@ -350,11 +338,7 @@ impl click_area(
         _validate_screenshot_only_point(x2, y2, ctx=ctx);
         _validate_normalized_point(x1, y1, ctx=ctx);
         _validate_normalized_point(x2, y2, ctx=ctx);
-        cx: any;
-        cy: any;
         (cx, cy) = ((x1 + x2) // 2, (y1 + y2) // 2);
-        abs_x: any;
-        abs_y: any;
         (abs_x, abs_y) = _convert_action_point(cx, cy, ctx=ctx) as any;
         await ctx.driver.tap(abs_x, abs_y);
         _record_macro_action(ctx, {"action_type": "tap", "x": abs_x, "y": abs_y}, pre_ui=pre_ui);
@@ -379,8 +363,6 @@ impl type_text(
     try {
         pre_ui: any = await _macro_pre_ui(ctx);
         if index is not None and index != -1 {
-            x: any;
-            y: any;
             (x, y) = ctx.ui.get_element_coords(index) as any;
             await ctx.driver.tap(x, y);
             _record_macro_action(ctx, {"action_type": "tap", "x": x, "y": y}, pre_ui=pre_ui);
@@ -455,11 +437,7 @@ impl swipe(
 
     try {
         pre_ui: any = await _macro_pre_ui(ctx);
-        start_x: any;
-        start_y: any;
         (start_x, start_y) = _convert_action_point(*coordinate, ctx=ctx) as any;
-        end_x: any;
-        end_y: any;
         (end_x, end_y) = _convert_action_point(*coordinate2, ctx=ctx) as any;
         duration_ms: any = `int(duration * 1000);
         await ctx.driver.swipe(start_x, start_y, end_x, end_y, duration_ms=duration_ms);
@@ -577,8 +555,6 @@ impl type_secret(
         secret_value: any = await ctx.credential_manager.resolve_key(secret_id);
         pre_ui: any = await _macro_pre_ui(ctx);
         if index != -1 {
-            x: any;
-            y: any;
             (x, y) = ctx.ui.get_element_coords(index) as any;
             await ctx.driver.tap(x, y);
             _record_macro_action(ctx, {"action_type": "tap", "x": x, "y": y}, pre_ui=pre_ui);

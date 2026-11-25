@@ -22,7 +22,6 @@ impl _first_choice(mapping: builtins.dict, key: builtins.str) -> builtins.dict {
 impl _empty_response_diagnostics(
     response: builtins.object, llm: builtins.object, *, stream: builtins.bool = False
 ) -> builtins.dict[builtins.str, builtins.object] {
-    sources: any;
     message: any = getattr(response, "message", None);
     raw: any = _as_dict(getattr(response, "raw", None));
     extra: any = _as_dict(getattr(response, "additional_kwargs", None));
@@ -221,8 +220,6 @@ impl acall_with_retries(
 impl _stream_response(
     llm, messages: builtins.list, timeout: builtins.float, **chat_kwargs
 ) -> ChatResponse {
-    content: any;
-    last_chunk: any;
     (content, last_chunk) = await asyncio.wait_for(
         _collect_stream(await_stream=llm.astream_chat(messages=messages, **chat_kwargs)),
         timeout=timeout,
@@ -290,8 +287,6 @@ impl acomplete_with_retries(
 impl _stream_complete_response(
     llm, prompt: builtins.str, timeout: builtins.float
 ) -> CompletionResponse {
-    content: any;
-    last_chunk: any;
     (content, last_chunk) = await asyncio.wait_for(
         _collect_stream(await_stream=llm.astream_complete(prompt)), timeout=timeout
     ) as any;

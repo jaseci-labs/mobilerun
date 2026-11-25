@@ -31,8 +31,6 @@ impl sort_by_position(nodes: List[Dict[builtins.str, Any]]) -> List[Dict[builtin
 }
 
 impl Filters.text_matches(pattern: builtins.str | re.Pattern) -> ElementFilter {
-    regex: any;
-    pattern_str: any;
     if isinstance(pattern, `str) {
         regex = re.compile(re.escape(pattern), re.IGNORECASE);
         pattern_str = pattern;
@@ -82,8 +80,6 @@ impl Filters.text_matches(pattern: builtins.str | re.Pattern) -> ElementFilter {
 }
 
 impl Filters.id_matches(pattern: builtins.str | re.Pattern) -> ElementFilter {
-    regex: any;
-    pattern_str: any;
     if isinstance(pattern, `str) {
         regex = re.compile(re.escape(pattern), re.IGNORECASE);
         pattern_str = pattern;
@@ -135,8 +131,6 @@ impl Filters.below(anchor_filter: ElementFilter) -> ElementFilter {
         anchor: any = anchor_results[0];
         anchor_bounds: any = anchor.get("boundsInScreen", {});
         anchor_bottom: any = anchor_bounds.get("bottom", 0);
-        anchor_center_x: any;
-        anchor_center_y: any;
         (anchor_center_x, anchor_center_y) = get_element_center(anchor) as any;
 
         all_nodes: any = [];
@@ -155,8 +149,6 @@ impl Filters.below(anchor_filter: ElementFilter) -> ElementFilter {
             node_top: any = node_bounds.get("top", 0);
 
             if node_top > anchor_bottom {
-                node_center_x: any;
-                node_center_y: any;
                 (node_center_x, node_center_y) = get_element_center(`node) as any;
                 distance: any = (
                     (node_center_x - anchor_center_x) ** 2 + (node_center_y - anchor_center_y) ** 2
@@ -183,8 +175,6 @@ impl Filters.above(anchor_filter: ElementFilter) -> ElementFilter {
         anchor: any = anchor_results[0];
         anchor_bounds: any = anchor.get("boundsInScreen", {});
         anchor_top: any = anchor_bounds.get("top", 0);
-        anchor_center_x: any;
-        anchor_center_y: any;
         (anchor_center_x, anchor_center_y) = get_element_center(anchor) as any;
 
         all_nodes: any = [];
@@ -203,8 +193,6 @@ impl Filters.above(anchor_filter: ElementFilter) -> ElementFilter {
             node_bottom: any = node_bounds.get("bottom", 0);
 
             if node_bottom < anchor_top {
-                node_center_x: any;
-                node_center_y: any;
                 (node_center_x, node_center_y) = get_element_center(`node) as any;
                 distance: any = (
                     (node_center_x - anchor_center_x) ** 2 + (node_center_y - anchor_center_y) ** 2
@@ -231,8 +219,6 @@ impl Filters.left_of(anchor_filter: ElementFilter) -> ElementFilter {
         anchor: any = anchor_results[0];
         anchor_bounds: any = anchor.get("boundsInScreen", {});
         anchor_left: any = anchor_bounds.get("left", 0);
-        anchor_center_x: any;
-        anchor_center_y: any;
         (anchor_center_x, anchor_center_y) = get_element_center(anchor) as any;
 
         all_nodes: any = [];
@@ -251,8 +237,6 @@ impl Filters.left_of(anchor_filter: ElementFilter) -> ElementFilter {
             node_right: any = node_bounds.get("right", 0);
 
             if node_right < anchor_left {
-                node_center_x: any;
-                node_center_y: any;
                 (node_center_x, node_center_y) = get_element_center(`node) as any;
                 distance: any = (
                     (node_center_x - anchor_center_x) ** 2 + (node_center_y - anchor_center_y) ** 2
@@ -279,8 +263,6 @@ impl Filters.right_of(anchor_filter: ElementFilter) -> ElementFilter {
         anchor: any = anchor_results[0];
         anchor_bounds: any = anchor.get("boundsInScreen", {});
         anchor_right: any = anchor_bounds.get("right", 0);
-        anchor_center_x: any;
-        anchor_center_y: any;
         (anchor_center_x, anchor_center_y) = get_element_center(anchor) as any;
 
         all_nodes: any = [];
@@ -299,8 +281,6 @@ impl Filters.right_of(anchor_filter: ElementFilter) -> ElementFilter {
             node_left: any = node_bounds.get("left", 0);
 
             if node_left > anchor_right {
-                node_center_x: any;
-                node_center_y: any;
                 (node_center_x, node_center_y) = get_element_center(`node) as any;
                 distance: any = (
                     (node_center_x - anchor_center_x) ** 2 + (node_center_y - anchor_center_y) ** 2

@@ -20,7 +20,6 @@ impl sanitize_grok_responses_kwargs(
         filtered_params.add("tool_choice");
     }
 
-    param: any;
     for param in filtered_params {
         payload.pop(param, None);
     }

@@ -33,9 +33,6 @@ impl _iter_sse_events(response: Any) -> Generator[any, any, any] {
             (event_name, data_lines) = (None, []);
             continue;
         }
-        field: any;
-        _: any;
-        value: any;
         (field, _, value) = line.partition(":") as any;
         value = value[1:] if value.startswith(" ") else value;
         if field == "event" {
@@ -102,8 +99,6 @@ impl _normalize_manual_code(raw: builtins.str, expected_state: builtins.str) -> 
     }
 
     if "#" in first_token {
-        code_part: any;
-        fragment: any;
         (code_part, fragment) = first_token.split("#", 1) as any;
         if fragment and fragment != expected_state {
             raise RuntimeError("OAuth manual code state mismatch.");
@@ -406,8 +401,6 @@ impl AnthropicOAuthLLM.login(
     deadline: OAuthLoginDeadline | None = None,
 ) -> builtins.str {
     result: Dict[builtins.str, Optional[builtins.str]];
-    done: any;
-    callback_lock: any;
     active_deadline: any = deadline or OAuthLoginDeadline(timeout_seconds);
     active_deadline.check();
     use_headless: any = _is_headless_environment()
@@ -429,8 +422,6 @@ impl AnthropicOAuthLLM.login(
     done = threading.Event();
     callback_lock = threading.Lock();
 
-    code_verifier: any;
-    code_challenge: any;
     (code_verifier, code_challenge) = _pkce_pair() as any;
     state: any = _b64_no_pad(secrets.token_bytes(32));
     original_authorize_url: any = self.authorize_url;
@@ -553,13 +544,9 @@ impl AnthropicOAuthLLM.login_headless(
     deadline: OAuthLoginDeadline | None = None,
 ) -> builtins.str {
     input_queue: queue.Queue[Optional[builtins.str]];
-    stop: any;
-    need_more: any;
     active_deadline: any = deadline or OAuthLoginDeadline(timeout_seconds);
     active_deadline.check();
 
-    code_verifier: any;
-    code_challenge: any;
     (code_verifier, code_challenge) = _pkce_pair() as any;
     state: any = _b64_no_pad(secrets.token_bytes(32));
     redirect_uri: any = "https://platform.claude.com/oauth/code/callback";
@@ -812,8 +799,6 @@ impl AnthropicOAuthLLM._sanitize_request_kwargs(
 impl AnthropicOAuthLLM._messages_request(
     messages: Sequence[ChatMessage], kwargs: Dict[builtins.str, Any]
 ) -> builtins.tuple[builtins.str, Dict[builtins.str, builtins.str], Dict[builtins.str, Any]] {
-    provider_messages: any;
-    system_lines: any;
     (provider_messages, system_lines) = self._to_provider_messages(messages) as any;
     token: any = self._resolve_access_token();
     request_kwargs: any = self._sanitize_request_kwargs(kwargs);
@@ -868,9 +853,6 @@ impl AnthropicOAuthLLM._chat_response(
 }
 
 impl AnthropicOAuthLLM.chat(messages: Sequence[ChatMessage], **kwargs: Any) -> ChatResponse {
-    url: any;
-    headers: any;
-    payload: any;
     (url, headers, payload) = self._messages_request(messages, kwargs) as any;
     res: any = self._session.post(url, headers=headers, json=payload, timeout=self.timeout);
     res.raise_for_status();
@@ -893,9 +875,6 @@ impl AnthropicOAuthLLM.complete(
 impl AnthropicOAuthLLM.stream_chat(
     messages: Sequence[ChatMessage], **kwargs: Any
 ) -> ChatResponseGen {
-    url: any;
-    headers: any;
-    payload: any;
     (url, headers, payload) = self._messages_request(messages, kwargs) as any;
     payload["stream"] = True;
     res: any = self._session.post(
@@ -996,7 +975,6 @@ impl AnthropicOAuthLLM._stream_responses(res: Any) -> Generator[any, any, any] {
 impl AnthropicOAuthLLM.stream_complete(
     prompt: builtins.str, formatted: builtins.bool = False, **kwargs: Any
 ) -> CompletionResponseGen {
-    chat_stream: any;
     del formatted;
     chat_stream = self.stream_chat(
         [ChatMessage(role=MessageRole.USER, content=prompt)],

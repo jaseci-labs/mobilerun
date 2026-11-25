@@ -53,10 +53,6 @@ impl UIState.get_element_coords(index: int) -> Tuple[int, int] {
     }
 
     try {
-        left: any;
-        top: any;
-        right: any;
-        bottom: any;
         (left, top, right, bottom) = map(int, bounds_str.split(",")) as any;
     } except ValueError as e {
         raise ValueError(
@@ -70,12 +66,6 @@ impl UIState.get_element_coords(index: int) -> Tuple[int, int] {
 impl UIState._avoid_tap_blockers(
     element: Dict[str, Any], point: Tuple[int, int]
 ) -> Tuple[int, int] {
-    x: any;
-    y: any;
-    left: any;
-    top: any;
-    right: any;
-    bottom: any;
     blockers: any = [
         `tuple(map(int, bounds.split(",")))
         for bounds in element.get("tapBlockers", [])
@@ -160,8 +150,6 @@ impl UIState.get_clear_point(index: int) -> Tuple[int, int] {
 
 impl UIState.convert_point(x: int, y: int) -> Tuple[int, int] {
     if self.use_normalized {
-        abs_x: any;
-        abs_y: any;
         (abs_x, abs_y) = to_absolute(x, y, self.screen_width, self.screen_height) as any;
         if x == NORMALIZED_MAX {
             abs_x = max(self.screen_width - 1, 0);

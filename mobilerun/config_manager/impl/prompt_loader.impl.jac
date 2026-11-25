@@ -16,7 +16,6 @@ impl PromptLoader.load_prompt(
     if not path.exists() {
         raise FileNotFoundError(f"Prompt file not found: {file_path}");
     }
-    f: any;
     async with (aiofiles.open(path, mode="r", encoding="utf-8")) as f {
         template_content: any = (await f.read());
     }

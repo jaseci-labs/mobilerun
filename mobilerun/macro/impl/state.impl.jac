@@ -166,10 +166,6 @@ impl _parse_bounds(value: Any) -> Optional[Dict[str, int]] {
         return None;
     }
 
-    left: any;
-    top: any;
-    right: any;
-    bottom: any;
     (left, top, right, bottom) = raw as any;
     return {
         "left": left,

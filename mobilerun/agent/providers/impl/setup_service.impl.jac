@@ -75,7 +75,6 @@ impl create_profile_for_variant(
     variant: ProviderVariantSpec, selection: SetupSelection, *, temperature: float = 0.2
 ) -> LLMProfile {
     base_url: any = selection.base_url or variant.base_url;
-    resolved_model: any;
     (base_url, resolved_model) = _resolve_zai_selection(selection, base_url) as any;
     resolved_model = normalize_model_id_for_variant(
         selection.family_id, selection.auth_mode, resolved_model

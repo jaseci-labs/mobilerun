@@ -225,9 +225,6 @@ impl check_portal_version(
         );
     }
     latest_portal: any = _get_latest_portal_version();
-    expected: any;
-    download_base: any;
-    mapping_fetched: any;
     (expected, download_base, mapping_fetched) = get_compatible_portal_version(
         __version__, debug
     ) as any;
@@ -375,7 +372,6 @@ impl check_tcp(device: AdbDevice, debug: builtins.bool) -> CheckResult {
     local_port: any = None;
     try {
         forwards: any = [];
-        fwd: any;
         async for fwd in device.forward_list() {
             forwards.append(fwd);
         }
@@ -398,7 +394,6 @@ impl check_tcp(device: AdbDevice, debug: builtins.bool) -> CheckResult {
         return CheckResult("TCP Mode", Status.FAIL, "port forward failed", detail=`str(e));
     }
     try {
-        client: any;
         async with httpx.AsyncClient() as client {
             resp: any = await client.get(
                 f"http://localhost:{local_port}/ping", headers=auth_headers, timeout=5
@@ -536,8 +531,6 @@ impl run_doctor(device_serial: builtins.str | None = None, debug: builtins.bool 
     r: any = await check_sdk_version(debug);
     _print_result(r, debug);
     results.append(r);
-    r_config: any;
-    config: any;
     (r_config, config) = await check_config(debug) as any;
     _print_result(r_config, debug);
     results.append(r_config);
@@ -551,8 +544,6 @@ impl run_doctor(device_serial: builtins.str | None = None, debug: builtins.bool 
         _print_summary(results);
         return;
     }
-    r_device: any;
-    device: any;
     (r_device, device) = await check_device(device_serial, debug) as any;
     _print_result(r_device, debug);
     results.append(r_device);
@@ -561,8 +552,6 @@ impl run_doctor(device_serial: builtins.str | None = None, debug: builtins.bool 
         _print_summary(results);
         return;
     }
-    r_portal: any;
-    is_installed: any;
     (r_portal, is_installed) = await check_portal_installed(device, debug) as any;
     _print_result(r_portal, debug);
     if not is_installed {
@@ -577,9 +566,6 @@ impl run_doctor(device_serial: builtins.str | None = None, debug: builtins.bool 
         }
     }
     results.append(r_portal);
-    r_version: any;
-    installed_ver: any;
-    _: any;
     (r_version, installed_ver, _, _) = await check_portal_version(device, debug) as any;
     _print_result(r_version, debug);
     if r_version.status == Status.WARN and installed_ver {
@@ -597,8 +583,6 @@ impl run_doctor(device_serial: builtins.str | None = None, debug: builtins.bool 
         }
     }
     results.append(r_version);
-    r_a11y: any;
-    a11y_enabled: any;
     (r_a11y, a11y_enabled) = await check_accessibility(device, debug) as any;
     if not a11y_enabled {
         _print_result(r_a11y, debug);
@@ -615,8 +599,6 @@ impl run_doctor(device_serial: builtins.str | None = None, debug: builtins.bool 
     _print_result(r, debug);
     results.append(r);
 
-    r_cp_state: any;
-    cp_portal: any;
     (r_cp_state, cp_portal) = await check_portal_state(device, False, debug) as any;
     r_cp_state.name = "State (content)";
     _print_result(r_cp_state, debug);
@@ -633,8 +615,6 @@ impl run_doctor(device_serial: builtins.str | None = None, debug: builtins.bool 
     results.append(r);
 
     if r.status == Status.PASS {
-        r_tcp_state: any;
-        tcp_portal: any;
         (r_tcp_state, tcp_portal) = await check_portal_state(device, True, debug) as any;
         r_tcp_state.name = "State (tcp)";
         _print_result(r_tcp_state, debug);
@@ -655,7 +635,6 @@ impl run_doctor(device_serial: builtins.str | None = None, debug: builtins.bool 
 }
 
 impl _print_summary(results: builtins.list[CheckResult]) -> None {
-    r: any;
     fails: any = [r for r in results if r.status == Status.FAIL];
     warns: any = [r for r in results if r.status == Status.WARN];
 

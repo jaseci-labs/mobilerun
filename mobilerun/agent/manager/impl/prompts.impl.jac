@@ -36,7 +36,6 @@ impl _success_from_attrs(attrs: builtins.str) -> builtins.bool | None {
         return None;
     }
 
-    quote: any;
     (quote, value) = success_attributes[0] as any;
     if quote is None or value.lower() not in {"true", "false"} {
         return None;
@@ -155,8 +154,6 @@ impl parse_manager_response(response: builtins.str) -> builtins.dict {
     thought: any = extract("thought");
     memory_section: any = extract_all("add_memory");
     progress_summary: any = extract("progress_summary");
-    result_tags: any;
-    result_tag_errors: any;
     (result_tags, result_tag_errors) = _find_top_level_manager_result_tags(response) as any;
     plan_matches: any = [tag for tag in result_tags if tag["tag"] == "plan"];
     final_matches: any = [tag for tag in result_tags if tag["tag"] in FINAL_RESPONSE_TAGS];

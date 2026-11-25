@@ -11,20 +11,14 @@ impl ScreenshotOnlyStateProvider.init(
 
 impl ScreenshotOnlyStateProvider.get_state -> UIState {
     screenshot: any = (await self.driver.screenshot());
-    native_width: any;
-    native_height: any;
     (native_width, native_height) = image_dimensions(screenshot) as any;
     input_size: any = getattr(self.driver, "input_coordinate_size", None);
     if input_size is None {
-        input_width: any;
-        input_height: any;
         (input_width, input_height) = (native_width, native_height);
     } else {
         (input_width, input_height) = (await input_size(native_width, native_height)) as any;
     }
     if self.vision_resize_policy is not None {
-        screen_width: any;
-        screen_height: any;
         (screen_width, screen_height) = self.vision_resize_policy.effective_dims(
             native_width, native_height
         ) as any;

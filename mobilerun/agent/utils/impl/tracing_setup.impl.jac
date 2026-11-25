@@ -86,8 +86,6 @@ impl _setup_phoenix_tracing -> builtins.bool {
 impl _setup_langfuse_tracing(
     tracing_config: TracingConfig, agent: Optional[builtins.object] = None
 ) -> builtins.bool {
-    original_encoder: any;
-
     try {
         import from langfuse { Langfuse }
 
@@ -222,7 +220,6 @@ impl _export_all_spans(_span) -> builtins.bool {
 }
 
 impl _provider_has_langfuse_processor(tracer_provider: builtins.object) -> builtins.bool {
-    _LangfuseSpanProcessor: any;
     _LangfuseSpanProcessor = importlib.import_module(
         "mobilerun.telemetry.langfuse_processor"
     )._LangfuseSpanProcessor;

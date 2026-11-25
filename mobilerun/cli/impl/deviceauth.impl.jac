@@ -114,12 +114,9 @@ impl save_token(token: str, auth_url: str) -> Path {
     _chmod_private(path.parent, 448);
 
     payload: any = json.dumps({"access_token": token, "auth_url": auth_url});
-    fd: any;
-    tmp_name: any;
     (fd, tmp_name) = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent) as any;
     tmp_path: any = Path(tmp_name);
     try {
-        handle: any;
         with os.fdopen(fd, "w") as handle {
             handle.write(payload);
         }
